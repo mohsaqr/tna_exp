@@ -1,3 +1,9 @@
+# tna 1.2.4
+
+* Fixed case-insensitive argument matching to preserve canonical option names,
+  allowing `cluster_data()` and `cluster_sequences()` to pass `"ward.D"` and
+  `"ward.D2"` correctly to `stats::hclust()`.
+
 # tna 1.2.3
 
 * Resolved CRAN warning "Data files with namespace references not in the
