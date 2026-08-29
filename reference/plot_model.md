@@ -1,0 +1,42 @@
+# Plot a Transition Network Model from a Matrix of Edge Weights
+
+Plot a Transition Network Model from a Matrix of Edge Weights
+
+## Usage
+
+``` r
+plot_model(x, labels, colors, ...)
+```
+
+## Arguments
+
+- x:
+
+  A square `matrix` of edge weights.
+
+- labels:
+
+  Optional `character` vector of node labels.
+
+- colors:
+
+  An optional `character` vector of node colors to use.
+
+- ...:
+
+  Additional arguments passed to
+  [`cograph::splot()`](https://sonsoles.me/cograph/reference/splot.html)
+  or
+  [`cograph::plot_htna()`](https://sonsoles.me/cograph/reference/plot_htna.html).
+
+## Value
+
+See [`plot.tna()`](https://sonsoles.me/tna/reference/plot.tna.md).
+
+## Examples
+
+``` r
+m <- matrix(rexp(25), 5, 5)
+plot_model(m)
+
+```

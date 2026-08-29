@@ -1,0 +1,81 @@
+# Plot a Sequence Comparison
+
+Visualize the differences in pattern counts by plotting the standardized
+residuals by pattern and group.
+
+## Usage
+
+``` r
+# S3 method for class 'tna_sequence_comparison'
+plot(
+  x,
+  n = 10,
+  legend = TRUE,
+  cells = TRUE,
+  text_color = "white",
+  digits = 2L,
+  ...
+)
+```
+
+## Arguments
+
+- x:
+
+  A `tna_sequence_comparison` object.
+
+- n:
+
+  An `integer` giving the number of patterns to plot. The default is
+  `10`.
+
+- legend:
+
+  A `logical` value indicating whether to show the color scale legend.
+  The default is `TRUE`.
+
+- cells:
+
+  A `logical` value indicating whether to display the numeric values in
+  each cell. The default is `TRUE`.
+
+- text_color:
+
+  A `character` string specifying the text color to use for the cell
+  values. The default is `"white"`.
+
+- digits:
+
+  An `integer` specifying the number of digits for the cell values.
+
+- ...:
+
+  Not used.
+
+## Value
+
+A `ggplot` object.
+
+## See also
+
+Model comparison functions
+[`compare()`](https://sonsoles.me/tna/reference/compare.md),
+[`compare.group_tna()`](https://sonsoles.me/tna/reference/compare.group_tna.md),
+[`compare_sequences()`](https://sonsoles.me/tna/reference/compare_sequences.md),
+[`plot.tna_comparison()`](https://sonsoles.me/tna/reference/plot.tna_comparison.md),
+[`plot_compare()`](https://sonsoles.me/tna/reference/plot_compare.md),
+[`plot_compare.group_tna()`](https://sonsoles.me/tna/reference/plot_compare.group_tna.md),
+[`print.tna_comparison()`](https://sonsoles.me/tna/reference/print.tna_comparison.md),
+[`print.tna_sequence_comparison()`](https://sonsoles.me/tna/reference/print.tna_sequence_comparison.md)
+
+## Examples
+
+``` r
+# \donttest{
+idx <- c(1:500, 1001:1500)
+group <- c(rep("High", 500), rep("Low", 500))
+comp <- compare_sequences(group_regulation[idx, ], group)
+plot(comp)
+
+# }
+```

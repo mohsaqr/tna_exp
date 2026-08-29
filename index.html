@@ -12,13 +12,13 @@
 <link rel="icon" sizes="any" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Transition Network Analysis (TNA)">
 <meta name="description" content="Provides tools for performing Transition Network Analysis (TNA) to study relational dynamics, including functions for building and plotting TNA models, calculating centrality measures, and identifying dominant events and patterns. TNA statistical techniques (e.g., bootstrapping and permutation tests) ensure the reliability of observed insights and confirm that identified dynamics are meaningful. See (Saqr et al., 2025) &lt;doi:10.1145/3706468.3706513&gt; for more details on TNA.">
 <meta property="og:description" content="Provides tools for performing Transition Network Analysis (TNA) to study relational dynamics, including functions for building and plotting TNA models, calculating centrality measures, and identifying dominant events and patterns. TNA statistical techniques (e.g., bootstrapping and permutation tests) ensure the reliability of observed insights and confirm that identified dynamics are meaningful. See (Saqr et al., 2025) &lt;doi:10.1145/3706468.3706513&gt; for more details on TNA.">
-<meta property="og:image" content="http://sonsoles.me/tna/logo.png">
+<meta property="og:image" content="https://sonsoles.me/tna/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,10 +42,12 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/communities_and_cliques.html">Finding cliques and communities with tna</a></li>
+<li><a class="dropdown-item" href="articles/atna.html">Attention TNA</a></li>
+    <li><a class="dropdown-item" href="articles/communities_and_cliques.html">Finding cliques and communities with tna</a></li>
     <li><a class="dropdown-item" href="articles/complete_tutorial.html">A showcase of the main tna functions</a></li>
-    <li><a class="dropdown-item" href="articles/ftna.html">Frequency-based tna</a></li>
+    <li><a class="dropdown-item" href="articles/ftna.html">Frequency-based TNA</a></li>
     <li><a class="dropdown-item" href="articles/grouped_sequences.html">Using grouped sequence data with tna</a></li>
+    <li><a class="dropdown-item" href="articles/new-docs.html">tna — R Package Documentation</a></li>
     <li><a class="dropdown-item" href="articles/prepare_data.html">How to prepare data for tna</a></li>
   </ul>
 </li>
@@ -77,13 +79,140 @@
 <div class="section level2">
 <h2 id="resources">Resources<a class="anchor" aria-label="anchor" href="#resources"></a>
 </h2>
-<p>Check out our tutorials:</p>
-<ul>
-<li><a href="https://lamethods.org/book2/chapters/ch15-tna/ch15-tna.html" class="external-link">Basics of TNA</a></li>
-<li><a href="https://lamethods.org/book2/chapters/ch16-ftna/ch16-ftna.html" class="external-link">Frequency-based TNA</a></li>
-<li><a href="https://lamethods.org/book2/chapters/ch17-tna-clusters/ch17-tna-clusters.html" class="external-link">Clustering</a></li>
-</ul>
-<p>You can also try our <a href="https://sonsoleslp.shinyapps.io/tna-app/" class="external-link">Shiny app</a>.</p>
+<div class="section level3">
+<h3 id="companion-tutorials">Companion tutorials<a class="anchor" aria-label="anchor" href="#companion-tutorials"></a>
+</h3>
+<p>We have also released comprehensive new tutorials for the main TNA features:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Tutorial</th>
+<th>Link</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>An Updated Comprehensive Tutorial on Transition Network Analysis (TNA)</td>
+<td><a href="https://sonsoles.me/posts/tna-tutorial/" class="external-link uri">https://sonsoles.me/posts/tna-tutorial/</a></td>
+</tr>
+<tr>
+<td>TNA Data Preparation: A Comprehensive Guide to <code><a href="reference/prepare_data.html">prepare_data()</a></code>
+</td>
+<td><a href="https://sonsoles.me/posts/tna-data/" class="external-link uri">https://sonsoles.me/posts/tna-data/</a></td>
+</tr>
+<tr>
+<td>TNA Group Analysis: Analysis and Comparison of Groups</td>
+<td><a href="https://sonsoles.me/posts/tna-group/" class="external-link uri">https://sonsoles.me/posts/tna-group/</a></td>
+</tr>
+<tr>
+<td>TNA Clustering: Discovering and Analysis of Clusters</td>
+<td><a href="https://sonsoles.me/posts/tna-clustering/" class="external-link uri">https://sonsoles.me/posts/tna-clustering/</a></td>
+</tr>
+<tr>
+<td>TNA Model Comparison:TNA Model Comparison: A Comprehensive Guide to Network Comparison</td>
+<td><a href="https://sonsoles.me/posts/tna-compare/" class="external-link uri">https://sonsoles.me/posts/tna-compare/</a></td>
+</tr>
+<tr>
+<td>Full reference guide on <code>tna</code> functions</td>
+<td><a href="https://sonsoles.me/tna/tna.html" class="uri">https://sonsoles.me/tna/tna.html</a></td>
+</tr>
+<tr>
+<td>Sequence Patterns, Outcomes, and Indices with <code>codyna</code>
+</td>
+<td><a href="https://sonsoles.me/posts/codyna-seq-tutorial/" class="external-link uri">https://sonsoles.me/posts/codyna-seq-tutorial/</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
+</h3>
+<p>Check out the <code>tna</code> R package vignettes:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Vignette</th>
+<th>Link</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Getting started with tna</td>
+<td><a href="https://sonsoles.me/tna/articles/tna.html" class="uri">https://sonsoles.me/tna/articles/tna.html</a></td>
+</tr>
+<tr>
+<td>A showcase of the main tna functions</td>
+<td><a href="https://sonsoles.me/tna/articles/complete_tutorial.html" class="uri">https://sonsoles.me/tna/articles/complete_tutorial.html</a></td>
+</tr>
+<tr>
+<td>How to prepare data for tna</td>
+<td><a href="https://sonsoles.me/tna/articles/prepare_data.html" class="uri">https://sonsoles.me/tna/articles/prepare_data.html</a></td>
+</tr>
+<tr>
+<td>Frequency-based TNA</td>
+<td><a href="https://sonsoles.me/tna/articles/ftna.html" class="uri">https://sonsoles.me/tna/articles/ftna.html</a></td>
+</tr>
+<tr>
+<td>Attention TNA</td>
+<td><a href="https://sonsoles.me/tna/articles/atna.html" class="uri">https://sonsoles.me/tna/articles/atna.html</a></td>
+</tr>
+<tr>
+<td>Finding cliques and communities</td>
+<td><a href="https://sonsoles.me/tna/articles/communities_and_cliques.html" class="uri">https://sonsoles.me/tna/articles/communities_and_cliques.html</a></td>
+</tr>
+<tr>
+<td>Using grouped sequence data</td>
+<td><a href="https://sonsoles.me/tna/articles/grouped_sequences.html" class="uri">https://sonsoles.me/tna/articles/grouped_sequences.html</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="book-chapters">Book chapters<a class="anchor" aria-label="anchor" href="#book-chapters"></a>
+</h3>
+<p>Do not forget to check out our tutorials in the “Advanced learning analytics methods” book:</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th>Title</th>
+<th>Pages</th>
+<th>Tutorial</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Saqr, M., Lopez-Pernas, S., &amp; Tikka, S. <em>Mapping Relational Dynamics with Transition Network Analysis: A Primer and Tutorial</em>
+</td>
+<td><a href="https://doi.org/10.1007/978-3-031-95365-1_15" class="external-link uri">https://doi.org/10.1007/978-3-031-95365-1_15</a></td>
+<td><a href="https://lamethods.org/book2/chapters/ch15-tna/ch15-tna.html" class="external-link">Online tutorial</a></td>
+</tr>
+<tr>
+<td>Saqr, M., Lopez-Pernas, S., &amp; Tikka, S. <em>Capturing the Breadth and Dynamics of the Temporal Processes with Frequency Transition Network Analysis: A Primer and Tutorial</em>
+</td>
+<td><a href="https://doi.org/10.1007/978-3-031-95365-1_16" class="external-link uri">https://doi.org/10.1007/978-3-031-95365-1_16</a></td>
+<td><a href="https://lamethods.org/book2/chapters/ch16-ftna/ch16-ftna.html" class="external-link">Online tutorial</a></td>
+</tr>
+<tr>
+<td>Lopez-Pernas, S., Tikka, S., &amp; Saqr, M. <em>Mining Patterns and Clusters with Transition Network Analysis: A Heterogeneity Approach</em>
+</td>
+<td><a href="https://doi.org/10.1007/978-3-031-95365-1_17" class="external-link uri">https://doi.org/10.1007/978-3-031-95365-1_17</a></td>
+<td><a href="https://lamethods.org/book2/chapters/ch17-tna-clusters/ch17-tna-clusters.html" class="external-link">Online tutorial</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="other-tools">Other tools<a class="anchor" aria-label="anchor" href="#other-tools"></a>
+</h3>
+<p>In addition to the <code>tna</code> R package, you can also try our <a href="https://sonsoleslp.shinyapps.io/tna-app/" class="external-link">Shiny app</a> and <a href="https://github.com/SONsoleslp/JTNA" class="external-link">Jamovi plugin</a>.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -109,7 +238,7 @@
 <code class="sourceCode R"><span><span class="va">tna_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/build_model.html">tna</a></span><span class="op">(</span><span class="va">group_regulation</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">tna_model</span><span class="op">)</span></span></code></pre></div>
-<div id="aegogjclfh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="wqjybadbrp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 
 
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false" style="-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 16px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3;" bgcolor="#FFFFFF">
@@ -231,19 +360,11 @@ Reciprocity
 </div>
 <p>Plot the transition network</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Default plot</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tna_model</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="reference/figures/README-tnaplot-1.svg" width="60%" style="text-align: center; display: block; margin: auto;"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tna_model</span><span class="op">)</span> </span></code></pre></div>
+<p><img src="reference/figures/README-tnaplot-1.svg" alt="" width="60%" style="text-align: center; display: block; margin: auto;"> Calculate the centrality measures</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Optimized plot</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
-<span>  <span class="va">tna_model</span>, cut <span class="op">=</span> <span class="fl">0.2</span>, minimum <span class="op">=</span> <span class="fl">0.05</span>, </span>
-<span>  edge.label.position <span class="op">=</span> <span class="fl">0.8</span>, edge.label.cex <span class="op">=</span> <span class="fl">0.7</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-tnaplot-2.svg" width="60%" style="text-align: center; display: block; margin: auto;"> Calculate the centrality measures</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cent</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/centralities.html">centralities</a></span><span class="op">(</span><span class="va">tna_model</span><span class="op">)</span></span></code></pre></div>
-<div id="gjehlwcyzi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ondqhamusk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 
 
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false" style="-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 8px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3;" bgcolor="#FFFFFF">
@@ -291,16 +412,16 @@ adapt
 0.345
 </td>
 <td headers="ClosenessIn" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-13.406
+0.008
 </td>
 <td headers="ClosenessOut" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-2.333
+0.015
 </td>
 <td headers="Closeness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-18.546
+0.025
 </td>
 <td headers="Betweenness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-17.000
+1.000
 </td>
 <td headers="BetweennessRSP" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 1.000
@@ -323,13 +444,13 @@ cohesion
 0.812
 </td>
 <td headers="ClosenessIn" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-3.651
+0.014
 </td>
 <td headers="ClosenessOut" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-2.791
+0.012
 </td>
 <td headers="Closeness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-13.813
+0.027
 </td>
 <td headers="Betweenness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 0.000
@@ -355,16 +476,16 @@ consensus
 2.667
 </td>
 <td headers="ClosenessIn" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-0.798
+0.035
 </td>
 <td headers="ClosenessOut" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-4.344
+0.013
 </td>
 <td headers="Closeness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-11.481
+0.038
 </td>
 <td headers="Betweenness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-0.000
+30.000
 </td>
 <td headers="BetweennessRSP" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 103.000
@@ -387,16 +508,16 @@ coregulate
 0.567
 </td>
 <td headers="ClosenessIn" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-4.547
+0.016
 </td>
 <td headers="ClosenessOut" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-2.309
+0.015
 </td>
 <td headers="Closeness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-5.974
+0.021
 </td>
 <td headers="Betweenness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-5.000
+0.000
 </td>
 <td headers="BetweennessRSP" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 27.000
@@ -419,16 +540,16 @@ discuss
 1.188
 </td>
 <td headers="ClosenessIn" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-1.954
+0.020
 </td>
 <td headers="ClosenessOut" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-2.681
+0.013
 </td>
 <td headers="Closeness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-7.308
+0.027
 </td>
 <td headers="Betweenness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-0.000
+16.000
 </td>
 <td headers="BetweennessRSP" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 53.000
@@ -451,16 +572,16 @@ emotion
 0.894
 </td>
 <td headers="ClosenessIn" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-1.568
+0.014
 </td>
 <td headers="ClosenessOut" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-3.133
+0.012
 </td>
 <td headers="Closeness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-14.539
+0.023
 </td>
 <td headers="Betweenness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-0.000
+5.000
 </td>
 <td headers="BetweennessRSP" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 36.000
@@ -483,16 +604,16 @@ monitor
 0.346
 </td>
 <td headers="ClosenessIn" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-6.243
+0.008
 </td>
 <td headers="ClosenessOut" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-2.210
+0.014
 </td>
 <td headers="Closeness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-7.757
+0.019
 </td>
 <td headers="Betweenness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-3.000
+0.000
 </td>
 <td headers="BetweennessRSP" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 11.000
@@ -515,16 +636,16 @@ plan
 1.194
 </td>
 <td headers="ClosenessIn" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-5.475
+0.027
 </td>
 <td headers="ClosenessOut" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-2.914
+0.012
 </td>
 <td headers="Closeness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-17.593
+0.027
 </td>
 <td headers="Betweenness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-10.000
+9.000
 </td>
 <td headers="BetweennessRSP" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 61.000
@@ -547,16 +668,16 @@ synthesis
 0.192
 </td>
 <td headers="ClosenessIn" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-12.271
+0.010
 </td>
 <td headers="ClosenessOut" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-2.184
+0.016
 </td>
 <td headers="Closeness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-15.901
+0.024
 </td>
 <td headers="Betweenness" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-14.000
+7.000
 </td>
 <td headers="BetweennessRSP" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 3.000
@@ -572,28 +693,28 @@ synthesis
 </table>
 </div>
 <p>Plot the centrality measures</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cent</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-centralitiesplot-1.svg" width="90%" style="text-align: center; display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-centralitiesplot-1.svg" alt="" width="90%" style="text-align: center; display: block; margin: auto;"></p>
 <p>Estimate centrality stability</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/estimate_centrality_stability.html">estimate_centrality_stability</a></span><span class="op">(</span><span class="va">tna_model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Centrality Stability Coefficients</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  InStrength OutStrength Betweenness </span></span>
-<span><span class="co">#&gt;         0.9         0.9         0.7</span></span></code></pre></div>
+<span><span class="co">#&gt;         0.9         0.9         0.9</span></span></code></pre></div>
 <p>Identify and plot communities</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">coms</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/communities.html">communities</a></span><span class="op">(</span><span class="va">tna_model</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">coms</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-12-1.svg" width="60%" style="text-align: center; display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-unnamed-chunk-12-1.svg" alt="" width="60%" style="text-align: center; display: block; margin: auto;"></p>
 <p>Find and plot cliques</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cliques.html">cliques</a></span><span class="op">(</span><span class="va">tna_model</span>, threshold <span class="op">=</span> <span class="fl">0.12</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cqs</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-14-1.svg" width="100%" style="text-align: center; display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-unnamed-chunk-14-1.svg" alt="" width="100%" style="text-align: center; display: block; margin: auto;"></p>
 <p>Compare high achievers (first 1000) with low achievers (last 1000)</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tna_model_start_high</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/build_model.html">tna</a></span><span class="op">(</span><span class="va">group_regulation</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">tna_model_start_low</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/build_model.html">tna</a></span><span class="op">(</span><span class="va">group_regulation</span><span class="op">[</span><span class="fl">1001</span><span class="op">:</span><span class="fl">2000</span>, <span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/permutation_test.html">permutation_test</a></span><span class="op">(</span></span>
@@ -602,14 +723,14 @@ synthesis
 <span>  measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"InStrength"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Simple comparison vs. permutation test comparison</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/plot_compare.html">plot_compare</a></span><span class="op">(</span><span class="va">tna_model_start_high</span>, <span class="va">tna_model_start_low</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">comparison</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-16-1.svg" width="100%" style="text-align: center; display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-unnamed-chunk-16-1.svg" alt="" width="100%" style="text-align: center; display: block; margin: auto;"></p>
 <p>Compare centralities</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">comparison</span><span class="op">$</span><span class="va">centralities</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span></span></code></pre></div>
-<div id="ifhtoofqgy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="bpwgsnxlgh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 
 
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false" style="-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 16px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3;" bgcolor="#FFFFFF">
@@ -642,7 +763,7 @@ InStrength
 -0.23693341
 </td>
 <td headers="effect_size" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
--6.6808853
+-6.5741846
 </td>
 <td headers="p_value" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 0.000999001
@@ -659,10 +780,10 @@ InStrength
 0.01634987
 </td>
 <td headers="effect_size" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-0.3255056
+0.3369021
 </td>
 <td headers="p_value" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-0.749250749
+0.743256743
 </td>
 </tr>
 <tr style="border-style: none;">
@@ -676,7 +797,7 @@ InStrength
 0.53680793
 </td>
 <td headers="effect_size" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-7.4741341
+7.7240021
 </td>
 <td headers="p_value" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 0.000999001
@@ -693,7 +814,7 @@ InStrength
 -0.25275371
 </td>
 <td headers="effect_size" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
--7.4623409
+-7.3308543
 </td>
 <td headers="p_value" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 0.000999001
@@ -710,10 +831,10 @@ InStrength
 -0.09009651
 </td>
 <td headers="effect_size" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
--1.8001285
+-1.9372656
 </td>
 <td headers="p_value" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-0.076923077
+0.046953047
 </td>
 </tr>
 <tr style="border-style: none;">
@@ -727,7 +848,7 @@ InStrength
 0.19288376
 </td>
 <td headers="effect_size" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-4.0066931
+4.0496273
 </td>
 <td headers="p_value" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 0.000999001
@@ -744,10 +865,10 @@ InStrength
 -0.09192991
 </td>
 <td headers="effect_size" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
--3.3380625
+-3.5069394
 </td>
 <td headers="p_value" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-0.001998002
+0.000999001
 </td>
 </tr>
 <tr style="border-style: none;">
@@ -761,10 +882,10 @@ InStrength
 0.12225988
 </td>
 <td headers="effect_size" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-2.6970534
+2.7153863
 </td>
 <td headers="p_value" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
-0.009990010
+0.005994006
 </td>
 </tr>
 <tr style="border-style: none;">
@@ -778,7 +899,7 @@ InStrength
 -0.04909607
 </td>
 <td headers="effect_size" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
--3.2554851
+-3.0577480
 </td>
 <td headers="p_value" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">
 0.002997003
@@ -789,6 +910,27 @@ InStrength
 </div>
 </div>
 </div>
+<div class="section level1">
+<h1 id="papers-using-tna">Papers using TNA<a class="anchor" aria-label="anchor" href="#papers-using-tna"></a>
+</h1>
+<ul>
+<li>Saqr, M., Lopez-Pernas, S., Tormanen, T., Kaliisa, R., Misiejuk, K., &amp; Tikka, S. (2025). Transition Network Analysis: A Novel Framework for Modeling, Visualizing, and Identifying the Temporal Patterns of Learners and Learning Processes. Proceedings of the 15th International Learning Analytics and Knowledge Conference (LAK ’25), 351–361. ACM. <a href="https://doi.org/10.1145/3706468.3706513" class="external-link uri">https://doi.org/10.1145/3706468.3706513</a>
+</li>
+<li>Tikka, S., Lopez-Pernas, S., &amp; Saqr, M. (2025). tna: An R Package for Transition Network Analysis. Applied Psychological Measurement (online ahead of print). <a href="doi:10.1177/01466216251348840" class="uri">doi:10.1177/01466216251348840</a>
+</li>
+<li>López-Pernas, S., Misiejuk, K., Kaliisa, R., &amp; Saqr, M. (2025). Capturing the process of students’ AI interactions when creating and learning complex network structures. IEEE Transactions on Learning Technologies, 1–13. <a href="https://doi.org/10.1109/tlt.2025.3568599" class="external-link uri">https://doi.org/10.1109/tlt.2025.3568599</a>
+</li>
+<li>Törmänen, T., Saqr, M., López-Pernas, S., Mänty, K., Suoraniemi, J., Heikkala, N., &amp; Järvenoja, H. (2025). Emotional dynamics and regulation in collaborative learning. Learning and Instruction, 100, 102188. <a href="https://doi.org/10.1016/j.learninstruc.2025.102188" class="external-link uri">https://doi.org/10.1016/j.learninstruc.2025.102188</a>
+</li>
+<li>López-Pernas, S., Misiejuk, K., Oliveira, E., &amp; Saqr, M. (2025). The dynamics of the self-regulation process in student-AI interactions: The case of problem-solving in programming education. Proceedings of the 25th Koli Calling International Conference on Computing Education Research, 1–12. <a href="https://doi.org/10.1145/3769994.3770043" class="external-link uri">https://doi.org/10.1145/3769994.3770043</a>
+</li>
+<li>Misiejuk, K., Kaliisa, R., Lopez-Pernas, S., &amp; Saqr, M. (2026). Expanding the Quantitative Ethnography Toolkit with Transition Network Analysis: Exploring Methodological Synergies and Boundaries. In Advances in Quantitative Ethnography. ICQE 2025, CCIS vol. 2677. Springer. <a href="https://doi.org/10.1007/978-3-032-12229-2_10" class="external-link uri">https://doi.org/10.1007/978-3-032-12229-2_10</a>
+</li>
+<li>Lopez-Pernas, S., Misiejuk, K., Tikka, S., &amp; Saqr, M. (2026). Role Dynamics in Student-AI Collaboration: A Heterogeneous Transition Network Analysis Approach. SSRN preprint. <a href="https://doi.org/10.2139/ssrn.6082190" class="external-link uri">https://doi.org/10.2139/ssrn.6082190</a>
+</li>
+</ul>
+</div>
+
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -822,7 +964,7 @@ InStrength
 <li>
 <a href="http://users.jyu.fi/~santikka/" class="external-link">Santtu Tikka</a> <br><small class="roles"> Author </small>   </li>
 <li>
-<a href="https://sonsoles.me" class="external-link">Sonsoles López-Pernas</a> <br><small class="roles"> Author, maintainer </small>   </li>
+<a href="https://sonsoles.me" class="external-link">Sonsoles López-Pernas</a> <br><small class="roles"> Author, maintainer, copyright holder </small>   </li>
 </ul>
 </div>
 
@@ -846,7 +988,7 @@ InStrength
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Using grouped sequence data with tna">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,10 +39,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/communities_and_cliques.html">Finding cliques and communities with tna</a></li>
+<li><a class="dropdown-item" href="../articles/atna.html">Attention TNA</a></li>
+    <li><a class="dropdown-item" href="../articles/communities_and_cliques.html">Finding cliques and communities with tna</a></li>
     <li><a class="dropdown-item" href="../articles/complete_tutorial.html">A showcase of the main tna functions</a></li>
-    <li><a class="dropdown-item" href="../articles/ftna.html">Frequency-based tna</a></li>
+    <li><a class="dropdown-item" href="../articles/ftna.html">Frequency-based TNA</a></li>
     <li><a class="dropdown-item" href="../articles/grouped_sequences.html">Using grouped sequence data with tna</a></li>
+    <li><a class="dropdown-item" href="../articles/new-docs.html">tna — R Package Documentation</a></li>
     <li><a class="dropdown-item" href="../articles/prepare_data.html">How to prepare data for tna</a></li>
   </ul>
 </li>
@@ -68,81 +70,145 @@
       <img src="../logo.png" class="logo" alt=""><h1>Using grouped sequence data with tna</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/sonsoleslp/tna/blob/main/vignettes/articles/grouped_sequences.Rmd" class="external-link"><code>vignettes/articles/grouped_sequences.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sonsoleslp/tna/blob/main/vignettes/grouped_sequences.Rmd" class="external-link"><code>vignettes/grouped_sequences.Rmd</code></a></small>
       <div class="d-none name"><code>grouped_sequences.Rmd</code></div>
     </div>
 
     
     
-<p>TNA also enables the analysis of transition networks constructed from
-grouped sequence data. In this example, we first fit a mixed Markov
-model to the <code>engagement</code> data using the <code>seqHMM</code>
-package and build a grouped TNA model based on this model. First, we
-load the packages we will use for this example.</p>
+<p>TNA supports the analysis of transition networks constructed from
+grouped sequence data. Groups can be defined in several ways, but
+mainly: using a pre-existing grouping variable in the data (e.g., a
+demographic or experimental condition), or by clustering the sequences
+themselves based on their similarity. This vignette demonstrates both
+approaches using the <code>group_regulation_long</code> dataset.</p>
+<p>First, we load the packages we will use for this example.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/sonsoleslp/tna/" class="external-link">"tna"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://tibble.tidyverse.org/" class="external-link">"tibble"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org" class="external-link">"dplyr"</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://gt.rstudio.com" class="external-link">"gt"</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st">"seqHMM"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"engagement"</span>, package <span class="op">=</span> <span class="st">"tna"</span><span class="op">)</span></span></code></pre></div>
-<p>We simulate transition probabilities to initialize the model.</p>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://gt.rstudio.com" class="external-link">"gt"</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="data-preparation">Data preparation<a class="anchor" aria-label="anchor" href="#data-preparation"></a>
+</h2>
+<p>We import the data in long format and prepare it for analysis. The
+<code><a href="../reference/prepare_data.html">prepare_data()</a></code> function converts the long-format event log
+into wide-format sequences. The unused columns in the dataset are stored
+in the metadata of <code>prepared</code> and we can use them later
+on.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">265</span><span class="op">)</span></span>
-<span><span class="va">tna_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_model.html">tna</a></span><span class="op">(</span><span class="va">engagement</span><span class="op">)</span></span>
-<span><span class="va">n_var</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tna_model</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span></span>
-<span><span class="va">n_clusters</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
-<span><span class="va">trans_probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seqHMM/man/simulate_pars.html" class="external-link">simulate_transition_probs</a></span><span class="op">(</span><span class="va">n_var</span>, <span class="va">n_clusters</span><span class="op">)</span></span>
-<span><span class="va">init_probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.70</span>, <span class="fl">0.20</span>, <span class="fl">0.10</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.15</span>, <span class="fl">0.70</span>, <span class="fl">0.15</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.10</span>, <span class="fl">0.20</span>, <span class="fl">0.70</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>Next, we building and fit the model (this step takes some time to
-compute, the final model object is also available in the
-<code>tna</code> package as <code>engagement_mmm</code>).</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"group_regulation_long"</span>, package <span class="op">=</span> <span class="st">"tna"</span><span class="op">)</span></span>
+<span><span class="va">prepared</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_data.html">prepare_data</a></span><span class="op">(</span><span class="va">group_regulation_long</span>,</span>
+<span>                         actor <span class="op">=</span> <span class="st">"Actor"</span>,</span>
+<span>                         action <span class="op">=</span> <span class="st">"Action"</span>,</span>
+<span>                         time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="groups-from-a-pre-existing-variable">Groups from a pre-existing variable<a class="anchor" aria-label="anchor" href="#groups-from-a-pre-existing-variable"></a>
+</h2>
+<p>When the data contains a grouping variable, we can build separate TNA
+models for each group directly. Here, the <code>"Achiever"</code> column
+in the metadata splits the sequences into two groups (high vs. low
+achievers).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seqHMM/man/build_mmm.html" class="external-link">build_mmm</a></span><span class="op">(</span></span>
-<span>  <span class="va">engagement</span>,</span>
-<span>  transition_probs <span class="op">=</span> <span class="va">trans_probs</span>,</span>
-<span>  initial_probs <span class="op">=</span> <span class="va">init_probs</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">fit_mmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seqHMM/man/fit_model.html" class="external-link">fit_model</a></span><span class="op">(</span></span>
-<span>  <span class="va">modelTrans</span>,</span>
-<span>  global_step <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  control_global <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>algorithm <span class="op">=</span> <span class="st">"NLOPT_GD_STOGO_RAND"</span><span class="op">)</span>,</span>
-<span>  local_step <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  threads <span class="op">=</span> <span class="fl">60</span>,</span>
-<span>  control_em <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>restart <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>times <span class="op">=</span> <span class="fl">100</span>, n_optimum <span class="op">=</span> <span class="fl">101</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>Now, we create a new model using the cluster information from the
-model. Alternatively, if sequence data is provided to
-<code><a href="../reference/group_model.html">group_model()</a></code>, the group assignments can be provided with
-the <code>group</code> argument.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">achievers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_model.html">group_tna</a></span><span class="op">(</span><span class="va">prepared</span>, group <span class="op">=</span> <span class="st">"Achiever"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">achievers</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Registered S3 method overwritten by 'cograph':</span></span>
+<span><span class="co">#&gt;   method             from</span></span>
+<span><span class="co">#&gt;   plot.tna_bootstrap tna</span></span></code></pre></div>
+<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="100%"></p>
+<div class="section level3">
+<h3 id="comparing-groups">Comparing groups<a class="anchor" aria-label="anchor" href="#comparing-groups"></a>
+</h3>
+<p>The <code><a href="../reference/plot_compare.html">plot_compare()</a></code> function visualizes the difference
+network between the two groups. Green edges and donut segments indicate
+that the first group (High achievers) has higher values, while red
+indicates the opposite (Low achievers have higher values).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tna_model_clus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_model.html">group_model</a></span><span class="op">(</span><span class="va">fit_mmm</span><span class="op">$</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<p>We can summarize the cluster-specific models</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_compare.html">plot_compare</a></span><span class="op">(</span><span class="va">achievers</span><span class="op">)</span></span></code></pre></div>
+<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="permutation-test">Permutation test<a class="anchor" aria-label="anchor" href="#permutation-test"></a>
+</h3>
+<p>A permutation test can be used to assess whether the observed
+differences between the two groups are statistically significant.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">permutation_test_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/permutation_test.html">permutation_test</a></span><span class="op">(</span><span class="va">achievers</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">permutation_test_results</span><span class="op">)</span></span></code></pre></div>
+<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="subsequence-comparison">Subsequence comparison<a class="anchor" aria-label="anchor" href="#subsequence-comparison"></a>
+</h3>
+<p>We can also compare the frequency of subsequences across groups. Here
+we look at subsequences of length 3 to 5, keeping only those that appear
+at least 5 times, and apply FDR correction for multiple comparisons.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">subsequence_comparison</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compare_sequences.html">compare_sequences</a></span><span class="op">(</span><span class="va">achievers</span>,</span>
+<span>                                                  sub <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>,</span>
+<span>                                                  min_freq <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>                                                  correction <span class="op">=</span> <span class="st">"fdr"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">subsequence_comparison</span>, cells <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="100%"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="groups-from-sequence-clustering">Groups from sequence clustering<a class="anchor" aria-label="anchor" href="#groups-from-sequence-clustering"></a>
+</h2>
+<p>When no pre-existing grouping variable is available, we can cluster
+the sequences based on their pairwise dissimilarity. The
+<code><a href="../reference/cluster_data.html">cluster_sequences()</a></code>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">clustering_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cluster_data.html">cluster_sequences</a></span><span class="op">(</span><span class="va">prepared</span>, k <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p>To choose an appropriate number of clusters, we can plot the
+silhouette score for different values of <em>k</em>. Higher silhouette
+values indicate better-separated clusters.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="fl">2</span><span class="op">:</span><span class="fl">8</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">8</span>, \<span class="op">(</span><span class="va">k</span><span class="op">)</span> <span class="fu"><a href="../reference/cluster_data.html">cluster_sequences</a></span><span class="op">(</span><span class="va">prepared</span>, k <span class="op">=</span> <span class="va">k</span><span class="op">)</span><span class="op">$</span><span class="va">silhouette</span><span class="op">)</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"b"</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="st">"Number of clusters (k)"</span>,</span>
+<span>  ylab <span class="op">=</span> <span class="st">"Silhouette"</span>,</span>
+<span>  xaxt <span class="op">=</span> <span class="st">"n"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="100%"></p>
+<p>Once we have chosen <em>k</em>, we build the grouped TNA model using
+the cluster assignments.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tna_model_clus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_model.html">group_tna</a></span><span class="op">(</span><span class="va">prepared</span>, group <span class="op">=</span> <span class="va">clustering_results</span><span class="op">$</span><span class="va">assignments</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, byrow <span class="op">=</span> <span class="cn">T</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tna_model_clus</span><span class="op">)</span></span></code></pre></div>
+<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="100%"></p>
+<div class="section level3">
+<h3 id="summarizing-the-cluster-specific-models">Summarizing the cluster-specific models<a class="anchor" aria-label="anchor" href="#summarizing-the-cluster-specific-models"></a>
+</h3>
+<p>We can summarize the cluster-specific models to compare their overall
+characteristics.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">tna_model_clus</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>decimals <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mwlefoodfi table {
+<div id="mvfgzduvqb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mvfgzduvqb table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#mwlefoodfi thead, #mwlefoodfi tbody, #mwlefoodfi tfoot, #mwlefoodfi tr, #mwlefoodfi td, #mwlefoodfi th {
+#mvfgzduvqb thead, #mvfgzduvqb tbody, #mvfgzduvqb tfoot, #mvfgzduvqb tr, #mvfgzduvqb td, #mvfgzduvqb th {
   border-style: none;
 }
 
-#mwlefoodfi p {
+#mvfgzduvqb p {
   margin: 0;
   padding: 0;
 }
 
-#mwlefoodfi .gt_table {
+#mvfgzduvqb .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -168,12 +234,12 @@ the <code>group</code> argument.</p>
   border-left-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_caption {
+#mvfgzduvqb .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#mwlefoodfi .gt_title {
+#mvfgzduvqb .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -185,7 +251,7 @@ the <code>group</code> argument.</p>
   border-bottom-width: 0;
 }
 
-#mwlefoodfi .gt_subtitle {
+#mvfgzduvqb .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -197,7 +263,7 @@ the <code>group</code> argument.</p>
   border-top-width: 0;
 }
 
-#mwlefoodfi .gt_heading {
+#mvfgzduvqb .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -209,13 +275,13 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_bottom_border {
+#mvfgzduvqb .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_col_headings {
+#mvfgzduvqb .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -230,7 +296,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_col_heading {
+#mvfgzduvqb .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -250,7 +316,7 @@ the <code>group</code> argument.</p>
   overflow-x: hidden;
 }
 
-#mwlefoodfi .gt_column_spanner_outer {
+#mvfgzduvqb .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -262,15 +328,15 @@ the <code>group</code> argument.</p>
   padding-right: 4px;
 }
 
-#mwlefoodfi .gt_column_spanner_outer:first-child {
+#mvfgzduvqb .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mwlefoodfi .gt_column_spanner_outer:last-child {
+#mvfgzduvqb .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mwlefoodfi .gt_column_spanner {
+#mvfgzduvqb .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -282,11 +348,11 @@ the <code>group</code> argument.</p>
   width: 100%;
 }
 
-#mwlefoodfi .gt_spanner_row {
+#mvfgzduvqb .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#mwlefoodfi .gt_group_heading {
+#mvfgzduvqb .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -312,7 +378,7 @@ the <code>group</code> argument.</p>
   text-align: left;
 }
 
-#mwlefoodfi .gt_empty_group_heading {
+#mvfgzduvqb .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -327,15 +393,15 @@ the <code>group</code> argument.</p>
   vertical-align: middle;
 }
 
-#mwlefoodfi .gt_from_md > :first-child {
+#mvfgzduvqb .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mwlefoodfi .gt_from_md > :last-child {
+#mvfgzduvqb .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mwlefoodfi .gt_row {
+#mvfgzduvqb .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -354,7 +420,7 @@ the <code>group</code> argument.</p>
   overflow-x: hidden;
 }
 
-#mwlefoodfi .gt_stub {
+#mvfgzduvqb .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -367,7 +433,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_stub_row_group {
+#mvfgzduvqb .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -381,15 +447,15 @@ the <code>group</code> argument.</p>
   vertical-align: top;
 }
 
-#mwlefoodfi .gt_row_group_first td {
+#mvfgzduvqb .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mwlefoodfi .gt_row_group_first th {
+#mvfgzduvqb .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#mwlefoodfi .gt_summary_row {
+#mvfgzduvqb .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -399,16 +465,16 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_first_summary_row {
+#mvfgzduvqb .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_first_summary_row.thick {
+#mvfgzduvqb .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mwlefoodfi .gt_last_summary_row {
+#mvfgzduvqb .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -418,7 +484,7 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_grand_summary_row {
+#mvfgzduvqb .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -428,7 +494,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_first_grand_summary_row {
+#mvfgzduvqb .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -438,7 +504,7 @@ the <code>group</code> argument.</p>
   border-top-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_last_grand_summary_row_top {
+#mvfgzduvqb .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -448,11 +514,11 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_striped {
+#mvfgzduvqb .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mwlefoodfi .gt_table_body {
+#mvfgzduvqb .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -461,7 +527,7 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_footnotes {
+#mvfgzduvqb .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -475,7 +541,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_footnote {
+#mvfgzduvqb .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -484,7 +550,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_sourcenotes {
+#mvfgzduvqb .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -498,7 +564,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_sourcenote {
+#mvfgzduvqb .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -506,186 +572,192 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_left {
+#mvfgzduvqb .gt_left {
   text-align: left;
 }
 
-#mwlefoodfi .gt_center {
+#mvfgzduvqb .gt_center {
   text-align: center;
 }
 
-#mwlefoodfi .gt_right {
+#mvfgzduvqb .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mwlefoodfi .gt_font_normal {
+#mvfgzduvqb .gt_font_normal {
   font-weight: normal;
 }
 
-#mwlefoodfi .gt_font_bold {
+#mvfgzduvqb .gt_font_bold {
   font-weight: bold;
 }
 
-#mwlefoodfi .gt_font_italic {
+#mvfgzduvqb .gt_font_italic {
   font-style: italic;
 }
 
-#mwlefoodfi .gt_super {
+#mvfgzduvqb .gt_super {
   font-size: 65%;
 }
 
-#mwlefoodfi .gt_footnote_marks {
+#mvfgzduvqb .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#mwlefoodfi .gt_asterisk {
+#mvfgzduvqb .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mwlefoodfi .gt_indent_1 {
+#mvfgzduvqb .gt_indent_1 {
   text-indent: 5px;
 }
 
-#mwlefoodfi .gt_indent_2 {
+#mvfgzduvqb .gt_indent_2 {
   text-indent: 10px;
 }
 
-#mwlefoodfi .gt_indent_3 {
+#mvfgzduvqb .gt_indent_3 {
   text-indent: 15px;
 }
 
-#mwlefoodfi .gt_indent_4 {
+#mvfgzduvqb .gt_indent_4 {
   text-indent: 20px;
 }
 
-#mwlefoodfi .gt_indent_5 {
+#mvfgzduvqb .gt_indent_5 {
   text-indent: 25px;
 }
 
-#mwlefoodfi .katex-display {
+#mvfgzduvqb .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#mwlefoodfi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#mvfgzduvqb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="metric">metric</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Cluster-1">Cluster 1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Cluster-2">Cluster 2</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Cluster-3">Cluster 3</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Group-1">Group 1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Group-2">Group 2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Group-3">Group 3</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
 <td headers="metric" class="gt_row gt_left">Node Count</td>
-<td headers="Cluster 1" class="gt_row gt_right">3.00</td>
-<td headers="Cluster 2" class="gt_row gt_right">3.00</td>
-<td headers="Cluster 3" class="gt_row gt_right">3.00</td>
+<td headers="Group 1" class="gt_row gt_right">9.00</td>
+<td headers="Group 2" class="gt_row gt_right">9.00</td>
+<td headers="Group 3" class="gt_row gt_right">9.00</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">Edge Count</td>
-<td headers="Cluster 1" class="gt_row gt_right">8.00</td>
-<td headers="Cluster 2" class="gt_row gt_right">9.00</td>
-<td headers="Cluster 3" class="gt_row gt_right">9.00</td>
+<td headers="Group 1" class="gt_row gt_right">78.00</td>
+<td headers="Group 2" class="gt_row gt_right">77.00</td>
+<td headers="Group 3" class="gt_row gt_right">77.00</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">Network Density</td>
-<td headers="Cluster 1" class="gt_row gt_right">1.00</td>
-<td headers="Cluster 2" class="gt_row gt_right">1.00</td>
-<td headers="Cluster 3" class="gt_row gt_right">1.00</td>
+<td headers="Group 1" class="gt_row gt_right">1.00</td>
+<td headers="Group 2" class="gt_row gt_right">1.00</td>
+<td headers="Group 3" class="gt_row gt_right">1.00</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">Mean Distance</td>
-<td headers="Cluster 1" class="gt_row gt_right">0.29</td>
-<td headers="Cluster 2" class="gt_row gt_right">0.30</td>
-<td headers="Cluster 3" class="gt_row gt_right">0.27</td>
+<td headers="Group 1" class="gt_row gt_right">0.04</td>
+<td headers="Group 2" class="gt_row gt_right">0.05</td>
+<td headers="Group 3" class="gt_row gt_right">0.05</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">Mean Out-Strength</td>
-<td headers="Cluster 1" class="gt_row gt_right">1.00</td>
-<td headers="Cluster 2" class="gt_row gt_right">1.00</td>
-<td headers="Cluster 3" class="gt_row gt_right">1.00</td>
+<td headers="Group 1" class="gt_row gt_right">1.00</td>
+<td headers="Group 2" class="gt_row gt_right">1.00</td>
+<td headers="Group 3" class="gt_row gt_right">1.00</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">SD Out-Strength</td>
-<td headers="Cluster 1" class="gt_row gt_right">0.63</td>
-<td headers="Cluster 2" class="gt_row gt_right">0.69</td>
-<td headers="Cluster 3" class="gt_row gt_right">0.58</td>
+<td headers="Group 1" class="gt_row gt_right">0.76</td>
+<td headers="Group 2" class="gt_row gt_right">0.84</td>
+<td headers="Group 3" class="gt_row gt_right">0.81</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">Mean In-Strength</td>
-<td headers="Cluster 1" class="gt_row gt_right">1.00</td>
-<td headers="Cluster 2" class="gt_row gt_right">1.00</td>
-<td headers="Cluster 3" class="gt_row gt_right">1.00</td>
+<td headers="Group 1" class="gt_row gt_right">1.00</td>
+<td headers="Group 2" class="gt_row gt_right">1.00</td>
+<td headers="Group 3" class="gt_row gt_right">1.00</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">SD In-Strength</td>
-<td headers="Cluster 1" class="gt_row gt_right">0.00</td>
-<td headers="Cluster 2" class="gt_row gt_right">0.00</td>
-<td headers="Cluster 3" class="gt_row gt_right">0.00</td>
+<td headers="Group 1" class="gt_row gt_right">0.00</td>
+<td headers="Group 2" class="gt_row gt_right">0.00</td>
+<td headers="Group 3" class="gt_row gt_right">0.00</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">Mean Out-Degree</td>
-<td headers="Cluster 1" class="gt_row gt_right">2.67</td>
-<td headers="Cluster 2" class="gt_row gt_right">3.00</td>
-<td headers="Cluster 3" class="gt_row gt_right">3.00</td>
+<td headers="Group 1" class="gt_row gt_right">8.67</td>
+<td headers="Group 2" class="gt_row gt_right">8.56</td>
+<td headers="Group 3" class="gt_row gt_right">8.56</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">SD Out-Degree</td>
-<td headers="Cluster 1" class="gt_row gt_right">0.58</td>
-<td headers="Cluster 2" class="gt_row gt_right">0.00</td>
-<td headers="Cluster 3" class="gt_row gt_right">0.00</td>
+<td headers="Group 1" class="gt_row gt_right">0.71</td>
+<td headers="Group 2" class="gt_row gt_right">0.73</td>
+<td headers="Group 3" class="gt_row gt_right">0.73</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">Centralization (Out-Degree)</td>
-<td headers="Cluster 1" class="gt_row gt_right">0.25</td>
-<td headers="Cluster 2" class="gt_row gt_right">0.00</td>
-<td headers="Cluster 3" class="gt_row gt_right">0.00</td>
+<td headers="Group 1" class="gt_row gt_right">0.02</td>
+<td headers="Group 2" class="gt_row gt_right">0.03</td>
+<td headers="Group 3" class="gt_row gt_right">0.03</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">Centralization (In-Degree)</td>
-<td headers="Cluster 1" class="gt_row gt_right">0.25</td>
-<td headers="Cluster 2" class="gt_row gt_right">0.00</td>
-<td headers="Cluster 3" class="gt_row gt_right">0.00</td>
+<td headers="Group 1" class="gt_row gt_right">0.02</td>
+<td headers="Group 2" class="gt_row gt_right">0.03</td>
+<td headers="Group 3" class="gt_row gt_right">0.03</td>
 </tr>
 <tr>
 <td headers="metric" class="gt_row gt_left">Reciprocity</td>
-<td headers="Cluster 1" class="gt_row gt_right">0.80</td>
-<td headers="Cluster 2" class="gt_row gt_right">1.00</td>
-<td headers="Cluster 3" class="gt_row gt_right">1.00</td>
+<td headers="Group 1" class="gt_row gt_right">0.99</td>
+<td headers="Group 2" class="gt_row gt_right">0.97</td>
+<td headers="Group 3" class="gt_row gt_right">0.97</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>and their initial probabilities</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">tna_model_clus</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">inits</span><span class="op">)</span>, .id <span class="op">=</span> <span class="st">"Cluster"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_percent.html" class="external-link">fmt_percent</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div id="eexombwkke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#eexombwkke table {
+<p>Initial probabilities show which states are most common at the start
+of the sequences in each cluster.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span></span>
+<span>  <span class="va">tna_model_clus</span>,</span>
+<span>  \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">inits</span>, <span class="va">x</span><span class="op">$</span><span class="va">labels</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span>, <span class="va">mat</span>, row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="va">df</span>, rowname_col <span class="op">=</span> <span class="st">"label"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_percent.html" class="external-link">fmt_percent</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="op">-</span><span class="va">label</span><span class="op">)</span></span></code></pre></div>
+<div id="hqkbhxmjac" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hqkbhxmjac table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#eexombwkke thead, #eexombwkke tbody, #eexombwkke tfoot, #eexombwkke tr, #eexombwkke td, #eexombwkke th {
+#hqkbhxmjac thead, #hqkbhxmjac tbody, #hqkbhxmjac tfoot, #hqkbhxmjac tr, #hqkbhxmjac td, #hqkbhxmjac th {
   border-style: none;
 }
 
-#eexombwkke p {
+#hqkbhxmjac p {
   margin: 0;
   padding: 0;
 }
 
-#eexombwkke .gt_table {
+#hqkbhxmjac .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -711,12 +783,12 @@ the <code>group</code> argument.</p>
   border-left-color: #D3D3D3;
 }
 
-#eexombwkke .gt_caption {
+#hqkbhxmjac .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#eexombwkke .gt_title {
+#hqkbhxmjac .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -728,7 +800,7 @@ the <code>group</code> argument.</p>
   border-bottom-width: 0;
 }
 
-#eexombwkke .gt_subtitle {
+#hqkbhxmjac .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -740,7 +812,7 @@ the <code>group</code> argument.</p>
   border-top-width: 0;
 }
 
-#eexombwkke .gt_heading {
+#hqkbhxmjac .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -752,13 +824,13 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#eexombwkke .gt_bottom_border {
+#hqkbhxmjac .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#eexombwkke .gt_col_headings {
+#hqkbhxmjac .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -773,7 +845,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#eexombwkke .gt_col_heading {
+#hqkbhxmjac .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -793,7 +865,7 @@ the <code>group</code> argument.</p>
   overflow-x: hidden;
 }
 
-#eexombwkke .gt_column_spanner_outer {
+#hqkbhxmjac .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -805,15 +877,15 @@ the <code>group</code> argument.</p>
   padding-right: 4px;
 }
 
-#eexombwkke .gt_column_spanner_outer:first-child {
+#hqkbhxmjac .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#eexombwkke .gt_column_spanner_outer:last-child {
+#hqkbhxmjac .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#eexombwkke .gt_column_spanner {
+#hqkbhxmjac .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -825,11 +897,11 @@ the <code>group</code> argument.</p>
   width: 100%;
 }
 
-#eexombwkke .gt_spanner_row {
+#hqkbhxmjac .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#eexombwkke .gt_group_heading {
+#hqkbhxmjac .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -855,7 +927,7 @@ the <code>group</code> argument.</p>
   text-align: left;
 }
 
-#eexombwkke .gt_empty_group_heading {
+#hqkbhxmjac .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -870,15 +942,15 @@ the <code>group</code> argument.</p>
   vertical-align: middle;
 }
 
-#eexombwkke .gt_from_md > :first-child {
+#hqkbhxmjac .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#eexombwkke .gt_from_md > :last-child {
+#hqkbhxmjac .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#eexombwkke .gt_row {
+#hqkbhxmjac .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -897,7 +969,7 @@ the <code>group</code> argument.</p>
   overflow-x: hidden;
 }
 
-#eexombwkke .gt_stub {
+#hqkbhxmjac .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -910,7 +982,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#eexombwkke .gt_stub_row_group {
+#hqkbhxmjac .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -924,15 +996,15 @@ the <code>group</code> argument.</p>
   vertical-align: top;
 }
 
-#eexombwkke .gt_row_group_first td {
+#hqkbhxmjac .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#eexombwkke .gt_row_group_first th {
+#hqkbhxmjac .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#eexombwkke .gt_summary_row {
+#hqkbhxmjac .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -942,16 +1014,16 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#eexombwkke .gt_first_summary_row {
+#hqkbhxmjac .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#eexombwkke .gt_first_summary_row.thick {
+#hqkbhxmjac .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#eexombwkke .gt_last_summary_row {
+#hqkbhxmjac .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -961,7 +1033,7 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#eexombwkke .gt_grand_summary_row {
+#hqkbhxmjac .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -971,7 +1043,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#eexombwkke .gt_first_grand_summary_row {
+#hqkbhxmjac .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -981,7 +1053,7 @@ the <code>group</code> argument.</p>
   border-top-color: #D3D3D3;
 }
 
-#eexombwkke .gt_last_grand_summary_row_top {
+#hqkbhxmjac .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -991,11 +1063,11 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#eexombwkke .gt_striped {
+#hqkbhxmjac .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#eexombwkke .gt_table_body {
+#hqkbhxmjac .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1004,7 +1076,7 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#eexombwkke .gt_footnotes {
+#hqkbhxmjac .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1018,7 +1090,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#eexombwkke .gt_footnote {
+#hqkbhxmjac .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1027,7 +1099,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#eexombwkke .gt_sourcenotes {
+#hqkbhxmjac .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1041,7 +1113,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#eexombwkke .gt_sourcenote {
+#hqkbhxmjac .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1049,102 +1121,143 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#eexombwkke .gt_left {
+#hqkbhxmjac .gt_left {
   text-align: left;
 }
 
-#eexombwkke .gt_center {
+#hqkbhxmjac .gt_center {
   text-align: center;
 }
 
-#eexombwkke .gt_right {
+#hqkbhxmjac .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#eexombwkke .gt_font_normal {
+#hqkbhxmjac .gt_font_normal {
   font-weight: normal;
 }
 
-#eexombwkke .gt_font_bold {
+#hqkbhxmjac .gt_font_bold {
   font-weight: bold;
 }
 
-#eexombwkke .gt_font_italic {
+#hqkbhxmjac .gt_font_italic {
   font-style: italic;
 }
 
-#eexombwkke .gt_super {
+#hqkbhxmjac .gt_super {
   font-size: 65%;
 }
 
-#eexombwkke .gt_footnote_marks {
+#hqkbhxmjac .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#eexombwkke .gt_asterisk {
+#hqkbhxmjac .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#eexombwkke .gt_indent_1 {
+#hqkbhxmjac .gt_indent_1 {
   text-indent: 5px;
 }
 
-#eexombwkke .gt_indent_2 {
+#hqkbhxmjac .gt_indent_2 {
   text-indent: 10px;
 }
 
-#eexombwkke .gt_indent_3 {
+#hqkbhxmjac .gt_indent_3 {
   text-indent: 15px;
 }
 
-#eexombwkke .gt_indent_4 {
+#hqkbhxmjac .gt_indent_4 {
   text-indent: 20px;
 }
 
-#eexombwkke .gt_indent_5 {
+#hqkbhxmjac .gt_indent_5 {
   text-indent: 25px;
 }
 
-#eexombwkke .katex-display {
+#hqkbhxmjac .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#eexombwkke div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#hqkbhxmjac div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Cluster-1">Cluster 1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Cluster-2">Cluster 2</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Cluster-3">Cluster 3</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="a::stub"></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Group.1">Group.1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Group.2">Group.2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Group.3">Group.3</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Cluster 1" class="gt_row gt_right">75.00%</td>
-<td headers="Cluster 2" class="gt_row gt_right">51.92%</td>
-<td headers="Cluster 3" class="gt_row gt_right">0.00%</td>
+<th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub">adapt</th>
+<td headers="stub_1_1 Group.1" class="gt_row gt_right">1.01%</td>
+<td headers="stub_1_1 Group.2" class="gt_row gt_right">1.01%</td>
+<td headers="stub_1_1 Group.3" class="gt_row gt_right">1.47%</td>
 </tr>
 <tr>
-<td headers="Cluster 1" class="gt_row gt_right">0.00%</td>
-<td headers="Cluster 2" class="gt_row gt_right">48.08%</td>
-<td headers="Cluster 3" class="gt_row gt_right">41.07%</td>
+<th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub">cohesion</th>
+<td headers="stub_1_2 Group.1" class="gt_row gt_right">6.05%</td>
+<td headers="stub_1_2 Group.2" class="gt_row gt_right">6.68%</td>
+<td headers="stub_1_2 Group.3" class="gt_row gt_right">5.55%</td>
 </tr>
 <tr>
-<td headers="Cluster 1" class="gt_row gt_right">25.00%</td>
-<td headers="Cluster 2" class="gt_row gt_right">0.00%</td>
-<td headers="Cluster 3" class="gt_row gt_right">58.93%</td>
+<th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub">consensus</th>
+<td headers="stub_1_3 Group.1" class="gt_row gt_right">17.02%</td>
+<td headers="stub_1_3 Group.2" class="gt_row gt_right">18.42%</td>
+<td headers="stub_1_3 Group.3" class="gt_row gt_right">30.18%</td>
+</tr>
+<tr>
+<th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub">coregulate</th>
+<td headers="stub_1_4 Group.1" class="gt_row gt_right">1.46%</td>
+<td headers="stub_1_4 Group.2" class="gt_row gt_right">2.83%</td>
+<td headers="stub_1_4 Group.3" class="gt_row gt_right">1.79%</td>
+</tr>
+<tr>
+<th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub">discuss</th>
+<td headers="stub_1_5 Group.1" class="gt_row gt_right">17.69%</td>
+<td headers="stub_1_5 Group.2" class="gt_row gt_right">19.43%</td>
+<td headers="stub_1_5 Group.3" class="gt_row gt_right">15.82%</td>
+</tr>
+<tr>
+<th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub">emotion</th>
+<td headers="stub_1_6 Group.1" class="gt_row gt_right">15.68%</td>
+<td headers="stub_1_6 Group.2" class="gt_row gt_right">13.97%</td>
+<td headers="stub_1_6 Group.3" class="gt_row gt_right">15.33%</td>
+</tr>
+<tr>
+<th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub">monitor</th>
+<td headers="stub_1_7 Group.1" class="gt_row gt_right">15.12%</td>
+<td headers="stub_1_7 Group.2" class="gt_row gt_right">12.75%</td>
+<td headers="stub_1_7 Group.3" class="gt_row gt_right">14.68%</td>
+</tr>
+<tr>
+<th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub">plan</th>
+<td headers="stub_1_8 Group.1" class="gt_row gt_right">23.63%</td>
+<td headers="stub_1_8 Group.2" class="gt_row gt_right">22.87%</td>
+<td headers="stub_1_8 Group.3" class="gt_row gt_right">13.87%</td>
+</tr>
+<tr>
+<th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub">synthesis</th>
+<td headers="stub_1_9 Group.1" class="gt_row gt_right">2.35%</td>
+<td headers="stub_1_9 Group.2" class="gt_row gt_right">2.02%</td>
+<td headers="stub_1_9 Group.3" class="gt_row gt_right">1.31%</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>as well as transition probabilities.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>The full transition probability matrices can also be inspected for
+each cluster.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
 <span>  <span class="va">tna_model_clus</span>,</span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -1152,28 +1265,28 @@ the <code>group</code> argument.</p>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>      <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames_to_column</a></span><span class="op">(</span><span class="st">"From\\To"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>      <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">tna_model_clus</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>      <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_percent.html" class="external-link">fmt_percent</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">transitions</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<div id="ulbfdpbcyv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ulbfdpbcyv table {
+<span></span>
+<span><span class="va">transitions</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">tna_model_clus</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<div id="jspaouvmve" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jspaouvmve table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ulbfdpbcyv thead, #ulbfdpbcyv tbody, #ulbfdpbcyv tfoot, #ulbfdpbcyv tr, #ulbfdpbcyv td, #ulbfdpbcyv th {
+#jspaouvmve thead, #jspaouvmve tbody, #jspaouvmve tfoot, #jspaouvmve tr, #jspaouvmve td, #jspaouvmve th {
   border-style: none;
 }
 
-#ulbfdpbcyv p {
+#jspaouvmve p {
   margin: 0;
   padding: 0;
 }
 
-#ulbfdpbcyv .gt_table {
+#jspaouvmve .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1199,12 +1312,12 @@ the <code>group</code> argument.</p>
   border-left-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_caption {
+#jspaouvmve .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ulbfdpbcyv .gt_title {
+#jspaouvmve .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1216,7 +1329,7 @@ the <code>group</code> argument.</p>
   border-bottom-width: 0;
 }
 
-#ulbfdpbcyv .gt_subtitle {
+#jspaouvmve .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1228,7 +1341,7 @@ the <code>group</code> argument.</p>
   border-top-width: 0;
 }
 
-#ulbfdpbcyv .gt_heading {
+#jspaouvmve .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1240,13 +1353,13 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_bottom_border {
+#jspaouvmve .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_col_headings {
+#jspaouvmve .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1261,7 +1374,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_col_heading {
+#jspaouvmve .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1281,7 +1394,7 @@ the <code>group</code> argument.</p>
   overflow-x: hidden;
 }
 
-#ulbfdpbcyv .gt_column_spanner_outer {
+#jspaouvmve .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1293,15 +1406,15 @@ the <code>group</code> argument.</p>
   padding-right: 4px;
 }
 
-#ulbfdpbcyv .gt_column_spanner_outer:first-child {
+#jspaouvmve .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ulbfdpbcyv .gt_column_spanner_outer:last-child {
+#jspaouvmve .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ulbfdpbcyv .gt_column_spanner {
+#jspaouvmve .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1313,11 +1426,11 @@ the <code>group</code> argument.</p>
   width: 100%;
 }
 
-#ulbfdpbcyv .gt_spanner_row {
+#jspaouvmve .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ulbfdpbcyv .gt_group_heading {
+#jspaouvmve .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1343,7 +1456,7 @@ the <code>group</code> argument.</p>
   text-align: left;
 }
 
-#ulbfdpbcyv .gt_empty_group_heading {
+#jspaouvmve .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1358,15 +1471,15 @@ the <code>group</code> argument.</p>
   vertical-align: middle;
 }
 
-#ulbfdpbcyv .gt_from_md > :first-child {
+#jspaouvmve .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ulbfdpbcyv .gt_from_md > :last-child {
+#jspaouvmve .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ulbfdpbcyv .gt_row {
+#jspaouvmve .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1385,7 +1498,7 @@ the <code>group</code> argument.</p>
   overflow-x: hidden;
 }
 
-#ulbfdpbcyv .gt_stub {
+#jspaouvmve .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1398,7 +1511,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#ulbfdpbcyv .gt_stub_row_group {
+#jspaouvmve .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1412,15 +1525,15 @@ the <code>group</code> argument.</p>
   vertical-align: top;
 }
 
-#ulbfdpbcyv .gt_row_group_first td {
+#jspaouvmve .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ulbfdpbcyv .gt_row_group_first th {
+#jspaouvmve .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ulbfdpbcyv .gt_summary_row {
+#jspaouvmve .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1430,16 +1543,16 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#ulbfdpbcyv .gt_first_summary_row {
+#jspaouvmve .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_first_summary_row.thick {
+#jspaouvmve .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ulbfdpbcyv .gt_last_summary_row {
+#jspaouvmve .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1449,7 +1562,7 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_grand_summary_row {
+#jspaouvmve .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1459,7 +1572,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#ulbfdpbcyv .gt_first_grand_summary_row {
+#jspaouvmve .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1469,7 +1582,7 @@ the <code>group</code> argument.</p>
   border-top-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_last_grand_summary_row_top {
+#jspaouvmve .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1479,11 +1592,11 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_striped {
+#jspaouvmve .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ulbfdpbcyv .gt_table_body {
+#jspaouvmve .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1492,7 +1605,7 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_footnotes {
+#jspaouvmve .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1506,7 +1619,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_footnote {
+#jspaouvmve .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1515,7 +1628,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#ulbfdpbcyv .gt_sourcenotes {
+#jspaouvmve .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1529,7 +1642,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_sourcenote {
+#jspaouvmve .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1537,128 +1650,224 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#ulbfdpbcyv .gt_left {
+#jspaouvmve .gt_left {
   text-align: left;
 }
 
-#ulbfdpbcyv .gt_center {
+#jspaouvmve .gt_center {
   text-align: center;
 }
 
-#ulbfdpbcyv .gt_right {
+#jspaouvmve .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ulbfdpbcyv .gt_font_normal {
+#jspaouvmve .gt_font_normal {
   font-weight: normal;
 }
 
-#ulbfdpbcyv .gt_font_bold {
+#jspaouvmve .gt_font_bold {
   font-weight: bold;
 }
 
-#ulbfdpbcyv .gt_font_italic {
+#jspaouvmve .gt_font_italic {
   font-style: italic;
 }
 
-#ulbfdpbcyv .gt_super {
+#jspaouvmve .gt_super {
   font-size: 65%;
 }
 
-#ulbfdpbcyv .gt_footnote_marks {
+#jspaouvmve .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ulbfdpbcyv .gt_asterisk {
+#jspaouvmve .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ulbfdpbcyv .gt_indent_1 {
+#jspaouvmve .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ulbfdpbcyv .gt_indent_2 {
+#jspaouvmve .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ulbfdpbcyv .gt_indent_3 {
+#jspaouvmve .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ulbfdpbcyv .gt_indent_4 {
+#jspaouvmve .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ulbfdpbcyv .gt_indent_5 {
+#jspaouvmve .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ulbfdpbcyv .katex-display {
+#jspaouvmve .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ulbfdpbcyv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#jspaouvmve div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading">
-<td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Cluster 1</td>
+<td colspan="10" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Group 1</td>
     </tr>
 <tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="From\To">From\To</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Active">Active</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Average">Average</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Disengaged">Disengaged</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="adapt">adapt</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="cohesion">cohesion</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="consensus">consensus</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="coregulate">coregulate</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="discuss">discuss</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="emotion">emotion</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="monitor">monitor</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="plan">plan</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="synthesis">synthesis</th>
     </tr>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="From\To" class="gt_row gt_left">Active</td>
-<td headers="Active" class="gt_row gt_right">70.62%</td>
-<td headers="Average" class="gt_row gt_right">29.38%</td>
-<td headers="Disengaged" class="gt_row gt_right">0.00%</td>
+<td headers="From\To" class="gt_row gt_left">adapt</td>
+<td headers="adapt" class="gt_row gt_right">0.00%</td>
+<td headers="cohesion" class="gt_row gt_right">33.33%</td>
+<td headers="consensus" class="gt_row gt_right">43.09%</td>
+<td headers="coregulate" class="gt_row gt_right">1.63%</td>
+<td headers="discuss" class="gt_row gt_right">4.07%</td>
+<td headers="emotion" class="gt_row gt_right">12.20%</td>
+<td headers="monitor" class="gt_row gt_right">4.88%</td>
+<td headers="plan" class="gt_row gt_right">0.81%</td>
+<td headers="synthesis" class="gt_row gt_right">0.00%</td>
 </tr>
 <tr>
-<td headers="From\To" class="gt_row gt_left">Average</td>
-<td headers="Active" class="gt_row gt_right">51.34%</td>
-<td headers="Average" class="gt_row gt_right">45.98%</td>
-<td headers="Disengaged" class="gt_row gt_right">2.68%</td>
+<td headers="From\To" class="gt_row gt_left">cohesion</td>
+<td headers="adapt" class="gt_row gt_right">0.52%</td>
+<td headers="cohesion" class="gt_row gt_right">2.09%</td>
+<td headers="consensus" class="gt_row gt_right">47.64%</td>
+<td headers="coregulate" class="gt_row gt_right">11.26%</td>
+<td headers="discuss" class="gt_row gt_right">8.90%</td>
+<td headers="emotion" class="gt_row gt_right">12.83%</td>
+<td headers="monitor" class="gt_row gt_right">3.40%</td>
+<td headers="plan" class="gt_row gt_right">12.83%</td>
+<td headers="synthesis" class="gt_row gt_right">0.52%</td>
 </tr>
 <tr>
-<td headers="From\To" class="gt_row gt_left">Disengaged</td>
-<td headers="Active" class="gt_row gt_right">33.33%</td>
-<td headers="Average" class="gt_row gt_right">38.10%</td>
-<td headers="Disengaged" class="gt_row gt_right">28.57%</td>
+<td headers="From\To" class="gt_row gt_left">consensus</td>
+<td headers="adapt" class="gt_row gt_right">0.85%</td>
+<td headers="cohesion" class="gt_row gt_right">0.93%</td>
+<td headers="consensus" class="gt_row gt_right">8.24%</td>
+<td headers="coregulate" class="gt_row gt_right">20.51%</td>
+<td headers="discuss" class="gt_row gt_right">22.07%</td>
+<td headers="emotion" class="gt_row gt_right">7.61%</td>
+<td headers="monitor" class="gt_row gt_right">4.20%</td>
+<td headers="plan" class="gt_row gt_right">34.50%</td>
+<td headers="synthesis" class="gt_row gt_right">1.09%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">coregulate</td>
+<td headers="adapt" class="gt_row gt_right">1.31%</td>
+<td headers="cohesion" class="gt_row gt_right">4.70%</td>
+<td headers="consensus" class="gt_row gt_right">11.49%</td>
+<td headers="coregulate" class="gt_row gt_right">2.09%</td>
+<td headers="discuss" class="gt_row gt_right">31.07%</td>
+<td headers="emotion" class="gt_row gt_right">19.84%</td>
+<td headers="monitor" class="gt_row gt_right">7.57%</td>
+<td headers="plan" class="gt_row gt_right">19.06%</td>
+<td headers="synthesis" class="gt_row gt_right">2.87%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">discuss</td>
+<td headers="adapt" class="gt_row gt_right">7.40%</td>
+<td headers="cohesion" class="gt_row gt_right">5.25%</td>
+<td headers="consensus" class="gt_row gt_right">31.94%</td>
+<td headers="coregulate" class="gt_row gt_right">7.72%</td>
+<td headers="discuss" class="gt_row gt_right">19.72%</td>
+<td headers="emotion" class="gt_row gt_right">11.68%</td>
+<td headers="monitor" class="gt_row gt_right">1.82%</td>
+<td headers="plan" class="gt_row gt_right">0.86%</td>
+<td headers="synthesis" class="gt_row gt_right">13.61%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">emotion</td>
+<td headers="adapt" class="gt_row gt_right">0.31%</td>
+<td headers="cohesion" class="gt_row gt_right">33.23%</td>
+<td headers="consensus" class="gt_row gt_right">34.46%</td>
+<td headers="coregulate" class="gt_row gt_right">3.06%</td>
+<td headers="discuss" class="gt_row gt_right">9.95%</td>
+<td headers="emotion" class="gt_row gt_right">7.20%</td>
+<td headers="monitor" class="gt_row gt_right">3.22%</td>
+<td headers="plan" class="gt_row gt_right">8.27%</td>
+<td headers="synthesis" class="gt_row gt_right">0.31%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">monitor</td>
+<td headers="adapt" class="gt_row gt_right">1.40%</td>
+<td headers="cohesion" class="gt_row gt_right">6.72%</td>
+<td headers="consensus" class="gt_row gt_right">15.13%</td>
+<td headers="coregulate" class="gt_row gt_right">5.88%</td>
+<td headers="discuss" class="gt_row gt_right">38.66%</td>
+<td headers="emotion" class="gt_row gt_right">10.36%</td>
+<td headers="monitor" class="gt_row gt_right">2.80%</td>
+<td headers="plan" class="gt_row gt_right">18.49%</td>
+<td headers="synthesis" class="gt_row gt_right">0.56%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">plan</td>
+<td headers="adapt" class="gt_row gt_right">0.09%</td>
+<td headers="cohesion" class="gt_row gt_right">1.83%</td>
+<td headers="consensus" class="gt_row gt_right">28.58%</td>
+<td headers="coregulate" class="gt_row gt_right">1.19%</td>
+<td headers="discuss" class="gt_row gt_right">7.31%</td>
+<td headers="emotion" class="gt_row gt_right">16.62%</td>
+<td headers="monitor" class="gt_row gt_right">9.13%</td>
+<td headers="plan" class="gt_row gt_right">34.98%</td>
+<td headers="synthesis" class="gt_row gt_right">0.27%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">synthesis</td>
+<td headers="adapt" class="gt_row gt_right">28.00%</td>
+<td headers="cohesion" class="gt_row gt_right">3.33%</td>
+<td headers="consensus" class="gt_row gt_right">44.67%</td>
+<td headers="coregulate" class="gt_row gt_right">6.00%</td>
+<td headers="discuss" class="gt_row gt_right">5.33%</td>
+<td headers="emotion" class="gt_row gt_right">8.00%</td>
+<td headers="monitor" class="gt_row gt_right">2.00%</td>
+<td headers="plan" class="gt_row gt_right">2.67%</td>
+<td headers="synthesis" class="gt_row gt_right">0.00%</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">transitions</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<div id="kgufivjubq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kgufivjubq table {
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">transitions</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">tna_model_clus</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<div id="gacmnuintg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gacmnuintg table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kgufivjubq thead, #kgufivjubq tbody, #kgufivjubq tfoot, #kgufivjubq tr, #kgufivjubq td, #kgufivjubq th {
+#gacmnuintg thead, #gacmnuintg tbody, #gacmnuintg tfoot, #gacmnuintg tr, #gacmnuintg td, #gacmnuintg th {
   border-style: none;
 }
 
-#kgufivjubq p {
+#gacmnuintg p {
   margin: 0;
   padding: 0;
 }
 
-#kgufivjubq .gt_table {
+#gacmnuintg .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1684,12 +1893,12 @@ the <code>group</code> argument.</p>
   border-left-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_caption {
+#gacmnuintg .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kgufivjubq .gt_title {
+#gacmnuintg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1701,7 +1910,7 @@ the <code>group</code> argument.</p>
   border-bottom-width: 0;
 }
 
-#kgufivjubq .gt_subtitle {
+#gacmnuintg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1713,7 +1922,7 @@ the <code>group</code> argument.</p>
   border-top-width: 0;
 }
 
-#kgufivjubq .gt_heading {
+#gacmnuintg .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1725,13 +1934,13 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_bottom_border {
+#gacmnuintg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_col_headings {
+#gacmnuintg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1746,7 +1955,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_col_heading {
+#gacmnuintg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1766,7 +1975,7 @@ the <code>group</code> argument.</p>
   overflow-x: hidden;
 }
 
-#kgufivjubq .gt_column_spanner_outer {
+#gacmnuintg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1778,15 +1987,15 @@ the <code>group</code> argument.</p>
   padding-right: 4px;
 }
 
-#kgufivjubq .gt_column_spanner_outer:first-child {
+#gacmnuintg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kgufivjubq .gt_column_spanner_outer:last-child {
+#gacmnuintg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kgufivjubq .gt_column_spanner {
+#gacmnuintg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1798,11 +2007,11 @@ the <code>group</code> argument.</p>
   width: 100%;
 }
 
-#kgufivjubq .gt_spanner_row {
+#gacmnuintg .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kgufivjubq .gt_group_heading {
+#gacmnuintg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1828,7 +2037,7 @@ the <code>group</code> argument.</p>
   text-align: left;
 }
 
-#kgufivjubq .gt_empty_group_heading {
+#gacmnuintg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1843,15 +2052,15 @@ the <code>group</code> argument.</p>
   vertical-align: middle;
 }
 
-#kgufivjubq .gt_from_md > :first-child {
+#gacmnuintg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kgufivjubq .gt_from_md > :last-child {
+#gacmnuintg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kgufivjubq .gt_row {
+#gacmnuintg .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1870,7 +2079,7 @@ the <code>group</code> argument.</p>
   overflow-x: hidden;
 }
 
-#kgufivjubq .gt_stub {
+#gacmnuintg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1883,7 +2092,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#kgufivjubq .gt_stub_row_group {
+#gacmnuintg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1897,15 +2106,15 @@ the <code>group</code> argument.</p>
   vertical-align: top;
 }
 
-#kgufivjubq .gt_row_group_first td {
+#gacmnuintg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kgufivjubq .gt_row_group_first th {
+#gacmnuintg .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kgufivjubq .gt_summary_row {
+#gacmnuintg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1915,16 +2124,16 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#kgufivjubq .gt_first_summary_row {
+#gacmnuintg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_first_summary_row.thick {
+#gacmnuintg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kgufivjubq .gt_last_summary_row {
+#gacmnuintg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1934,7 +2143,7 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_grand_summary_row {
+#gacmnuintg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1944,7 +2153,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#kgufivjubq .gt_first_grand_summary_row {
+#gacmnuintg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1954,7 +2163,7 @@ the <code>group</code> argument.</p>
   border-top-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_last_grand_summary_row_top {
+#gacmnuintg .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1964,11 +2173,11 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_striped {
+#gacmnuintg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kgufivjubq .gt_table_body {
+#gacmnuintg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1977,7 +2186,7 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_footnotes {
+#gacmnuintg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1991,7 +2200,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_footnote {
+#gacmnuintg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2000,7 +2209,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#kgufivjubq .gt_sourcenotes {
+#gacmnuintg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2014,7 +2223,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_sourcenote {
+#gacmnuintg .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2022,128 +2231,224 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#kgufivjubq .gt_left {
+#gacmnuintg .gt_left {
   text-align: left;
 }
 
-#kgufivjubq .gt_center {
+#gacmnuintg .gt_center {
   text-align: center;
 }
 
-#kgufivjubq .gt_right {
+#gacmnuintg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kgufivjubq .gt_font_normal {
+#gacmnuintg .gt_font_normal {
   font-weight: normal;
 }
 
-#kgufivjubq .gt_font_bold {
+#gacmnuintg .gt_font_bold {
   font-weight: bold;
 }
 
-#kgufivjubq .gt_font_italic {
+#gacmnuintg .gt_font_italic {
   font-style: italic;
 }
 
-#kgufivjubq .gt_super {
+#gacmnuintg .gt_super {
   font-size: 65%;
 }
 
-#kgufivjubq .gt_footnote_marks {
+#gacmnuintg .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kgufivjubq .gt_asterisk {
+#gacmnuintg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kgufivjubq .gt_indent_1 {
+#gacmnuintg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kgufivjubq .gt_indent_2 {
+#gacmnuintg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kgufivjubq .gt_indent_3 {
+#gacmnuintg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kgufivjubq .gt_indent_4 {
+#gacmnuintg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kgufivjubq .gt_indent_5 {
+#gacmnuintg .gt_indent_5 {
   text-indent: 25px;
 }
 
-#kgufivjubq .katex-display {
+#gacmnuintg .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#kgufivjubq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#gacmnuintg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading">
-<td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Cluster 1</td>
+<td colspan="10" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Group 2</td>
     </tr>
 <tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="From\To">From\To</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Active">Active</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Average">Average</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Disengaged">Disengaged</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="adapt">adapt</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="cohesion">cohesion</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="consensus">consensus</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="coregulate">coregulate</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="discuss">discuss</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="emotion">emotion</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="monitor">monitor</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="plan">plan</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="synthesis">synthesis</th>
     </tr>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="From\To" class="gt_row gt_left">Active</td>
-<td headers="Active" class="gt_row gt_right">49.24%</td>
-<td headers="Average" class="gt_row gt_right">44.19%</td>
-<td headers="Disengaged" class="gt_row gt_right">6.57%</td>
+<td headers="From\To" class="gt_row gt_left">adapt</td>
+<td headers="adapt" class="gt_row gt_right">0.00%</td>
+<td headers="cohesion" class="gt_row gt_right">24.06%</td>
+<td headers="consensus" class="gt_row gt_right">52.36%</td>
+<td headers="coregulate" class="gt_row gt_right">2.83%</td>
+<td headers="discuss" class="gt_row gt_right">6.60%</td>
+<td headers="emotion" class="gt_row gt_right">10.38%</td>
+<td headers="monitor" class="gt_row gt_right">3.30%</td>
+<td headers="plan" class="gt_row gt_right">0.47%</td>
+<td headers="synthesis" class="gt_row gt_right">0.00%</td>
 </tr>
 <tr>
-<td headers="From\To" class="gt_row gt_left">Average</td>
-<td headers="Active" class="gt_row gt_right">32.50%</td>
-<td headers="Average" class="gt_row gt_right">58.61%</td>
-<td headers="Disengaged" class="gt_row gt_right">8.90%</td>
+<td headers="From\To" class="gt_row gt_left">cohesion</td>
+<td headers="adapt" class="gt_row gt_right">0.15%</td>
+<td headers="cohesion" class="gt_row gt_right">2.51%</td>
+<td headers="consensus" class="gt_row gt_right">52.22%</td>
+<td headers="coregulate" class="gt_row gt_right">11.39%</td>
+<td headers="discuss" class="gt_row gt_right">4.73%</td>
+<td headers="emotion" class="gt_row gt_right">11.54%</td>
+<td headers="monitor" class="gt_row gt_right">3.40%</td>
+<td headers="plan" class="gt_row gt_right">13.91%</td>
+<td headers="synthesis" class="gt_row gt_right">0.15%</td>
 </tr>
 <tr>
-<td headers="From\To" class="gt_row gt_left">Disengaged</td>
-<td headers="Active" class="gt_row gt_right">33.33%</td>
-<td headers="Average" class="gt_row gt_right">57.33%</td>
-<td headers="Disengaged" class="gt_row gt_right">9.33%</td>
+<td headers="From\To" class="gt_row gt_left">consensus</td>
+<td headers="adapt" class="gt_row gt_right">0.40%</td>
+<td headers="cohesion" class="gt_row gt_right">1.42%</td>
+<td headers="consensus" class="gt_row gt_right">9.16%</td>
+<td headers="coregulate" class="gt_row gt_right">17.85%</td>
+<td headers="discuss" class="gt_row gt_right">18.72%</td>
+<td headers="emotion" class="gt_row gt_right">7.08%</td>
+<td headers="monitor" class="gt_row gt_right">4.78%</td>
+<td headers="plan" class="gt_row gt_right">39.89%</td>
+<td headers="synthesis" class="gt_row gt_right">0.69%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">coregulate</td>
+<td headers="adapt" class="gt_row gt_right">1.31%</td>
+<td headers="cohesion" class="gt_row gt_right">3.33%</td>
+<td headers="consensus" class="gt_row gt_right">14.88%</td>
+<td headers="coregulate" class="gt_row gt_right">2.38%</td>
+<td headers="discuss" class="gt_row gt_right">25.95%</td>
+<td headers="emotion" class="gt_row gt_right">16.55%</td>
+<td headers="monitor" class="gt_row gt_right">10.00%</td>
+<td headers="plan" class="gt_row gt_right">23.57%</td>
+<td headers="synthesis" class="gt_row gt_right">2.02%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">discuss</td>
+<td headers="adapt" class="gt_row gt_right">7.19%</td>
+<td headers="cohesion" class="gt_row gt_right">4.03%</td>
+<td headers="consensus" class="gt_row gt_right">32.78%</td>
+<td headers="coregulate" class="gt_row gt_right">8.55%</td>
+<td headers="discuss" class="gt_row gt_right">17.78%</td>
+<td headers="emotion" class="gt_row gt_right">10.66%</td>
+<td headers="monitor" class="gt_row gt_right">2.91%</td>
+<td headers="plan" class="gt_row gt_right">1.30%</td>
+<td headers="synthesis" class="gt_row gt_right">14.81%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">emotion</td>
+<td headers="adapt" class="gt_row gt_right">0.00%</td>
+<td headers="cohesion" class="gt_row gt_right">31.96%</td>
+<td headers="consensus" class="gt_row gt_right">32.56%</td>
+<td headers="coregulate" class="gt_row gt_right">3.44%</td>
+<td headers="discuss" class="gt_row gt_right">10.05%</td>
+<td headers="emotion" class="gt_row gt_right">7.73%</td>
+<td headers="monitor" class="gt_row gt_right">4.12%</td>
+<td headers="plan" class="gt_row gt_right">9.88%</td>
+<td headers="synthesis" class="gt_row gt_right">0.26%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">monitor</td>
+<td headers="adapt" class="gt_row gt_right">1.39%</td>
+<td headers="cohesion" class="gt_row gt_right">5.37%</td>
+<td headers="consensus" class="gt_row gt_right">16.98%</td>
+<td headers="coregulate" class="gt_row gt_right">5.89%</td>
+<td headers="discuss" class="gt_row gt_right">38.47%</td>
+<td headers="emotion" class="gt_row gt_right">9.36%</td>
+<td headers="monitor" class="gt_row gt_right">1.73%</td>
+<td headers="plan" class="gt_row gt_right">18.54%</td>
+<td headers="synthesis" class="gt_row gt_right">2.25%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">plan</td>
+<td headers="adapt" class="gt_row gt_right">0.19%</td>
+<td headers="cohesion" class="gt_row gt_right">2.63%</td>
+<td headers="consensus" class="gt_row gt_right">30.17%</td>
+<td headers="coregulate" class="gt_row gt_right">1.74%</td>
+<td headers="discuss" class="gt_row gt_right">6.95%</td>
+<td headers="emotion" class="gt_row gt_right">14.83%</td>
+<td headers="monitor" class="gt_row gt_right">7.03%</td>
+<td headers="plan" class="gt_row gt_right">36.27%</td>
+<td headers="synthesis" class="gt_row gt_right">0.19%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">synthesis</td>
+<td headers="adapt" class="gt_row gt_right">22.73%</td>
+<td headers="cohesion" class="gt_row gt_right">3.85%</td>
+<td headers="consensus" class="gt_row gt_right">46.85%</td>
+<td headers="coregulate" class="gt_row gt_right">4.20%</td>
+<td headers="discuss" class="gt_row gt_right">6.29%</td>
+<td headers="emotion" class="gt_row gt_right">6.29%</td>
+<td headers="monitor" class="gt_row gt_right">1.40%</td>
+<td headers="plan" class="gt_row gt_right">8.39%</td>
+<td headers="synthesis" class="gt_row gt_right">0.00%</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">transitions</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<div id="txvafbsnay" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#txvafbsnay table {
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">transitions</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">tna_model_clus</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<div id="nqzctuzdsl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#nqzctuzdsl table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#txvafbsnay thead, #txvafbsnay tbody, #txvafbsnay tfoot, #txvafbsnay tr, #txvafbsnay td, #txvafbsnay th {
+#nqzctuzdsl thead, #nqzctuzdsl tbody, #nqzctuzdsl tfoot, #nqzctuzdsl tr, #nqzctuzdsl td, #nqzctuzdsl th {
   border-style: none;
 }
 
-#txvafbsnay p {
+#nqzctuzdsl p {
   margin: 0;
   padding: 0;
 }
 
-#txvafbsnay .gt_table {
+#nqzctuzdsl .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2169,12 +2474,12 @@ the <code>group</code> argument.</p>
   border-left-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_caption {
+#nqzctuzdsl .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#txvafbsnay .gt_title {
+#nqzctuzdsl .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2186,7 +2491,7 @@ the <code>group</code> argument.</p>
   border-bottom-width: 0;
 }
 
-#txvafbsnay .gt_subtitle {
+#nqzctuzdsl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2198,7 +2503,7 @@ the <code>group</code> argument.</p>
   border-top-width: 0;
 }
 
-#txvafbsnay .gt_heading {
+#nqzctuzdsl .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2210,13 +2515,13 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_bottom_border {
+#nqzctuzdsl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_col_headings {
+#nqzctuzdsl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2231,7 +2536,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_col_heading {
+#nqzctuzdsl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2251,7 +2556,7 @@ the <code>group</code> argument.</p>
   overflow-x: hidden;
 }
 
-#txvafbsnay .gt_column_spanner_outer {
+#nqzctuzdsl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2263,15 +2568,15 @@ the <code>group</code> argument.</p>
   padding-right: 4px;
 }
 
-#txvafbsnay .gt_column_spanner_outer:first-child {
+#nqzctuzdsl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#txvafbsnay .gt_column_spanner_outer:last-child {
+#nqzctuzdsl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#txvafbsnay .gt_column_spanner {
+#nqzctuzdsl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2283,11 +2588,11 @@ the <code>group</code> argument.</p>
   width: 100%;
 }
 
-#txvafbsnay .gt_spanner_row {
+#nqzctuzdsl .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#txvafbsnay .gt_group_heading {
+#nqzctuzdsl .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2313,7 +2618,7 @@ the <code>group</code> argument.</p>
   text-align: left;
 }
 
-#txvafbsnay .gt_empty_group_heading {
+#nqzctuzdsl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2328,15 +2633,15 @@ the <code>group</code> argument.</p>
   vertical-align: middle;
 }
 
-#txvafbsnay .gt_from_md > :first-child {
+#nqzctuzdsl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#txvafbsnay .gt_from_md > :last-child {
+#nqzctuzdsl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#txvafbsnay .gt_row {
+#nqzctuzdsl .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2355,7 +2660,7 @@ the <code>group</code> argument.</p>
   overflow-x: hidden;
 }
 
-#txvafbsnay .gt_stub {
+#nqzctuzdsl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2368,7 +2673,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#txvafbsnay .gt_stub_row_group {
+#nqzctuzdsl .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2382,15 +2687,15 @@ the <code>group</code> argument.</p>
   vertical-align: top;
 }
 
-#txvafbsnay .gt_row_group_first td {
+#nqzctuzdsl .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#txvafbsnay .gt_row_group_first th {
+#nqzctuzdsl .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#txvafbsnay .gt_summary_row {
+#nqzctuzdsl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2400,16 +2705,16 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#txvafbsnay .gt_first_summary_row {
+#nqzctuzdsl .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_first_summary_row.thick {
+#nqzctuzdsl .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#txvafbsnay .gt_last_summary_row {
+#nqzctuzdsl .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2419,7 +2724,7 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_grand_summary_row {
+#nqzctuzdsl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2429,7 +2734,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#txvafbsnay .gt_first_grand_summary_row {
+#nqzctuzdsl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2439,7 +2744,7 @@ the <code>group</code> argument.</p>
   border-top-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_last_grand_summary_row_top {
+#nqzctuzdsl .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2449,11 +2754,11 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_striped {
+#nqzctuzdsl .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#txvafbsnay .gt_table_body {
+#nqzctuzdsl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2462,7 +2767,7 @@ the <code>group</code> argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_footnotes {
+#nqzctuzdsl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2476,7 +2781,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_footnote {
+#nqzctuzdsl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2485,7 +2790,7 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#txvafbsnay .gt_sourcenotes {
+#nqzctuzdsl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2499,7 +2804,7 @@ the <code>group</code> argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_sourcenote {
+#nqzctuzdsl .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2507,125 +2812,224 @@ the <code>group</code> argument.</p>
   padding-right: 5px;
 }
 
-#txvafbsnay .gt_left {
+#nqzctuzdsl .gt_left {
   text-align: left;
 }
 
-#txvafbsnay .gt_center {
+#nqzctuzdsl .gt_center {
   text-align: center;
 }
 
-#txvafbsnay .gt_right {
+#nqzctuzdsl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#txvafbsnay .gt_font_normal {
+#nqzctuzdsl .gt_font_normal {
   font-weight: normal;
 }
 
-#txvafbsnay .gt_font_bold {
+#nqzctuzdsl .gt_font_bold {
   font-weight: bold;
 }
 
-#txvafbsnay .gt_font_italic {
+#nqzctuzdsl .gt_font_italic {
   font-style: italic;
 }
 
-#txvafbsnay .gt_super {
+#nqzctuzdsl .gt_super {
   font-size: 65%;
 }
 
-#txvafbsnay .gt_footnote_marks {
+#nqzctuzdsl .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#txvafbsnay .gt_asterisk {
+#nqzctuzdsl .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#txvafbsnay .gt_indent_1 {
+#nqzctuzdsl .gt_indent_1 {
   text-indent: 5px;
 }
 
-#txvafbsnay .gt_indent_2 {
+#nqzctuzdsl .gt_indent_2 {
   text-indent: 10px;
 }
 
-#txvafbsnay .gt_indent_3 {
+#nqzctuzdsl .gt_indent_3 {
   text-indent: 15px;
 }
 
-#txvafbsnay .gt_indent_4 {
+#nqzctuzdsl .gt_indent_4 {
   text-indent: 20px;
 }
 
-#txvafbsnay .gt_indent_5 {
+#nqzctuzdsl .gt_indent_5 {
   text-indent: 25px;
 }
 
-#txvafbsnay .katex-display {
+#nqzctuzdsl .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#txvafbsnay div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#nqzctuzdsl div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading">
-<td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Cluster 1</td>
+<td colspan="10" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Group 3</td>
     </tr>
 <tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="From\To">From\To</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Active">Active</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Average">Average</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Disengaged">Disengaged</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="adapt">adapt</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="cohesion">cohesion</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="consensus">consensus</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="coregulate">coregulate</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="discuss">discuss</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="emotion">emotion</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="monitor">monitor</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="plan">plan</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="synthesis">synthesis</th>
     </tr>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="From\To" class="gt_row gt_left">Active</td>
-<td headers="Active" class="gt_row gt_right">30.07%</td>
-<td headers="Average" class="gt_row gt_right">60.81%</td>
-<td headers="Disengaged" class="gt_row gt_right">9.12%</td>
+<td headers="From\To" class="gt_row gt_left">adapt</td>
+<td headers="adapt" class="gt_row gt_right">0.00%</td>
+<td headers="cohesion" class="gt_row gt_right">27.01%</td>
+<td headers="consensus" class="gt_row gt_right">45.40%</td>
+<td headers="coregulate" class="gt_row gt_right">1.72%</td>
+<td headers="discuss" class="gt_row gt_right">6.32%</td>
+<td headers="emotion" class="gt_row gt_right">13.79%</td>
+<td headers="monitor" class="gt_row gt_right">2.30%</td>
+<td headers="plan" class="gt_row gt_right">3.45%</td>
+<td headers="synthesis" class="gt_row gt_right">0.00%</td>
 </tr>
 <tr>
-<td headers="From\To" class="gt_row gt_left">Average</td>
-<td headers="Active" class="gt_row gt_right">15.94%</td>
-<td headers="Average" class="gt_row gt_right">57.32%</td>
-<td headers="Disengaged" class="gt_row gt_right">26.74%</td>
+<td headers="From\To" class="gt_row gt_left">cohesion</td>
+<td headers="adapt" class="gt_row gt_right">0.31%</td>
+<td headers="cohesion" class="gt_row gt_right">3.30%</td>
+<td headers="consensus" class="gt_row gt_right">48.51%</td>
+<td headers="coregulate" class="gt_row gt_right">12.87%</td>
+<td headers="discuss" class="gt_row gt_right">5.49%</td>
+<td headers="emotion" class="gt_row gt_right">10.83%</td>
+<td headers="monitor" class="gt_row gt_right">3.14%</td>
+<td headers="plan" class="gt_row gt_right">15.07%</td>
+<td headers="synthesis" class="gt_row gt_right">0.47%</td>
 </tr>
 <tr>
-<td headers="From\To" class="gt_row gt_left">Disengaged</td>
-<td headers="Active" class="gt_row gt_right">6.58%</td>
-<td headers="Average" class="gt_row gt_right">47.08%</td>
-<td headers="Disengaged" class="gt_row gt_right">46.35%</td>
+<td headers="From\To" class="gt_row gt_left">consensus</td>
+<td headers="adapt" class="gt_row gt_right">0.35%</td>
+<td headers="cohesion" class="gt_row gt_right">1.87%</td>
+<td headers="consensus" class="gt_row gt_right">7.04%</td>
+<td headers="coregulate" class="gt_row gt_right">18.90%</td>
+<td headers="discuss" class="gt_row gt_right">17.07%</td>
+<td headers="emotion" class="gt_row gt_right">7.30%</td>
+<td headers="monitor" class="gt_row gt_right">4.78%</td>
+<td headers="plan" class="gt_row gt_right">42.05%</td>
+<td headers="synthesis" class="gt_row gt_right">0.65%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">coregulate</td>
+<td headers="adapt" class="gt_row gt_right">2.14%</td>
+<td headers="cohesion" class="gt_row gt_right">3.35%</td>
+<td headers="consensus" class="gt_row gt_right">12.85%</td>
+<td headers="coregulate" class="gt_row gt_right">2.41%</td>
+<td headers="discuss" class="gt_row gt_right">27.04%</td>
+<td headers="emotion" class="gt_row gt_right">16.60%</td>
+<td headers="monitor" class="gt_row gt_right">7.63%</td>
+<td headers="plan" class="gt_row gt_right">26.77%</td>
+<td headers="synthesis" class="gt_row gt_right">1.20%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">discuss</td>
+<td headers="adapt" class="gt_row gt_right">6.91%</td>
+<td headers="cohesion" class="gt_row gt_right">5.27%</td>
+<td headers="consensus" class="gt_row gt_right">31.48%</td>
+<td headers="coregulate" class="gt_row gt_right">8.76%</td>
+<td headers="discuss" class="gt_row gt_right">21.30%</td>
+<td headers="emotion" class="gt_row gt_right">9.76%</td>
+<td headers="monitor" class="gt_row gt_right">1.71%</td>
+<td headers="plan" class="gt_row gt_right">1.21%</td>
+<td headers="synthesis" class="gt_row gt_right">13.60%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">emotion</td>
+<td headers="adapt" class="gt_row gt_right">0.49%</td>
+<td headers="cohesion" class="gt_row gt_right">32.75%</td>
+<td headers="consensus" class="gt_row gt_right">29.90%</td>
+<td headers="coregulate" class="gt_row gt_right">3.63%</td>
+<td headers="discuss" class="gt_row gt_right">10.49%</td>
+<td headers="emotion" class="gt_row gt_right">7.94%</td>
+<td headers="monitor" class="gt_row gt_right">3.33%</td>
+<td headers="plan" class="gt_row gt_right">11.18%</td>
+<td headers="synthesis" class="gt_row gt_right">0.29%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">monitor</td>
+<td headers="adapt" class="gt_row gt_right">0.60%</td>
+<td headers="cohesion" class="gt_row gt_right">5.01%</td>
+<td headers="consensus" class="gt_row gt_right">15.23%</td>
+<td headers="coregulate" class="gt_row gt_right">5.61%</td>
+<td headers="discuss" class="gt_row gt_right">35.67%</td>
+<td headers="emotion" class="gt_row gt_right">7.82%</td>
+<td headers="monitor" class="gt_row gt_right">1.20%</td>
+<td headers="plan" class="gt_row gt_right">27.25%</td>
+<td headers="synthesis" class="gt_row gt_right">1.60%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">plan</td>
+<td headers="adapt" class="gt_row gt_right">0.00%</td>
+<td headers="cohesion" class="gt_row gt_right">2.71%</td>
+<td headers="consensus" class="gt_row gt_right">28.06%</td>
+<td headers="coregulate" class="gt_row gt_right">1.94%</td>
+<td headers="discuss" class="gt_row gt_right">6.39%</td>
+<td headers="emotion" class="gt_row gt_right">13.67%</td>
+<td headers="monitor" class="gt_row gt_right">7.40%</td>
+<td headers="plan" class="gt_row gt_right">39.71%</td>
+<td headers="synthesis" class="gt_row gt_right">0.12%</td>
+</tr>
+<tr>
+<td headers="From\To" class="gt_row gt_left">synthesis</td>
+<td headers="adapt" class="gt_row gt_right">21.30%</td>
+<td headers="cohesion" class="gt_row gt_right">2.78%</td>
+<td headers="consensus" class="gt_row gt_right">47.69%</td>
+<td headers="coregulate" class="gt_row gt_right">3.70%</td>
+<td headers="discuss" class="gt_row gt_right">6.94%</td>
+<td headers="emotion" class="gt_row gt_right">7.41%</td>
+<td headers="monitor" class="gt_row gt_right">0.46%</td>
+<td headers="plan" class="gt_row gt_right">9.72%</td>
+<td headers="synthesis" class="gt_row gt_right">0.00%</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>We can also plot the cluster-specific transitions</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tna_model_clus</span>, vsize <span class="op">=</span> <span class="fl">20</span>, edge.label.cex <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-10-1.png" width="100%"></p>
-<p>Just like ordinary TNA models, we can prune the rare transitions</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pruned_clus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune.html">prune</a></span><span class="op">(</span><span class="va">tna_model_clus</span>, threshold <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p>and plot the cluster transitions after pruning</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pruned_clus</span>, vsize <span class="op">=</span> <span class="fl">20</span>, edge.label.cex <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-12-1.png" width="100%"></p>
-<p>Centrality measures can also be computed for each cluster
-directly.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+</div>
+<div class="section level3">
+<h3 id="pruning-with-bootstrap">Pruning with bootstrap<a class="anchor" aria-label="anchor" href="#pruning-with-bootstrap"></a>
+</h3>
+<p>Just like ordinary TNA models, we can retain only the statistically
+robust edges.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cluster_boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bootstrap.html">bootstrap</a></span><span class="op">(</span><span class="va">tna_model_clus</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, byrow <span class="op">=</span> <span class="cn">T</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cluster_boot</span><span class="op">)</span></span></code></pre></div>
+<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="centrality-measures">Centrality measures<a class="anchor" aria-label="anchor" href="#centrality-measures"></a>
+</h3>
+<p>Centrality measures can be computed for each cluster to identify
+which states play central roles in each group’s transition dynamics.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">centrality_measures</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"BetweennessRSP"</span>,</span>
 <span>  <span class="st">"Closeness"</span>,</span>
@@ -2640,8 +3044,21 @@ directly.</p>
 <span>  <span class="va">centralities_per_cluster</span>, ncol <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"purple"</span>, <span class="st">"orange"</span>, <span class="st">"pink"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-13-1.png" width="100%"></p>
-  </main>
+<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="subsequence-comparison-across-clusters">Subsequence comparison across clusters<a class="anchor" aria-label="anchor" href="#subsequence-comparison-across-clusters"></a>
+</h3>
+<p>Finally, we can compare subsequence frequencies across the clusters,
+just as we did for the pre-existing groups above.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">subsequence_comparison</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compare_sequences.html">compare_sequences</a></span><span class="op">(</span><span class="va">tna_model_clus</span>, sub <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, min_freq <span class="op">=</span> <span class="fl">5</span>, correction <span class="op">=</span> <span class="st">"fdr"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">subsequence_comparison</span>, cells <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="grouped_sequences_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="100%"></p>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
@@ -2651,7 +3068,7 @@ directly.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

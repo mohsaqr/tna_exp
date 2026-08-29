@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="A showcase of the main tna functions">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,10 +39,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/communities_and_cliques.html">Finding cliques and communities with tna</a></li>
+<li><a class="dropdown-item" href="../articles/atna.html">Attention TNA</a></li>
+    <li><a class="dropdown-item" href="../articles/communities_and_cliques.html">Finding cliques and communities with tna</a></li>
     <li><a class="dropdown-item" href="../articles/complete_tutorial.html">A showcase of the main tna functions</a></li>
-    <li><a class="dropdown-item" href="../articles/ftna.html">Frequency-based tna</a></li>
+    <li><a class="dropdown-item" href="../articles/ftna.html">Frequency-based TNA</a></li>
     <li><a class="dropdown-item" href="../articles/grouped_sequences.html">Using grouped sequence data with tna</a></li>
+    <li><a class="dropdown-item" href="../articles/new-docs.html">tna — R Package Documentation</a></li>
     <li><a class="dropdown-item" href="../articles/prepare_data.html">How to prepare data for tna</a></li>
   </ul>
 </li>
@@ -68,7 +70,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>A showcase of the main tna functions</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/sonsoleslp/tna/blob/main/vignettes/articles/complete_tutorial.Rmd" class="external-link"><code>vignettes/articles/complete_tutorial.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sonsoleslp/tna/blob/main/vignettes/complete_tutorial.Rmd" class="external-link"><code>vignettes/complete_tutorial.Rmd</code></a></small>
       <div class="d-none name"><code>complete_tutorial.Rmd</code></div>
     </div>
 
@@ -77,14 +79,18 @@
 <div class="section level2">
 <h2 id="tutorial-of-tna-with-r">Tutorial of TNA with R<a class="anchor" aria-label="anchor" href="#tutorial-of-tna-with-r"></a>
 </h2>
+<p>This is a short tutorial of the <code>tna</code> package. We begin by
+loading the package and the example data set
+<code>group_regulation</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Install `tna` if you haven't already</span></span>
-<span><span class="co"># install.packages("tna")</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/sonsoleslp/tna/" class="external-link">"tna"</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"group_regulation"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/sonsoleslp/tna/" class="external-link">"tna"</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"group_regulation"</span>, package <span class="op">=</span> <span class="st">"tna"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="building-tna-model">Building <code>tna</code> Model<a class="anchor" aria-label="anchor" href="#building-tna-model"></a>
 </h3>
+<p>TNA models can be built with the <code>tna</code> function, which
+accepts several types of data such a sequence data, data frames or
+matrices.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_model.html">tna</a></span><span class="op">(</span><span class="va">group_regulation</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
@@ -97,8 +103,11 @@
 </h4>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># TNA visualization</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span>, minimum <span class="op">=</span> <span class="fl">0.05</span>, cut <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Registered S3 method overwritten by 'cograph':</span></span>
+<span><span class="co">#&gt;   method             from</span></span>
+<span><span class="co">#&gt;   plot.tna_bootstrap tna</span></span></code></pre></div>
+<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="pruning-and-retaining-edges-that-matter">Pruning and retaining edges that “matter”<a class="anchor" aria-label="anchor" href="#pruning-and-retaining-edges-that-matter"></a>
@@ -114,8 +123,8 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pruned_threshold</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pruned_lowest</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pruned_disparity</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span>, minimum <span class="op">=</span> <span class="fl">0.05</span>, cut <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="100%"></p>
 </div>
 </div>
 <div class="section level3">
@@ -143,8 +152,8 @@
 <span><span class="co">#&gt;           consensus discuss</span></span>
 <span><span class="co">#&gt; consensus     0.082    0.19</span></span>
 <span><span class="co">#&gt; discuss       0.321    0.19</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cliques_of_two</span>, vsize <span class="op">=</span> <span class="fl">15</span>, edge.label.cex <span class="op">=</span> <span class="fl">2</span>, esize <span class="op">=</span> <span class="fl">20</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cliques_of_two</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="100%"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Identify 3-cliques (triads) from the TNA_Model</span></span>
@@ -175,8 +184,8 @@
 <span><span class="co">#&gt; consensus      0.082      0.188    0.19</span></span>
 <span><span class="co">#&gt; coregulate     0.135      0.023    0.27</span></span>
 <span><span class="co">#&gt; discuss        0.321      0.084    0.19</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cliques_of_three</span>, vsize <span class="op">=</span> <span class="fl">25</span>, edge.label.cex <span class="op">=</span> <span class="fl">4</span>, esize <span class="op">=</span> <span class="fl">20</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cliques_of_three</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="100%"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identify 4-cliques (quadruples) from the TNA_Model</span></span>
 <span><span class="co"># A clique of size 4 means four nodes that are all mutually connected</span></span>
@@ -196,7 +205,7 @@
 <span><span class="co">#&gt; monitor       0.159   0.091   0.018 0.22</span></span>
 <span><span class="co">#&gt; plan          0.290   0.147   0.076 0.37</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cliques_of_four</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-8-1.png" width="100%"></p>
+<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="100%"></p>
 <div class="section level4">
 <h4 id="centralities">Centralities<a class="anchor" aria-label="anchor" href="#centralities"></a>
 </h4>
@@ -209,7 +218,7 @@
 <span></span>
 <span><span class="co"># Visualize the centrality measures</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Centralities</span><span class="op">)</span></span></code></pre></div>
-<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate hub scores and the authority scores for the network</span></span>
 <span><span class="va">hits_scores</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/hits_scores.html" class="external-link">hits_scores</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/as.igraph.html" class="external-link">as.igraph</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></span>
@@ -235,7 +244,7 @@
 <code class="sourceCode R"><span><span class="co"># Edge betweenness</span></span>
 <span><span class="va">Edge_betweeness</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/betweenness_network.html">betweenness_network</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Edge_betweeness</span><span class="op">)</span></span></code></pre></div>
-<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-11-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level4">
@@ -263,7 +272,7 @@
 <span><span class="co">#&gt; 3         1</span></span>
 <span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 6 rows ]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">communities</span>, method <span class="op">=</span> <span class="st">"leading_eigen"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-12-1.png" width="100%"></p>
+<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="100%"></p>
 </div>
 </div>
 <div class="section level3">
@@ -309,7 +318,7 @@
 <span><span class="co"># Plot a comparison of the "Hi" and "Lo" models</span></span>
 <span><span class="co"># The 'minimum' parameter is set to 0.001, so edges with weights &gt;= 0.001 are shown</span></span>
 <span><span class="fu"><a href="../reference/plot_compare.html">plot_compare</a></span><span class="op">(</span><span class="va">Hi</span>, <span class="va">Lo</span>, minimum <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
-<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-14-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Run a permutation test to determine statistical significance of differences</span></span>
@@ -319,7 +328,7 @@
 <span></span>
 <span><span class="co"># Plot the significant differences identified in the permutation test</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Permutation</span>, minimum <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
-<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-14-2.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-14-2.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Permutation</span><span class="op">$</span><span class="va">edges</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span></span>
 <span><span class="co">#&gt;             edge_name diff_true effect_size p_value</span></span>
@@ -333,12 +342,12 @@
 <span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 74 rows ]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Permutation</span><span class="op">$</span><span class="va">centralities</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        state  centrality diff_true effect_size p_value</span></span>
-<span><span class="co">#&gt; 1      adapt Betweenness        -9       -1.31   0.221</span></span>
-<span><span class="co">#&gt; 2   cohesion Betweenness         1        0.79   0.315</span></span>
-<span><span class="co">#&gt; 3  consensus Betweenness         0         NaN   1.000</span></span>
-<span><span class="co">#&gt; 4 coregulate Betweenness         3        1.02   0.323</span></span>
-<span><span class="co">#&gt; 5    discuss Betweenness         2        4.55   0.006</span></span>
-<span><span class="co">#&gt; 6    emotion Betweenness         0         NaN   1.000</span></span>
+<span><span class="co">#&gt; 1      adapt Betweenness        -3       -6.69   0.001</span></span>
+<span><span class="co">#&gt; 2   cohesion Betweenness         0        0.00   1.000</span></span>
+<span><span class="co">#&gt; 3  consensus Betweenness         5        7.01   0.001</span></span>
+<span><span class="co">#&gt; 4 coregulate Betweenness        -3       -0.97   0.265</span></span>
+<span><span class="co">#&gt; 5    discuss Betweenness         2        1.83   0.233</span></span>
+<span><span class="co">#&gt; 6    emotion Betweenness         2       16.33   0.001</span></span>
 <span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 3 rows ]</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -349,7 +358,7 @@ Centrality Indices<a class="anchor" aria-label="anchor" href="#interpreting-the-
 <code class="sourceCode R"><span><span class="co"># Results of the Case-Dropping Bootstrap for Centrality Indices</span></span>
 <span><span class="va">Centrality_stability</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_centrality_stability.html">estimate_centrality_stability</a></span><span class="op">(</span><span class="va">model</span>, iter <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Centrality_stability</span><span class="op">)</span></span></code></pre></div>
-<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="complete_tutorial_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>
@@ -364,7 +373,7 @@ Centrality Indices<a class="anchor" aria-label="anchor" href="#interpreting-the-
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

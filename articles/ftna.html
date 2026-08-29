@@ -5,17 +5,17 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Frequency-based tna • tna</title>
+<title>Frequency-based TNA • tna</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Frequency-based tna">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Frequency-based TNA">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,10 +39,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/communities_and_cliques.html">Finding cliques and communities with tna</a></li>
+<li><a class="dropdown-item" href="../articles/atna.html">Attention TNA</a></li>
+    <li><a class="dropdown-item" href="../articles/communities_and_cliques.html">Finding cliques and communities with tna</a></li>
     <li><a class="dropdown-item" href="../articles/complete_tutorial.html">A showcase of the main tna functions</a></li>
-    <li><a class="dropdown-item" href="../articles/ftna.html">Frequency-based tna</a></li>
+    <li><a class="dropdown-item" href="../articles/ftna.html">Frequency-based TNA</a></li>
     <li><a class="dropdown-item" href="../articles/grouped_sequences.html">Using grouped sequence data with tna</a></li>
+    <li><a class="dropdown-item" href="../articles/new-docs.html">tna — R Package Documentation</a></li>
     <li><a class="dropdown-item" href="../articles/prepare_data.html">How to prepare data for tna</a></li>
   </ul>
 </li>
@@ -65,7 +67,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Frequency-based tna</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Frequency-based TNA</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/sonsoleslp/tna/blob/main/vignettes/articles/ftna.Rmd" class="external-link"><code>vignettes/articles/ftna.Rmd</code></a></small>
@@ -94,11 +96,11 @@
 <span></span>
 <span><span class="co"># Print the output to inspect the model</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span><span class="co">#&gt; State Labels</span></span>
+<span><span class="co">#&gt; State Labels : </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; adapt, cohesion, consensus, coregulate, discuss, emotion, monitor, plan, synthesis </span></span>
+<span><span class="co">#&gt;    adapt, cohesion, consensus, coregulate, discuss, emotion, monitor, plan, synthesis </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Transition Frequency Matrix</span></span>
+<span><span class="co">#&gt; Transition Frequency Matrix :</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            adapt cohesion consensus coregulate discuss emotion monitor plan</span></span>
 <span><span class="co">#&gt; adapt          0      139       243         11      30      61      17    8</span></span>
@@ -110,7 +112,7 @@
 <span><span class="co">#&gt; consensus         48</span></span>
 <span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 6 rows ]</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Initial Probabilities</span></span>
+<span><span class="co">#&gt; Initial Probabilities : </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;      adapt   cohesion  consensus coregulate    discuss    emotion    monitor </span></span>
 <span><span class="co">#&gt;      0.011      0.060      0.214      0.019      0.175      0.151      0.144 </span></span>
@@ -121,11 +123,11 @@
 <span><span class="co"># data with scaled weights between 0 and 1</span></span>
 <span><span class="va">model_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_model.html">ftna</a></span><span class="op">(</span><span class="va">group_regulation</span>, scaling <span class="op">=</span> <span class="st">"minmax"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">model_scaled</span><span class="op">)</span> <span class="co"># Print the FTNA model with scaled weights</span></span>
-<span><span class="co">#&gt; State Labels</span></span>
+<span><span class="co">#&gt; State Labels : </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; adapt, cohesion, consensus, coregulate, discuss, emotion, monitor, plan, synthesis </span></span>
+<span><span class="co">#&gt;    adapt, cohesion, consensus, coregulate, discuss, emotion, monitor, plan, synthesis </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Transition Frequency Matrix</span></span>
+<span><span class="co">#&gt; Transition Frequency Matrix :</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;             adapt cohesion consensus coregulate discuss emotion monitor   plan</span></span>
 <span><span class="co">#&gt; adapt      0.0000   0.0555     0.097     0.0044   0.012   0.024  0.0068 0.0032</span></span>
@@ -137,7 +139,7 @@
 <span><span class="co">#&gt; consensus     0.0192</span></span>
 <span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 6 rows ]</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Initial Probabilities</span></span>
+<span><span class="co">#&gt; Initial Probabilities : </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;      adapt   cohesion  consensus coregulate    discuss    emotion    monitor </span></span>
 <span><span class="co">#&gt;      0.011      0.060      0.214      0.019      0.175      0.151      0.144 </span></span>
@@ -171,7 +173,7 @@
 <span></span>
 <span><span class="co"># Display the scatter plot</span></span>
 <span><span class="va">plot_abs_scaled</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="ftna_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate the Transition Network Analysis (TNA) on the `group_regulation` </span></span>
 <span><span class="co"># data with ranked weights</span></span>
@@ -197,7 +199,7 @@
 <span></span>
 <span><span class="co"># Display the scatter plot</span></span>
 <span><span class="va">plot_abs_ranked</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="ftna_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="pruning">Pruning<a class="anchor" aria-label="anchor" href="#pruning"></a>
@@ -208,13 +210,18 @@
 <span><span class="va">pruned_threshold</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune.html">prune</a></span><span class="op">(</span><span class="va">model_scaled</span>, method <span class="op">=</span> <span class="st">"threshold"</span>, threshold <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span><span class="va">pruned_lowest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune.html">prune</a></span><span class="op">(</span><span class="va">model_scaled</span>, method <span class="op">=</span> <span class="st">"lowest"</span>, lowest <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span></span>
 <span><span class="va">pruned_disparity</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune.html">prune</a></span><span class="op">(</span><span class="va">model_scaled</span>, method <span class="op">=</span> <span class="st">"disparity"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Additional arguments in `...` are ignored unless `method =</span></span>
+<span><span class="co">#&gt; "bootstrap"`.</span></span>
 <span></span>
 <span><span class="co"># Plotting for comparison</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pruned_threshold</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Registered S3 method overwritten by 'cograph':</span></span>
+<span><span class="co">#&gt;   method             from</span></span>
+<span><span class="co">#&gt;   plot.tna_bootstrap tna</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pruned_lowest</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pruned_disparity</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model_scaled</span>, minimum <span class="op">=</span> <span class="fl">0.05</span>, cut <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model_scaled</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ftna_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="patterns">Patterns<a class="anchor" aria-label="anchor" href="#patterns"></a>
@@ -265,8 +272,8 @@
 <span><span class="co">#&gt;         monitor plan</span></span>
 <span><span class="co">#&gt; monitor    0.01 0.12</span></span>
 <span><span class="co">#&gt; plan       0.19 0.92</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cliques_of_two</span>, ask <span class="op">=</span> <span class="cn">F</span>, vsize <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>   <span class="co"># Visualize 2-cliques in the network</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cliques_of_two</span>, ask <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>   <span class="co"># Visualize 2-cliques in the network</span></span></code></pre></div>
+<p><img src="ftna_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Identify 3-cliques (triads) from the FTNA model.</span></span>
@@ -314,7 +321,7 @@
 <span><span class="co">#&gt; emotion     0.368   0.087 0.113</span></span>
 <span><span class="co">#&gt; plan        0.062   0.361 0.920</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cliques_of_three</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># Visualize 3-cliques in the network</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="ftna_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Identify 4-cliques (quadruples) from the FTNA model.</span></span>
@@ -375,7 +382,7 @@
 <span><span class="co">#&gt; monitor         0.033   0.052   0.010 0.12</span></span>
 <span><span class="co">#&gt; plan            0.042   0.361   0.186 0.92</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cliques_of_four</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>   <span class="co"># Visualize 4-cliques in the network</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="ftna_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identify 5-cliques (quintuples) from the FTNA model, summing edge weights.</span></span>
 <span><span class="co"># Here, the sum of edge weights in both directions must meet the specified </span></span>
@@ -401,7 +408,7 @@
 <span><span class="co">#&gt; emotion         0.36      0.039    0.12   0.087 0.113</span></span>
 <span><span class="co">#&gt; plan            0.71      0.042    0.17   0.361 0.920</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cliques_of_five</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>   <span class="co"># Visualize 5-cliques in the network</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="ftna_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="graph-level-measures">Graph level measures<a class="anchor" aria-label="anchor" href="#graph-level-measures"></a>
@@ -452,21 +459,22 @@
 <span></span>
 <span><span class="co"># Print the calculated centrality measures in the FTNA model</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">centrality_measures</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 10</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 11</span></span></span>
 <span><span class="co">#&gt;   state      OutStrength InStrength ClosenessIn ClosenessOut Closeness Betweenness</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adapt            0.203      0.212       14.6          5.83     21.6           20</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> cohesion         0.658      0.667        6.61         6.54     18.7            0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> consensus        2.32       2.34         1.25         5.89      7.68           0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> coregulate       0.768      0.818       11.3          4.02     13.0            0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> discuss          1.27       1.26         7.22         3.30      7.68           0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> emotion          1.05       1.02         4.46         6.68     16.9            0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> monitor          0.562      0.480       10.8          5.24     13.0            7</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> plan             1.54       1.56        11.6          5.88     16.8            9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> synthesis        0.260      0.275       12.0          5.72     16.9           21</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: BetweennessRSP &lt;dbl&gt;, Diffusion &lt;dbl&gt;, Clustering &lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adapt            0.203      0.212     0.009<span style="text-decoration: underline;">67</span>      0.009<span style="text-decoration: underline;">01</span>    0.010<span style="text-decoration: underline;">4</span>           0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> cohesion         0.658      0.667     0.012<span style="text-decoration: underline;">8</span>       0.017<span style="text-decoration: underline;">6</span>     0.019<span style="text-decoration: underline;">3</span>           0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> consensus        2.32       2.34      0.024<span style="text-decoration: underline;">5</span>       0.025<span style="text-decoration: underline;">4</span>     0.029<span style="text-decoration: underline;">4</span>          39</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> coregulate       0.768      0.818     0.019<span style="text-decoration: underline;">6</span>       0.014<span style="text-decoration: underline;">8</span>     0.020<span style="text-decoration: underline;">5</span>           0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> discuss          1.27       1.26      0.021<span style="text-decoration: underline;">0</span>       0.022<span style="text-decoration: underline;">2</span>     0.027<span style="text-decoration: underline;">2</span>          19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> emotion          1.05       1.02      0.015<span style="text-decoration: underline;">9</span>       0.019<span style="text-decoration: underline;">5</span>     0.020<span style="text-decoration: underline;">7</span>           7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> monitor          0.562      0.480     0.012<span style="text-decoration: underline;">4</span>       0.013<span style="text-decoration: underline;">5</span>     0.015<span style="text-decoration: underline;">4</span>           0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> plan             1.54       1.56      0.022<span style="text-decoration: underline;">1</span>       0.023<span style="text-decoration: underline;">6</span>     0.026<span style="text-decoration: underline;">3</span>          18</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> synthesis        0.260      0.275     0.013<span style="text-decoration: underline;">7</span>       0.010<span style="text-decoration: underline;">4</span>     0.014<span style="text-decoration: underline;">7</span>           0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: BetweennessRSP &lt;dbl&gt;, Diffusion &lt;dbl&gt;, Clustering &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   PageRank &lt;dbl&gt;</span></span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">centrality_measures</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-14-1.png" width="100%"></p>
+<p><img src="ftna_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="100%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convert the FTNA model to an igraph object and </span></span>
 <span><span class="co"># calculate HITS (Hub and Authority) scores</span></span>
@@ -494,17 +502,17 @@
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">edge_between</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/betweenness_network.html">betweenness_network</a></span><span class="op">(</span><span class="va">model_scaled</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">edge_between</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="ftna_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="community-detection">Community detection<a class="anchor" aria-label="anchor" href="#community-detection"></a>
 </h3>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">detected_communities</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/communities.html">communities</a></span><span class="op">(</span><span class="va">model_scaled</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">detected_communities</span>, minimum <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">detected_communities</span>, method <span class="op">=</span> <span class="st">"leading_eigen"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ftna_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">detected_communities</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">detected_communities</span>, method <span class="op">=</span> <span class="st">"leading_eigen"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Number of communities found by each algorithm</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;         walktrap      fast_greedy       label_prop          infomap </span></span>
@@ -563,7 +571,7 @@
 <span><span class="co"># Plot a comparison of the "Hi" and "Lo" models</span></span>
 <span><span class="co"># The 'minimum' parameter is set to 0.001, so edges with weights &gt;= 0.001 are shown</span></span>
 <span><span class="fu"><a href="../reference/plot_compare.html">plot_compare</a></span><span class="op">(</span><span class="va">Hi</span>, <span class="va">Lo</span>, minimum <span class="op">=</span> <span class="fl">0.0001</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="ftna_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Run a permutation test to determine statistical significance of </span></span>
@@ -572,8 +580,8 @@
 <span><span class="va">Permutation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/permutation_test.html">permutation_test</a></span><span class="op">(</span><span class="va">Hi</span>, <span class="va">Lo</span>, it <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot the significant differences identified in the permutation test</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Permutation</span>, minimum <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-20-2.png" width="100%" style="display: block; margin: auto;"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Permutation</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ftna_files/figure-html/unnamed-chunk-20-2.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="centrality-stability">Centrality stability<a class="anchor" aria-label="anchor" href="#centrality-stability"></a>
@@ -581,7 +589,7 @@
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Centrality_stability</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_centrality_stability.html">estimate_centrality_stability</a></span><span class="op">(</span><span class="va">model_scaled</span>, iter <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Centrality_stability</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-21-1.png" width="100%"></p>
+<p><img src="ftna_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" alt="" width="100%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -595,7 +603,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
