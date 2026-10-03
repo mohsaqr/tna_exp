@@ -44,6 +44,16 @@
 #' `method = "threshold"`.
 #' @param seed A single `numeric` random seed for reproducible resampling, or
 #' `NULL` (the default) to use the current RNG state.
+#' @param actor An optional actor identifier for sequences nested in actors
+#' (for example, several sessions per student). Either a `character` string
+#' naming a non-sequence column of the data the model was built from (such as
+#' a column of `meta_data` from [prepare_data()]), or a vector with one
+#' identifier per sequence (per sequence of the data the grouped model was
+#' built from, for a `group_tna` object). When given, whole actors are
+#' resampled with replacement instead of single sequences (a cluster
+#' bootstrap; Davison & Hinkley, 1997, Section 3.8), so that sequences nested
+#' in actors are not treated as independent. The default `NULL` resamples
+#' sequences.
 #' @return A `tna_bootstrap` object which is a `list` containing the
 #' following elements:
 #
@@ -68,13 +78,17 @@
 #' If `x` is a `group_tna` object, the output is a `group_tna_bootstrap`
 #' object, which is a `list` of `tna_bootstrap` objects.
 #'
+#' @references
+#' Davison, A. C., & Hinkley, D. V. (1997). *Bootstrap Methods and their
+#' Application*. Cambridge University Press.
+#'
 #' @examples
 #' model <- tna(group_regulation)
 #' # Small number of iterations for CRAN
 #' bootstrap(model, iter = 10)
 #'
 bootstrap <- function(x, iter, level, method, threshold, consistency_range,
-                      seed = NULL) {
+                      seed = NULL, actor = NULL) {
   UseMethod("bootstrap")
 }
 
@@ -82,7 +96,7 @@ bootstrap <- function(x, iter, level, method, threshold, consistency_range,
 #' @rdname bootstrap
 bootstrap.tna <- function(x, iter = 1000, level = 0.05, method = "stability",
                           threshold, consistency_range = c(0.75, 1.25),
-                          seed = NULL) {
+                          seed = NULL, actor = NULL) {
   check_missing(x)
   check_tna_seq(x)
   check_values(iter, strict = TRUE)
@@ -101,6 +115,7 @@ bootstrap.tna <- function(x, iter = 1000, level = 0.05, method = "stability",
     "Argument {.arg consistency_range} must be a sorted {.cls numeric}
      vector of length 2 containing positive values."
   )
+  check_actor(actor)
   if (!is.null(seed)) {
     check_numeric(seed)
     set.seed(seed)
@@ -119,10 +134,10 @@ bootstrap.tna <- function(x, iter = 1000, level = 0.05, method = "stability",
   dimnames(weights) <- dim_names
   weights_boot <- array(0.0, dim = c(iter, a, a))
   p_values <- matrix(0, a, a)
-  idx <- seq_len(n)
+  resample <- bootstrap_sampler(x, actor)
   if (method == "stability") {
     for (i in seq_len(iter)) {
-      trans_boot <- trans[sample(idx, n, replace = TRUE), , , drop = FALSE]
+      trans_boot <- trans[resample(), , , drop = FALSE]
       weights_boot[i, , ] <- compute_weights(trans_boot, type, scaling, a)
       p_values[] <- p_values +
         1L * (weights_boot[i, , ] <= weights * consistency_range[1] | 
@@ -130,7 +145,7 @@ bootstrap.tna <- function(x, iter = 1000, level = 0.05, method = "stability",
     }
   } else {
     for (i in seq_len(iter)) {
-      trans_boot <- trans[sample(idx, n, replace = TRUE), , , drop = FALSE]
+      trans_boot <- trans[resample(), , , drop = FALSE]
       weights_boot[i, , ] <- compute_weights(trans_boot, type, scaling, a)
       p_values <- p_values + 1L * (weights_boot[i, , ] < threshold)
     }
@@ -206,7 +221,7 @@ bootstrap.tna <- function(x, iter = 1000, level = 0.05, method = "stability",
 bootstrap.group_tna <- function(x, iter = 1000, level = 0.05,
                                 method = "stability", threshold,
                                 consistency_range = c(0.75, 1.25),
-                                seed = NULL) {
+                                seed = NULL, actor = NULL) {
   check_missing(x)
   check_class(x, "group_tna")
   stopifnot_(
@@ -214,6 +229,8 @@ bootstrap.group_tna <- function(x, iter = 1000, level = 0.05,
     "Bootstrapping is not supported for
      grouped models with globally scaled edge weights."
   )
+  check_actor(actor)
+  actors <- group_actor(x, actor)
   if (!is.null(seed)) {
     check_numeric(seed)
     set.seed(seed)
@@ -221,8 +238,8 @@ bootstrap.group_tna <- function(x, iter = 1000, level = 0.05,
   structure(
     stats::setNames(
       lapply(
-        x,
-        bootstrap,
+        seq_along(x),
+        function(i, ...) bootstrap(x[[i]], actor = actors[[i]], ...),
         iter = iter,
         level = level,
         method = method,

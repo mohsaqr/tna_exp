@@ -52,7 +52,9 @@
 cluster_data <- function(data, k, dissimilarity = "hamming",
                          method = "pam", na_syms = c("*", "%"),
                          weighted = FALSE, lambda = 1.0, ...) {
+  meta <- NULL
   if (inherits(data, "tna_data")) {
+    meta <- data$meta_data
     data <- data$sequence_data
   }
   stopifnot_(
@@ -91,6 +93,7 @@ cluster_data <- function(data, k, dissimilarity = "hamming",
       method = method,
       distance = dist_mat
     ),
+    meta = meta,
     class = "tna_clustering"
   )
 }

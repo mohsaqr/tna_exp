@@ -422,6 +422,13 @@ rv_coefficient <- function(x, y) {
 #'   [stats::p.adjust] methods: `"holm"`, `"hochberg"`, `"hommel"`,
 #'   `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"none"`. The adjustment
 #'   is carried out within sequences of the same length.
+#' @param actor An optional actor identifier for sequences nested in actors:
+#'   a `character` string naming a non-sequence column of the data, or a
+#'   vector with one identifier per row/sequence of `x` (of the data the
+#'   grouped model was built from, for a `group_tna` object). When given, the
+#'   permutation test reassigns whole actors between the groups, and shuffles
+#'   the sequences of actors present in several groups within the actor
+#'   (Good, 2005). The default `NULL` permutes single sequences.
 #' @param ... Not used.
 #' @return A `tna_sequence_comparison` object, which is a `data.frame` with
 #'   columns giving the names of the patterns, pattern frequencies, pattern
@@ -453,7 +460,8 @@ compare_sequences <- function(x, ...) {
 #' @rdname compare_sequences
 compare_sequences.default <- function(x, group, sub, min_freq = 5L,
                                       test = TRUE, iter = 1000L,
-                                      adjust = "bonferroni", ...) {
+                                      adjust = "bonferroni", actor = NULL,
+                                      ...) {
   check_missing(group)
   model <- group_tna(x, group = group)
   compare_sequences.group_tna(
@@ -463,6 +471,7 @@ compare_sequences.default <- function(x, group, sub, min_freq = 5L,
     test = test,
     iter = iter,
     adjust = adjust,
+    actor = actor,
     ...
   )
 }
@@ -471,7 +480,8 @@ compare_sequences.default <- function(x, group, sub, min_freq = 5L,
 #' @rdname compare_sequences
 compare_sequences.group_tna <- function(x, sub, min_freq = 5L,
                                         test = TRUE, iter = 1000L,
-                                        adjust = "bonferroni", ...) {
+                                        adjust = "bonferroni", actor = NULL,
+                                        ...) {
   check_missing(x)
   check_class(x, "group_tna")
   sub <- sub %m% seq(1, min(5, ncol(x[[1L]]$data)))
@@ -485,6 +495,7 @@ compare_sequences.group_tna <- function(x, sub, min_freq = 5L,
   check_values(min_freq)
   check_flag(test)
   check_values(iter, strict = TRUE)
+  check_actor(actor)
   adjust <- check_match(adjust, stats::p.adjust.methods)
   compare_sequences_(
     x = x,
@@ -492,12 +503,14 @@ compare_sequences.group_tna <- function(x, sub, min_freq = 5L,
     min_freq = min_freq,
     test = test,
     iter = iter,
-    adjust = adjust
+    adjust = adjust,
+    actor = actor
   )
 }
 
 # Internal sequence comparison
-compare_sequences_ <- function(x, len, min_freq, test, iter, adjust) {
+compare_sequences_ <- function(x, len, min_freq, test, iter, adjust,
+                               actor = NULL) {
   data <- combine_data(x)
   group <- data$.group
   data$.group <- NULL
@@ -510,7 +523,7 @@ compare_sequences_ <- function(x, len, min_freq, test, iter, adjust) {
   patterns <- factorize_patterns(pattern_matrices, group)
   perm <- onlyif(
     test,
-    permutation_test_patterns(x, len, iter, adjust)
+    permutation_test_patterns(x, len, iter, adjust, actor)
   )
   out <- vector(mode = "list", length = k)
   freq_cols <- paste0("freq_", groups)

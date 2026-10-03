@@ -154,7 +154,7 @@ diffusion <- function(mat) {
 #' @rdname estimate_centrality_stability
 estimate_cs <- function(x, loops, normalize, invert, measures, iter, method,
                         drop_prop, threshold, certainty, progressbar = NULL, 
-                        detailed = NULL) {
+                        detailed = NULL, actor = NULL) {
   UseMethod("estimate_cs")
 }
 
@@ -212,6 +212,13 @@ estimate_centrality_stability <- estimate_cs
 #'   Defaults to `FALSE`
 #' @param detailed Deprecated. This argument is ignored and will be removed in 
 #'   a future version.
+#' @param actor An optional actor identifier for sequences nested in actors:
+#'   a `character` string naming a non-sequence column of the data the model
+#'   was built from, or a vector with one identifier per sequence (per
+#'   sequence of the data the grouped model was built from, for a `group_tna`
+#'   object). When given, `drop_prop` is the proportion of actors dropped,
+#'   and each actor's sequences are dropped together. The default `NULL`
+#'   drops single sequences.
 #' @return A `tna_stability` object which is a `list` with an element for each
 #' `measure` with the following elements:
 #'
@@ -239,8 +246,10 @@ estimate_cs.tna <- function(x, loops = FALSE, normalize = FALSE, invert = TRUE,
                             ), iter = 1000, method = "pearson",
                             drop_prop = seq(0.1, 0.9, by = 0.1),
                             threshold = 0.7, certainty = 0.95,
-                            progressbar = FALSE, detailed = NULL) {
+                            progressbar = FALSE, detailed = NULL,
+                            actor = NULL) {
   check_tna_seq(x)
+  check_actor(actor)
   check_flag(loops)
   check_flag(normalize)
   check_flag(invert)
@@ -261,6 +270,16 @@ estimate_cs.tna <- function(x, loops = FALSE, normalize = FALSE, invert = TRUE,
   a <- dim(trans)[2L]
   n <- nrow(d)
   n_seq <- seq_len(n)
+  # Cases are sequences, or actors with all of their sequences
+  n_cases <- n
+  keep_cases <- function(m) sample(n_seq, m, replace = FALSE)
+  if (!is.null(actor)) {
+    units <- actor_units(x, actor)
+    n_cases <- length(units)
+    keep_cases <- function(m) {
+      unlist(units[sample.int(n_cases, m)], use.names = FALSE)
+    }
+  }
   n_prop <- length(drop_prop)
   centralities_orig <- centralities_(
     x = x$weights,
@@ -294,7 +313,7 @@ estimate_cs.tna <- function(x, loops = FALSE, normalize = FALSE, invert = TRUE,
   }
   for (i in seq_len(n_prop)) {
     prop <- drop_prop[i]
-    n_drop <- floor(n * prop)
+    n_drop <- floor(n_cases * prop)
     if (n_drop == 0) {
       warning_(
         paste0("No cases dropped for proportion ", prop, ". Skipping...")
@@ -303,7 +322,7 @@ estimate_cs.tna <- function(x, loops = FALSE, normalize = FALSE, invert = TRUE,
     }
     corr_prop <- matrix(nrow = iter, ncol = n_measures)
     for (j in seq_len(iter)) {
-      keep <- sample(n_seq, n - n_drop, replace = FALSE)
+      keep <- keep_cases(n_cases - n_drop)
       trans_sub <- trans[keep, , , drop = FALSE]
       weight_sub <- compute_weights(trans_sub, type, scaling, a)
       centralities_sub <- centralities_(
@@ -475,16 +494,18 @@ estimate_cs.group_tna <- function(x, loops = FALSE, normalize = FALSE,
                                   ), iter = 1000, method = "pearson",
                                   drop_prop = seq(0.1, 0.9, by = 0.1),
                                   threshold = 0.7, certainty = 0.95,
-                                  progressbar = FALSE, detailed = NULL) {
+                                  progressbar = FALSE, detailed = NULL,
+                                  actor = NULL) {
   check_missing(x)
   check_class(x, "group_tna")
+  check_actor(actor)
+  actors <- group_actor(x, actor)
   if (!is.null(detailed)) {
     .Deprecated(msg = "'detailed' is deprecated and will be ignored.")
   }
   structure(
-    lapply(
-      x,
-      function(i) {
+    Map(
+      function(i, actor) {
         estimate_centrality_stability.tna(
           i,
           loops = loops,
@@ -496,9 +517,12 @@ estimate_cs.group_tna <- function(x, loops = FALSE, normalize = FALSE,
           drop_prop = drop_prop,
           threshold = threshold,
           certainty = certainty,
-          progressbar = progressbar
+          progressbar = progressbar,
+          actor = actor
         )
-      }
+      },
+      x,
+      actors
     ),
     class = "group_tna_stability"
   )

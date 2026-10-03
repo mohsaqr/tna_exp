@@ -16,6 +16,7 @@ compare_sequences(x, ...)
   test = TRUE,
   iter = 1000L,
   adjust = "bonferroni",
+  actor = NULL,
   ...
 )
 
@@ -26,6 +27,7 @@ compare_sequences(x, ...)
   test = TRUE,
   iter = 1000L,
   adjust = "bonferroni",
+  actor = NULL,
   ...
 )
 }
@@ -60,6 +62,14 @@ correction method (default: \code{"bonferroni"}). Supports all
 \link[stats:p.adjust]{stats::p.adjust} methods: \code{"holm"}, \code{"hochberg"}, \code{"hommel"},
 \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"none"}. The adjustment
 is carried out within sequences of the same length.}
+
+\item{actor}{An optional actor identifier for sequences nested in actors:
+a \code{character} string naming a non-sequence column of the data, or a
+vector with one identifier per row/sequence of \code{x} (of the data the
+grouped model was built from, for a \code{group_tna} object). When given, the
+permutation test reassigns whole actors between the groups, and shuffles
+the sequences of actors present in several groups within the actor
+(Good, 2005). The default \code{NULL} permutes single sequences.}
 }
 \value{
 A \code{tna_sequence_comparison} object, which is a \code{data.frame} with

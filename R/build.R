@@ -570,6 +570,21 @@ create_seqdata <- function(x, cols, alphabet, concat = 1L,
       lapply(x[, cols], function(y) factor(y, levels = alphabet))
     )
   }
+  # Non-sequence columns, one row per sequence (e.g. actor ids)
+  meta <- onlyif(
+    ncol(x) > length(cols),
+    as.data.frame(x)[, -cols, drop = FALSE]
+  )
+  if (!is.null(meta) && concat > 1L) {
+    # Concatenated sequences keep the columns constant within each block
+    block <- (seq_len(nrow(meta)) - 1L) %/% concat
+    constant <- vapply(
+      meta,
+      function(y) all(tapply(y, block, n_unique) == 1L),
+      logical(1L)
+    )
+    meta <- meta[!duplicated(block), constant, drop = FALSE]
+  }
   x <- as.matrix(
     as.data.frame(
       lapply(
@@ -623,7 +638,8 @@ create_seqdata <- function(x, cols, alphabet, concat = 1L,
     class = c("tna_seq_data", "matrix", "array"),
     alphabet = alphabet,
     labels = labels,
-    colors = colors
+    colors = colors,
+    meta = meta
   )
 }
 

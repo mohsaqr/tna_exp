@@ -13,6 +13,7 @@ reliability(x, ...)
   split = 0.5,
   iter = 1000,
   scaling = "none",
+  actor = NULL,
   ...
 )
 }
@@ -31,6 +32,13 @@ of data for the split. The default is \code{0.5} for an even split.}
 default is \code{1000}.}
 
 \item{scaling}{See \code{\link[=compare]{compare()}}.}
+
+\item{actor}{An optional actor identifier for sequences nested in actors:
+a \code{character} string naming a non-sequence column of the data the model
+was built from, or a vector with one identifier per sequence. When given,
+the actors are split, so that all sequences of an actor fall in the same
+half, and \code{split} is the proportion of actors. The default \code{NULL} splits
+single sequences.}
 }
 \value{
 A \code{tna_reliability} object.

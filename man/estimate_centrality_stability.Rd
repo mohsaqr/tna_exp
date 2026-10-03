@@ -21,7 +21,8 @@ estimate_cs(
   threshold,
   certainty,
   progressbar = NULL,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 
 estimate_centrality_stability(
@@ -36,7 +37,8 @@ estimate_centrality_stability(
   threshold,
   certainty,
   progressbar = NULL,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 
 \method{estimate_cs}{tna}(
@@ -51,7 +53,8 @@ estimate_centrality_stability(
   threshold = 0.7,
   certainty = 0.95,
   progressbar = FALSE,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 
 \method{estimate_centrality_stability}{tna}(
@@ -66,7 +69,8 @@ estimate_centrality_stability(
   threshold = 0.7,
   certainty = 0.95,
   progressbar = FALSE,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 
 \method{estimate_cs}{group_tna}(
@@ -81,7 +85,8 @@ estimate_centrality_stability(
   threshold = 0.7,
   certainty = 0.95,
   progressbar = FALSE,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 
 \method{estimate_centrality_stability}{group_tna}(
@@ -96,7 +101,8 @@ estimate_centrality_stability(
   threshold = 0.7,
   certainty = 0.95,
   progressbar = FALSE,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 }
 \arguments{
@@ -138,6 +144,14 @@ Defaults to \code{FALSE}}
 
 \item{detailed}{Deprecated. This argument is ignored and will be removed in
 a future version.}
+
+\item{actor}{An optional actor identifier for sequences nested in actors:
+a \code{character} string naming a non-sequence column of the data the model
+was built from, or a vector with one identifier per sequence (per
+sequence of the data the grouped model was built from, for a \code{group_tna}
+object). When given, \code{drop_prop} is the proportion of actors dropped,
+and each actor's sequences are dropped together. The default \code{NULL}
+drops single sequences.}
 }
 \value{
 A \code{tna_stability} object which is a \code{list} with an element for each

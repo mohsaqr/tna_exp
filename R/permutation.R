@@ -22,6 +22,17 @@
 #' permutation tests. The default is 0.05.
 #' @param measures A `character` vector of centrality measures to test.
 #' See [centralities()] for a list of available centrality measures.
+#' @param actor An optional actor identifier for sequences nested in actors
+#' (for example, several sessions per student). Either a `character` string
+#' naming a non-sequence column of the data the models were built from (such
+#' as a column of `meta_data` from [prepare_data()]), or a vector with one
+#' identifier per sequence (the sequences of `x` first, then those of `y`).
+#' When given, the permutation respects the nesting: actors whose sequences
+#' are all in one group are reassigned between the groups as whole units, and
+#' the sequences of actors present in both groups are shuffled within the
+#' actor (Good, 2005). A warning is given when the actors allow too few
+#' distinct permutations to reach `level`. Cannot be combined with
+#' `paired = TRUE`. The default `NULL` permutes single sequences.
 #' @param ... Additional arguments passed to [centralities()].
 #' @return A `tna_permutation` object which is a `list` with two elements:
 #' `edges` and `centralities`, both containing the following elements:
@@ -32,6 +43,10 @@
 #'     of the differences of the permuted samples.
 #'   * `diffs_true`: A `matrix` of differences in the data.
 #'   * `diffs_sig`: A `matrix` showing the significant differences.
+#'
+#' @references
+#' Good, P. (2005). *Permutation, Parametric, and Bootstrap Tests of
+#' Hypotheses* (3rd ed.). Springer.
 #'
 #' @examples
 #' model_x <- tna(group_regulation[1:200, ])
@@ -47,15 +62,29 @@ permutation_test <- function(x, ...) {
 #' @rdname permutation_test
 permutation_test.tna <- function(x, y, adjust = "none", iter = 1000,
                                  paired = FALSE, level = 0.05,
-                                 measures = character(0), ...) {
+                                 measures = character(0), actor = NULL,
+                                 ...) {
   check_missing(x)
   check_missing(y)
   check_tna_seq(x)
   check_tna_seq(y)
   check_values(iter, strict = TRUE)
   check_flag(paired)
+  check_actor(actor, paired)
   check_range(level, lower = 0, upper = 1)
   adjust <- check_match(adjust, stats::p.adjust.methods, match_case = TRUE)
+  actor_x <- actor_y <- actor
+  if (!is.null(actor) && !is_actor_column(actor)) {
+    n_x <- nrow(x$data)
+    n_xy <- n_x + nrow(y$data)
+    stopifnot_(
+      length(actor) == n_xy,
+      "Argument {.arg actor} must have one value per sequence of
+       {.arg x} and {.arg y} ({n_xy}), not {length(actor)}."
+    )
+    actor_x <- actor[seq_len(n_x)]
+    actor_y <- actor[-seq_len(n_x)]
+  }
   permutation_test_(
     x = x,
     y = y,
@@ -64,6 +93,7 @@ permutation_test.tna <- function(x, y, adjust = "none", iter = 1000,
     paired = paired,
     level = level,
     measures = measures,
+    ids = pair_actor_ids(x, y, actor_x, actor_y),
     ...
   )
 }
@@ -92,7 +122,8 @@ permutation_test.tna <- function(x, y, adjust = "none", iter = 1000,
 permutation_test.group_tna <- function(x, groups, adjust = "none",
                                        iter = 1000, paired = FALSE,
                                        level = 0.05, measures = character(0),
-                                       consecutive = FALSE, ...) {
+                                       consecutive = FALSE, actor = NULL,
+                                       ...) {
   check_missing(x)
   check_class(x, "group_tna")
   stopifnot_(
@@ -102,6 +133,7 @@ permutation_test.group_tna <- function(x, groups, adjust = "none",
   )
   check_values(iter, strict = TRUE)
   check_flag(paired)
+  check_actor(actor, paired)
   check_range(level, lower = 0, upper = 1)
   adjust <- check_match(adjust, stats::p.adjust.methods, match_case = TRUE)
   x_names <- names(x)
@@ -117,6 +149,7 @@ permutation_test.group_tna <- function(x, groups, adjust = "none",
     n_groups >= 2L,
     "Argument {.arg groups} must contain at least two groups to compare."
   )
+  actors <- group_actor(x, actor)
   if (consecutive) {
     out <- vector(mode = "list", length = n_groups - 1L)
     for (i in seq_len(n_groups - 1L)) {
@@ -130,6 +163,9 @@ permutation_test.group_tna <- function(x, groups, adjust = "none",
         paired = paired,
         level = level,
         measures = measures,
+        ids = pair_actor_ids(
+          x[[group_i]], x[[group_j]], actors[[group_i]], actors[[group_j]]
+        ),
         ...
       )
       names(out)[i] <- paste0(x_names[group_i], " vs. ", x_names[group_j])
@@ -151,6 +187,9 @@ permutation_test.group_tna <- function(x, groups, adjust = "none",
           paired = paired,
           level = level,
           measures = measures,
+          ids = pair_actor_ids(
+            x[[group_i]], x[[group_j]], actors[[group_i]], actors[[group_j]]
+          ),
           ...
         )
         names(out)[idx] <- paste0(x_names[group_i], " vs. ", x_names[group_j])
@@ -164,7 +203,7 @@ permutation_test.group_tna <- function(x, groups, adjust = "none",
 }
 
 permutation_test_ <- function(x, y, adjust, iter, paired, level,
-                              measures, ...) {
+                              measures, ids = NULL, ...) {
   data_x <- x$data
   data_y <- y$data
   n_x <- nrow(data_x)
@@ -210,8 +249,6 @@ permutation_test_ <- function(x, y, adjust, iter, paired, level,
     to = colnames(weights_y)
   )
   edge_names <- paste0(edge_names$from, " -> ", edge_names$to)
-  idx_x <- seq_len(n_x)
-  idx_y <- seq(n_x + 1L, n_xy)
   combined_model <- initialize_model(
     combined_data,
     type,
@@ -220,6 +257,15 @@ permutation_test_ <- function(x, y, adjust, iter, paired, level,
     transitions = TRUE
   )
   combined_trans <- combined_model$trans
+  design <- onlyif(
+    !is.null(ids),
+    actor_design(
+      ids = ids,
+      labels = rep(c(TRUE, FALSE), c(n_x, n_y)),
+      level = level
+    )
+  )
+  n_perm_x <- n_x
   edge_diffs_perm <- array(0L, dim = c(iter, a, a))
   cent_diffs_perm <- array(0L, dim = c(iter, a, n_measures))
   edge_p_values <- matrix(0L, a, a)
@@ -230,12 +276,18 @@ permutation_test_ <- function(x, y, adjust, iter, paired, level,
       pair_idx <- matrix(seq_len(n_xy), ncol = 2)
       permuted_pairs <- t(apply(pair_idx, 1, sample))
       perm_idx <- c(permuted_pairs)
-    } else {
+    } else if (is.null(design)) {
       # For unpaired data, perform complete randomization
       perm_idx <- sample(n_xy)
+    } else {
+      # For nested data, permute within the restrictions set by actors
+      perm_x <- actor_permute(design)
+      perm_idx <- c(which(perm_x), which(!perm_x))
+      n_perm_x <- sum(perm_x)
     }
+    idx_x <- seq_len(n_perm_x)
     trans_perm_x <- combined_trans[perm_idx[idx_x], , , drop = FALSE]
-    trans_perm_y <- combined_trans[perm_idx[idx_y], , , drop = FALSE]
+    trans_perm_y <- combined_trans[perm_idx[-idx_x], , , drop = FALSE]
     weights_perm_x <- compute_weights(trans_perm_x, type, scaling, a)
     weights_perm_y <- compute_weights(trans_perm_y, type, scaling, a)
     if (include_centralities) {
@@ -305,7 +357,7 @@ permutation_test_ <- function(x, y, adjust, iter, paired, level,
   )
 }
 
-permutation_test_patterns <- function(x, len, iter, adjust) {
+permutation_test_patterns <- function(x, len, iter, adjust, actor = NULL) {
   stopifnot_(
     length(attr(x, "scaling")) == 0L || attr(x, "groupwise"),
     "Permutation test is not supported for
@@ -322,6 +374,15 @@ permutation_test_patterns <- function(x, len, iter, adjust) {
   pattern_matrices <- extract_patterns(m, len, labels)
   patterns <- factorize_patterns(pattern_matrices, group)
   stat_true <- lapply(patterns, pattern_statistic)
+  # Clusters are combined in order, so their actor ids line up with `group`
+  design <- onlyif(
+    !is.null(actor),
+    actor_design(
+      ids = unlist(Map(actor_ids, x, group_actor(x, actor))),
+      labels = group,
+      level = 0.05
+    )
+  )
   stat_perm <- vector(mode = "list", length = k)
   stat_p_value <- vector(mode = "list", length = k)
   for (j in seq_len(k)) {
@@ -330,8 +391,11 @@ permutation_test_patterns <- function(x, len, iter, adjust) {
     stat_p_value[[j]] <- numeric(u)
   }
   for (i in seq_len(iter)) {
-    perm_idx <- sample(n)
-    perm_group <- group[perm_idx]
+    perm_group <- ifelse_(
+      is.null(design),
+      group[sample(n)],
+      actor_permute(design)
+    )
     perm_patterns <- factorize_patterns(pattern_matrices, perm_group)
     for (j in seq_len(k)) {
       stat_perm[[j]][, i] <- pattern_statistic(perm_patterns[[j]])

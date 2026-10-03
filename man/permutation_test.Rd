@@ -15,6 +15,7 @@ permutation_test(x, ...)
   paired = FALSE,
   level = 0.05,
   measures = character(0),
+  actor = NULL,
   ...
 )
 }
@@ -41,6 +42,18 @@ permutation tests. The default is 0.05.}
 
 \item{measures}{A \code{character} vector of centrality measures to test.
 See \code{\link[=centralities]{centralities()}} for a list of available centrality measures.}
+
+\item{actor}{An optional actor identifier for sequences nested in actors
+(for example, several sessions per student). Either a \code{character} string
+naming a non-sequence column of the data the models were built from (such
+as a column of \code{meta_data} from \code{\link[=prepare_data]{prepare_data()}}), or a vector with one
+identifier per sequence (the sequences of \code{x} first, then those of \code{y}).
+When given, the permutation respects the nesting: actors whose sequences
+are all in one group are reassigned between the groups as whole units, and
+the sequences of actors present in both groups are shuffled within the
+actor (Good, 2005). A warning is given when the actors allow too few
+distinct permutations to reach \code{level}. Cannot be combined with
+\code{paired = TRUE}. The default \code{NULL} permutes single sequences.}
 }
 \value{
 A \code{tna_permutation} object which is a \code{list} with two elements:
@@ -67,6 +80,10 @@ model_y <- tna(group_regulation[1001:1200, ])
 # Small number of iterations for CRAN
 permutation_test(model_x, model_y, iter = 20)
 
+}
+\references{
+Good, P. (2005). \emph{Permutation, Parametric, and Bootstrap Tests of
+Hypotheses} (3rd ed.). Springer.
 }
 \seealso{
 Validation functions

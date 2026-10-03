@@ -13,6 +13,7 @@
   level = 0.05,
   measures = character(0),
   consecutive = FALSE,
+  actor = NULL,
   ...
 )
 }
@@ -44,6 +45,18 @@ See \code{\link[=centralities]{centralities()}} for a list of available centrali
 comparisons are performed in lexicographic order with respect to the order
 of the groups. If \code{TRUE}, only comparisons between consecutive pairs
 of groups are performed.}
+
+\item{actor}{An optional actor identifier for sequences nested in actors
+(for example, several sessions per student). Either a \code{character} string
+naming a non-sequence column of the data the models were built from (such
+as a column of \code{meta_data} from \code{\link[=prepare_data]{prepare_data()}}), or a vector with one
+identifier per sequence (the sequences of \code{x} first, then those of \code{y}).
+When given, the permutation respects the nesting: actors whose sequences
+are all in one group are reassigned between the groups as whole units, and
+the sequences of actors present in both groups are shuffled within the
+actor (Good, 2005). A warning is given when the actors allow too few
+distinct permutations to reach \code{level}. Cannot be combined with
+\code{paired = TRUE}. The default \code{NULL} permutes single sequences.}
 
 \item{...}{Additional arguments passed to \code{\link[=centralities]{centralities()}}.}
 }

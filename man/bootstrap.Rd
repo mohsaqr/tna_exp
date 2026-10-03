@@ -6,7 +6,16 @@
 \alias{bootstrap.group_tna}
 \title{Bootstrap Transition Networks from Sequence Data}
 \usage{
-bootstrap(x, iter, level, method, threshold, consistency_range, seed = NULL)
+bootstrap(
+  x,
+  iter,
+  level,
+  method,
+  threshold,
+  consistency_range,
+  seed = NULL,
+  actor = NULL
+)
 
 \method{bootstrap}{tna}(
   x,
@@ -15,7 +24,8 @@ bootstrap(x, iter, level, method, threshold, consistency_range, seed = NULL)
   method = "stability",
   threshold,
   consistency_range = c(0.75, 1.25),
-  seed = NULL
+  seed = NULL,
+  actor = NULL
 )
 
 \method{bootstrap}{group_tna}(
@@ -25,7 +35,8 @@ bootstrap(x, iter, level, method, threshold, consistency_range, seed = NULL)
   method = "stability",
   threshold,
   consistency_range = c(0.75, 1.25),
-  seed = NULL
+  seed = NULL,
+  actor = NULL
 )
 }
 \arguments{
@@ -57,6 +68,17 @@ only when \code{method = "stability"}.}
 
 \item{seed}{A single \code{numeric} random seed for reproducible resampling, or
 \code{NULL} (the default) to use the current RNG state.}
+
+\item{actor}{An optional actor identifier for sequences nested in actors
+(for example, several sessions per student). Either a \code{character} string
+naming a non-sequence column of the data the model was built from (such as
+a column of \code{meta_data} from \code{\link[=prepare_data]{prepare_data()}}), or a vector with one
+identifier per sequence (per sequence of the data the grouped model was
+built from, for a \code{group_tna} object). When given, whole actors are
+resampled with replacement instead of single sequences (a cluster
+bootstrap; Davison & Hinkley, 1997, Section 3.8), so that sequences nested
+in actors are not treated as independent. The default \code{NULL} resamples
+sequences.}
 }
 \value{
 A \code{tna_bootstrap} object which is a \code{list} containing the
@@ -111,6 +133,10 @@ model <- tna(group_regulation)
 # Small number of iterations for CRAN
 bootstrap(model, iter = 10)
 
+}
+\references{
+Davison, A. C., & Hinkley, D. V. (1997). \emph{Bootstrap Methods and their
+Application}. Cambridge University Press.
 }
 \seealso{
 Validation functions

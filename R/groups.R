@@ -147,6 +147,8 @@ group_model.default <- function(x, group, type = "relative",
     attr(d, "alphabet") <- alphabet
     attr(d, "labels") <- alphabet
     attr(d, "colors") <- attr(seq_data, "colors")
+    attr(d, "meta") <- attr(seq_data, "meta")[rows, , drop = FALSE]
+    attr(d, "rows") <- rows
     inits <- factor(d[, 1L], levels = seq_len(a), labels = alphabet)
     inits <- as.vector(table(inits))
     weights <- compute_weights(
@@ -188,6 +190,7 @@ group_model.default <- function(x, group, type = "relative",
     groupwise = groupwise,
     type = type,
     scaling = scaling,
+    n_rows = nrow(seq_data),
     class = "group_tna"
   )
 }
@@ -242,9 +245,12 @@ group_model.tna_clustering <- function(x, type = "relative",
                                        na.rm = TRUE, ...) {
   check_missing(x)
   check_class(x, "tna_clustering")
+  seq_cols <- names(x$data)
+  meta <- attr(x, "meta")
   group_model.default(
-    x = x$data,
+    x = ifelse_(is.null(meta), x$data, cbind(x$data, meta)),
     group = x$assignment,
+    cols = tidyselect::all_of(seq_cols),
     type = type,
     scaling = scaling,
     groupwise = groupwise,

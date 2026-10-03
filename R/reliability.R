@@ -13,6 +13,12 @@
 #' @param iter An `integer` specifying number of iterations (splits). The
 #'   default is `1000`.
 #' @param scaling See [compare()].
+#' @param actor An optional actor identifier for sequences nested in actors:
+#'   a `character` string naming a non-sequence column of the data the model
+#'   was built from, or a vector with one identifier per sequence. When given,
+#'   the actors are split, so that all sequences of an actor fall in the same
+#'   half, and `split` is the proportion of actors. The default `NULL` splits
+#'   single sequences.
 #' @param ... Ignored.
 #' @return A `tna_reliability` object.
 #' @examples
@@ -27,8 +33,9 @@ reliability <- function(x, ...) {
 #' @export
 #' @rdname reliability
 reliability.tna <- function(x, types = "relative", split = 0.5, iter = 1000,
-                            scaling = "none", ...) {
+                            scaling = "none", actor = NULL, ...) {
   check_tna_seq(x)
+  check_actor(actor)
   check_values(iter, strict = TRUE)
   check_range(split, lower = 0.0, upper = 1.0)
   d <- x$data
@@ -42,16 +49,22 @@ reliability.tna <- function(x, types = "relative", split = 0.5, iter = 1000,
   alphabet <- attr(d, "alphabet")
   n <- nrow(d)
   m <- length(types)
-  n_sample <- round(n * split)
   a <- length(alphabet)
   idx <- seq_len(n)
+  # Split sequences, or actors with all of their sequences
+  units <- ifelse_(is.null(actor), as.list(idx), actor_units(x, actor))
+  n_sample <- round(length(units) * split)
   res <- vector(mode = "list", length = length(types))
   for (i in seq_len(m)) {
     check_model_type(types[i])
     comparisons <- vector(mode = "list", length = iter)
     for (j in seq_len(iter)) {
-      idx_a <- sample(idx, n_sample, replace = FALSE)
-      idx_b <- setdiff(idx, idx_a)
+      half <- sample(seq_along(units), n_sample, replace = FALSE)
+      idx_a <- unlist(units[half], use.names = FALSE)
+      idx_b <- unlist(
+        units[setdiff(seq_along(units), half)],
+        use.names = FALSE
+      )
       trans_a <- trans[idx_a, , , drop = FALSE]
       trans_b <- trans[idx_b, , , drop = FALSE]
       weights_a[] <- compute_weights(trans_a, types[i], scaling_, a)
