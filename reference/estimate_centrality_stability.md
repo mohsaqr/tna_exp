@@ -250,6 +250,7 @@ Validation functions
 ## Examples
 
 ``` r
+# \donttest{
 model <- tna(group_regulation)
 # Small number of iterations and drop proportions for CRAN
 estimate_cs(
@@ -262,4 +263,5 @@ estimate_cs(
 #> 
 #>  InStrength OutStrength 
 #>         0.9         0.9 
+# }
 ```
