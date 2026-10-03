@@ -21,6 +21,7 @@ permutation_test(
   paired = FALSE,
   level = 0.05,
   measures = character(0),
+  actor = NULL,
   ...
 )
 ```
@@ -69,6 +70,22 @@ permutation_test(
   [`centralities()`](https://sonsoles.me/tna/reference/centralities.md)
   for a list of available centrality measures.
 
+- actor:
+
+  An optional actor identifier for sequences nested in actors (for
+  example, several sessions per student). Either a `character` string
+  naming a non-sequence column of the data the models were built from
+  (such as a column of `meta_data` from
+  [`prepare_data()`](https://sonsoles.me/tna/reference/prepare_data.md)),
+  or a vector with one identifier per sequence (the sequences of `x`
+  first, then those of `y`). When given, the permutation respects the
+  nesting: actors whose sequences are all in one group are reassigned
+  between the groups as whole units, and the sequences of actors present
+  in both groups are shuffled within the actor (Good, 2005). A warning
+  is given when the actors allow too few distinct permutations to reach
+  `level`. Cannot be combined with `paired = TRUE`. The default `NULL`
+  permutes single sequences.
+
 ## Value
 
 A `tna_permutation` object which is a `list` with two elements: `edges`
@@ -82,6 +99,11 @@ and `centralities`, both containing the following elements:
 - `diffs_true`: A `matrix` of differences in the data.
 
 - `diffs_sig`: A `matrix` showing the significant differences.
+
+## References
+
+Good, P. (2005). *Permutation, Parametric, and Bootstrap Tests of
+Hypotheses* (3rd ed.). Springer.
 
 ## See also
 

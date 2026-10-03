@@ -13,7 +13,7 @@ testing."><meta property="og:image" content="https://sonsoles.me/tna/logo.png"><
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,16 @@ testing.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bootstrap</span><span class="op">(</span><span class="va">x</span>, <span class="va">iter</span>, <span class="va">level</span>, <span class="va">method</span>, <span class="va">threshold</span>, <span class="va">consistency_range</span>, seed <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bootstrap</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">iter</span>,</span>
+<span>  <span class="va">level</span>,</span>
+<span>  <span class="va">method</span>,</span>
+<span>  <span class="va">threshold</span>,</span>
+<span>  <span class="va">consistency_range</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'tna'</span></span>
 <span><span class="fu">bootstrap</span><span class="op">(</span></span>
@@ -68,7 +77,8 @@ testing.</p>
 <span>  method <span class="op">=</span> <span class="st">"stability"</span>,</span>
 <span>  <span class="va">threshold</span>,</span>
 <span>  consistency_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.75</span>, <span class="fl">1.25</span><span class="op">)</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'group_tna'</span></span>
@@ -79,7 +89,8 @@ testing.</p>
 <span>  method <span class="op">=</span> <span class="st">"stability"</span>,</span>
 <span>  <span class="va">threshold</span>,</span>
 <span>  consistency_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.75</span>, <span class="fl">1.25</span><span class="op">)</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -129,6 +140,19 @@ only when <code>method = "stability"</code>.</p></dd>
 <dd><p>A single <code>numeric</code> random seed for reproducible resampling, or
 <code>NULL</code> (the default) to use the current RNG state.</p></dd>
 
+
+<dt id="arg-actor">actor<a class="anchor" aria-label="anchor" href="#arg-actor"></a></dt>
+<dd><p>An optional actor identifier for sequences nested in actors
+(for example, several sessions per student). Either a <code>character</code> string
+naming a non-sequence column of the data the model was built from (such as
+a column of <code>meta_data</code> from <code><a href="prepare_data.html">prepare_data()</a></code>), or a vector with one
+identifier per sequence (per sequence of the data the grouped model was
+built from, for a <code>group_tna</code> object). When given, whole actors are
+resampled with replacement instead of single sequences (a cluster
+bootstrap; Davison &amp; Hinkley, 1997, Section 3.8), so that sequences nested
+in actors are not treated as independent. The default <code>NULL</code> resamples
+sequences.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -168,6 +192,11 @@ significant) are provided.</p>
 <p>All results, including the original transition matrix, bootstrapped
 estimates, and summary statistics for removed edges, are returned in a
 structured list.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Davison, A. C., &amp; Hinkley, D. V. (1997). <em>Bootstrap Methods and their
+Application</em>. Cambridge University Press.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

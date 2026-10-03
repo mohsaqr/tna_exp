@@ -18,6 +18,7 @@ permutation_test(
   level = 0.05,
   measures = character(0),
   consecutive = FALSE,
+  actor = NULL,
   ...
 )
 ```
@@ -69,6 +70,22 @@ permutation_test(
   are performed in lexicographic order with respect to the order of the
   groups. If `TRUE`, only comparisons between consecutive pairs of
   groups are performed.
+
+- actor:
+
+  An optional actor identifier for sequences nested in actors (for
+  example, several sessions per student). Either a `character` string
+  naming a non-sequence column of the data the models were built from
+  (such as a column of `meta_data` from
+  [`prepare_data()`](https://sonsoles.me/tna/reference/prepare_data.md)),
+  or a vector with one identifier per sequence (the sequences of `x`
+  first, then those of `y`). When given, the permutation respects the
+  nesting: actors whose sequences are all in one group are reassigned
+  between the groups as whole units, and the sequences of actors present
+  in both groups are shuffled within the actor (Good, 2005). A warning
+  is given when the actors allow too few distinct permutations to reach
+  `level`. Cannot be combined with `paired = TRUE`. The default `NULL`
+  permutes single sequences.
 
 - ...:
 

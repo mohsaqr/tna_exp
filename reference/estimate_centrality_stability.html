@@ -13,7 +13,7 @@ centralities and those computed using sampled subsets."><meta property="og:image
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  <span class="va">threshold</span>,</span>
 <span>  <span class="va">certainty</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  detailed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">estimate_centrality_stability</span><span class="op">(</span></span>
@@ -85,7 +86,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  <span class="va">threshold</span>,</span>
 <span>  <span class="va">certainty</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  detailed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'tna'</span></span>
@@ -101,7 +103,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  threshold <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  certainty <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  detailed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'tna'</span></span>
@@ -117,7 +120,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  threshold <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  certainty <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  detailed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'group_tna'</span></span>
@@ -133,7 +137,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  threshold <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  certainty <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  detailed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'group_tna'</span></span>
@@ -149,7 +154,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  threshold <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  certainty <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  detailed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -218,6 +224,16 @@ Defaults to <code>FALSE</code></p></dd>
 <dt id="arg-detailed">detailed<a class="anchor" aria-label="anchor" href="#arg-detailed"></a></dt>
 <dd><p>Deprecated. This argument is ignored and will be removed in
 a future version.</p></dd>
+
+
+<dt id="arg-actor">actor<a class="anchor" aria-label="anchor" href="#arg-actor"></a></dt>
+<dd><p>An optional actor identifier for sequences nested in actors:
+a <code>character</code> string naming a non-sequence column of the data the model
+was built from, or a vector with one identifier per sequence (per
+sequence of the data the grouped model was built from, for a <code>group_tna</code>
+object). When given, <code>drop_prop</code> is the proportion of actors dropped,
+and each actor's sequences are dropped together. The default <code>NULL</code>
+drops single sequences.</p></dd>
 
 </dl></div>
     <div class="section level2">

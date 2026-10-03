@@ -7,7 +7,16 @@ returned with confidence intervals and significance testing.
 ## Usage
 
 ``` r
-bootstrap(x, iter, level, method, threshold, consistency_range, seed = NULL)
+bootstrap(
+  x,
+  iter,
+  level,
+  method,
+  threshold,
+  consistency_range,
+  seed = NULL,
+  actor = NULL
+)
 
 # S3 method for class 'tna'
 bootstrap(
@@ -17,7 +26,8 @@ bootstrap(
   method = "stability",
   threshold,
   consistency_range = c(0.75, 1.25),
-  seed = NULL
+  seed = NULL,
+  actor = NULL
 )
 
 # S3 method for class 'group_tna'
@@ -28,7 +38,8 @@ bootstrap(
   method = "stability",
   threshold,
   consistency_range = c(0.75, 1.25),
-  seed = NULL
+  seed = NULL,
+  actor = NULL
 )
 ```
 
@@ -77,6 +88,20 @@ bootstrap(
 
   A single `numeric` random seed for reproducible resampling, or `NULL`
   (the default) to use the current RNG state.
+
+- actor:
+
+  An optional actor identifier for sequences nested in actors (for
+  example, several sessions per student). Either a `character` string
+  naming a non-sequence column of the data the model was built from
+  (such as a column of `meta_data` from
+  [`prepare_data()`](https://sonsoles.me/tna/reference/prepare_data.md)),
+  or a vector with one identifier per sequence (per sequence of the data
+  the grouped model was built from, for a `group_tna` object). When
+  given, whole actors are resampled with replacement instead of single
+  sequences (a cluster bootstrap; Davison & Hinkley, 1997, Section 3.8),
+  so that sequences nested in actors are not treated as independent. The
+  default `NULL` resamples sequences.
 
 ## Value
 
@@ -130,6 +155,11 @@ significant) are provided.
 All results, including the original transition matrix, bootstrapped
 estimates, and summary statistics for removed edges, are returned in a
 structured list.
+
+## References
+
+Davison, A. C., & Hinkley, D. V. (1997). *Bootstrap Methods and their
+Application*. Cambridge University Press.
 
 ## See also
 

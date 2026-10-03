@@ -20,7 +20,8 @@ estimate_cs(
   threshold,
   certainty,
   progressbar = NULL,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 
 estimate_centrality_stability(
@@ -35,7 +36,8 @@ estimate_centrality_stability(
   threshold,
   certainty,
   progressbar = NULL,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 
 # S3 method for class 'tna'
@@ -51,7 +53,8 @@ estimate_cs(
   threshold = 0.7,
   certainty = 0.95,
   progressbar = FALSE,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 
 # S3 method for class 'tna'
@@ -67,7 +70,8 @@ estimate_centrality_stability(
   threshold = 0.7,
   certainty = 0.95,
   progressbar = FALSE,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 
 # S3 method for class 'group_tna'
@@ -83,7 +87,8 @@ estimate_cs(
   threshold = 0.7,
   certainty = 0.95,
   progressbar = FALSE,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 
 # S3 method for class 'group_tna'
@@ -99,7 +104,8 @@ estimate_centrality_stability(
   threshold = 0.7,
   certainty = 0.95,
   progressbar = FALSE,
-  detailed = NULL
+  detailed = NULL,
+  actor = NULL
 )
 ```
 
@@ -169,6 +175,16 @@ estimate_centrality_stability(
 
   Deprecated. This argument is ignored and will be removed in a future
   version.
+
+- actor:
+
+  An optional actor identifier for sequences nested in actors: a
+  `character` string naming a non-sequence column of the data the model
+  was built from, or a vector with one identifier per sequence (per
+  sequence of the data the grouped model was built from, for a
+  `group_tna` object). When given, `drop_prop` is the proportion of
+  actors dropped, and each actor's sequences are dropped together. The
+  default `NULL` drops single sequences.
 
 ## Value
 

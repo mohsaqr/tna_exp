@@ -21,7 +21,7 @@ the number of observations."><meta property="og:image" content="https://sonsoles
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,6 +81,7 @@ the number of observations.</p>
 <span>  test <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  iter <span class="op">=</span> <span class="fl">1000L</span>,</span>
 <span>  adjust <span class="op">=</span> <span class="st">"bonferroni"</span>,</span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -92,6 +93,7 @@ the number of observations.</p>
 <span>  test <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  iter <span class="op">=</span> <span class="fl">1000L</span>,</span>
 <span>  adjust <span class="op">=</span> <span class="st">"bonferroni"</span>,</span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -145,6 +147,16 @@ correction method (default: <code>"bonferroni"</code>). Supports all
 <a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">stats::p.adjust</a> methods: <code>"holm"</code>, <code>"hochberg"</code>, <code>"hommel"</code>,
 <code>"bonferroni"</code>, <code>"BH"</code>, <code>"BY"</code>, <code>"fdr"</code>, <code>"none"</code>. The adjustment
 is carried out within sequences of the same length.</p></dd>
+
+
+<dt id="arg-actor">actor<a class="anchor" aria-label="anchor" href="#arg-actor"></a></dt>
+<dd><p>An optional actor identifier for sequences nested in actors:
+a <code>character</code> string naming a non-sequence column of the data, or a
+vector with one identifier per row/sequence of <code>x</code> (of the data the
+grouped model was built from, for a <code>group_tna</code> object). When given, the
+permutation test reassigns whole actors between the groups, and shuffles
+the sequences of actors present in several groups within the actor
+(Good, 2005). The default <code>NULL</code> permutes single sequences.</p></dd>
 
 </dl></div>
     <div class="section level2">

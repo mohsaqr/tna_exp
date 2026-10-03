@@ -1,6 +1,45 @@
 # Changelog
 
+## tna 1.4.0
+
+- New `actor` argument for sequences nested in actors (for example,
+  several sessions per student) in every resampling method:
+  [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md),
+  [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md),
+  [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md),
+  [`reliability()`](https://sonsoles.me/tna/reference/reliability.md),
+  [`compare_sequences()`](https://sonsoles.me/tna/reference/compare_sequences.md),
+  and `prune(method = "bootstrap")` through
+  [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md).
+  `actor` is a column name of the data the model was built from, or a
+  vector with one identifier per sequence. With one sequence per actor,
+  every method gives the same result as without `actor`.
+  - Permutation tests reassign whole actors between groups and shuffle
+    the sequences of actors present in several groups within the actor
+    (Good, 2005). A warning is given when the actors allow too few
+    distinct permutations to reach the significance level.
+  - Bootstraps resample whole actors with replacement (cluster
+    bootstrap; Davison & Hinkley, 1997).
+  - Case-dropping
+    ([`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md))
+    drops whole actors, and split-half reliability puts all sequences of
+    an actor in the same half.
+- Models keep the non-sequence columns of their data (one row per
+  sequence), so `actor` can name any of them. This includes models built
+  from
+  [`prepare_data()`](https://sonsoles.me/tna/reference/prepare_data.md)
+  output, grouped models, and
+  [`cluster_data()`](https://sonsoles.me/tna/reference/cluster_data.md)
+  of
+  [`prepare_data()`](https://sonsoles.me/tna/reference/prepare_data.md)
+  output. With `concat > 1`, the columns that are constant within each
+  concatenated block are kept. Grouped models record the rows of each
+  group, so an `actor` vector for the full data applies to every group,
+  including groups from mixture models.
+
 ## tna 1.3.1
+
+CRAN release: 2026-09-28
 
 - Fixed
   [`prepare_data()`](https://sonsoles.me/tna/reference/prepare_data.md)

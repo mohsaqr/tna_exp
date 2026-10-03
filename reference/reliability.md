@@ -15,6 +15,7 @@ reliability(
   split = 0.5,
   iter = 1000,
   scaling = "none",
+  actor = NULL,
   ...
 )
 ```
@@ -48,6 +49,15 @@ reliability(
 - scaling:
 
   See [`compare()`](https://sonsoles.me/tna/reference/compare.md).
+
+- actor:
+
+  An optional actor identifier for sequences nested in actors: a
+  `character` string naming a non-sequence column of the data the model
+  was built from, or a vector with one identifier per sequence. When
+  given, the actors are split, so that all sequences of an actor fall in
+  the same half, and `split` is the proportion of actors. The default
+  `NULL` splits single sequences.
 
 ## Value
 
