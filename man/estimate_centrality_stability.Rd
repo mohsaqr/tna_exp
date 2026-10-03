@@ -187,6 +187,7 @@ along with confidence intervals. The CS-coefficients are displayed in the
 subtitle.
 }
 \examples{
+\donttest{
 model <- tna(group_regulation)
 # Small number of iterations and drop proportions for CRAN
 estimate_cs(
@@ -195,6 +196,7 @@ estimate_cs(
   measures = c("InStrength", "OutStrength"),
   iter = 10
 )
+}
 
 }
 \seealso{

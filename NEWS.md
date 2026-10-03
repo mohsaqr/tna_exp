@@ -52,6 +52,15 @@
   supplied bootstrap object as a request for bootstrap pruning.
 * Added reproducible `seed` arguments to network and clique bootstrapping.
 * Added weighted PageRank to `centralities()`.
+* `plot.tna_permutation()` now dispatches to the dedicated permutation
+  renderer of `cograph::splot()`, so permutation-specific options such as
+  `show_nonsig`, `show_stars`, `show_effect`, `edge_nonsig_color`,
+  `edge_nonsig_style`, and `edge_nonsig_alpha` are honored.
+* Fixed qgraph-style plotting arguments (such as `edge.label.cex`) being
+  ignored by matrix-based network plots (e.g. permutation and disparity
+  plots).
+* Added a `bins` argument to `plot.tna_reliability()` for controlling the
+  number of histogram bins.
 
 # tna 1.2.3
 
