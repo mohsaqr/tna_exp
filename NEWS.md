@@ -1,3 +1,17 @@
+# tna 1.5.2
+
+* `summary()` of a permutation test returns the centrality results with
+  `what = "centralities"` (the edges remain the default).
+* New `summary()` method for `reliability()` results: all 22 split-half
+  metrics, with their category, as a tidy table (`print()` shows four).
+* New article "Validating a transition network" covering `markov_order()`,
+  `bootstrap()` and bootstrap pruning, `estimate_cs()`, `reliability()`,
+  `permutation_test()` (including edge betweenness), `compare_sequences()`,
+  and the `actor` argument for nested data.
+* Every vignette and article ends with a list of the package articles, the
+  TNA tutorials and book chapters, and the Dynalytics resources (package
+  sites, tools, CarmNotes, and selected articles).
+
 # tna 1.5.1
 
 * Every help page now has examples that run: small examples on a subset of

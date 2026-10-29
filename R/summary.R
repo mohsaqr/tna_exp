@@ -219,30 +219,60 @@ summary.group_tna_bootstrap <- function(object, ...) {
 
 #' Summarize Permutation Test Results
 #'
-#' Returns the edge-level results of a permutation test as a tidy table.
-#' The results for the centrality measures are shown by [print()].
+#' Returns the results of a permutation test as a tidy table, for the edges
+#' or for the centrality measures.
 #'
 #' @export
 #' @family validation
 #' @param object A `tna_permutation` or a `group_tna_permutation` object.
+#' @param what A `character` string, the results to return: `"edges"` (the
+#'   default) or `"centralities"`. The centralities are available when the
+#'   test was run with `measures`.
 #' @param digits An `integer`, the number of decimals of `diff_true` and
 #'   `effect_size`. The p-values are not rounded. The default is 2.
 #' @param ... Ignored.
-#' @return A `data.frame` with one row per edge (and per pair of groups, in
-#'   the first column `pair`, for a `group_tna_permutation` object) and the
-#'   columns `from`, `to`, `diff_true` (the observed difference in the edge
-#'   weight), `effect_size` (the difference divided by the standard deviation
-#'   of the permuted differences, `NA` when they do not vary), and `p_value`.
+#' @return A `data.frame` with one row per edge, or per state and centrality
+#'   measure, and per pair of groups (in the first column `pair`) for a
+#'   `group_tna_permutation` object. For the edges, the columns are `from`,
+#'   `to`, `diff_true` (the observed difference in the edge weight),
+#'   `effect_size` (the difference divided by the standard deviation of the
+#'   permuted differences, `NA` when they do not vary), and `p_value`. For
+#'   the centralities, `state` and `centrality` replace `from` and `to`.
+#'   An error of class `tna_error_permutation` is raised when
+#'   `what = "centralities"` and the test was run without `measures`.
 #' @examples
 #' model <- group_model(engagement_mmm)
 #' # Small number of iterations for CRAN
-#' perm <- permutation_test(model, iter = 20)
+#' perm <- permutation_test(model, iter = 20, measures = "InStrength")
 #' summary(perm)
+#' summary(perm, what = "centralities")
 #'
-summary.tna_permutation <- function(object, digits = 2L, ...) {
+summary.tna_permutation <- function(object, what = "edges", digits = 2L,
+                                    ...) {
   check_missing(object)
   check_class(object, "tna_permutation")
+  what <- check_match(what, c("edges", "centralities"))
   check_values(digits)
+  if (identical(what, "centralities")) {
+    stats <- object$centralities$stats
+    stopifnot_(
+      !is.null(stats),
+      c(
+        "The permutation test was run without centrality measures.",
+        `i` = "Use {.arg measures} in {.fn permutation_test} to test them."
+      ),
+      class = "tna_error_permutation"
+    )
+    return(
+      data.frame(
+        state = as.character(stats$state),
+        centrality = as.character(stats$centrality),
+        diff_true = round(stats$diff_true, digits),
+        effect_size = round(stats$effect_size, digits),
+        p_value = stats$p_value
+      )
+    )
+  }
   diffs <- object$edges$diffs_true
   stats <- object$edges$stats
   # The edges are in column-major order of the weight matrix
@@ -257,12 +287,14 @@ summary.tna_permutation <- function(object, digits = 2L, ...) {
 
 #' @export
 #' @rdname summary.tna_permutation
-summary.group_tna_permutation <- function(object, digits = 2L, ...) {
+summary.group_tna_permutation <- function(object, what = "edges",
+                                          digits = 2L, ...) {
   check_missing(object)
   check_class(object, "group_tna_permutation")
   tables <- Map(
     function(y, pair) {
-      data.frame(pair = pair, summary.tna_permutation(y, digits = digits))
+      table <- summary.tna_permutation(y, what = what, digits = digits)
+      data.frame(pair = rep(pair, nrow(table)), table)
     },
     object,
     names(object)
@@ -330,6 +362,48 @@ summary.group_tna_stability <- function(object, ...) {
     names(object)
   )
   out <- do.call(rbind, unname(tables))
+  rownames(out) <- NULL
+  out
+}
+
+#' Summarize Split-Half Reliability Results
+#'
+#' Returns every metric of a split-half reliability analysis as a tidy
+#' table. [print()] shows four of them.
+#'
+#' @export
+#' @family validation
+#' @param object A `tna_reliability` object.
+#' @param ... Ignored.
+#' @return A `data.frame` with one row per metric (and per model type, in
+#'   the column `model_type`, when [reliability()] was run with several
+#'   `types`). The columns are `category` (the kind of metric: weight
+#'   deviations, correlations, dissimilarities, similarities, or pattern
+#'   similarities), `metric`, and the `mean`, `sd`, `median`, `min`, `max`,
+#'   and quartiles (`q25`, `q75`) of the metric over the splits.
+#' @examples
+#' # Small number of iterations for CRAN
+#' rel <- reliability(tna(engagement), iter = 20)
+#' summary(rel)
+#'
+summary.tna_reliability <- function(object, ...) {
+  check_missing(object)
+  check_class(object, "tna_reliability")
+  metrics <- as.data.frame(object$metrics)
+  categories <- unique(metrics[, c("category", "metric")])
+  out <- merge(categories, as.data.frame(object$summary), by = "metric")
+  # The model types in the order given, the metrics in the order computed
+  type_rank <- ifelse_(
+    is.null(out$model_type),
+    rep(1L, nrow(out)),
+    match(out$model_type, unique(metrics$model_type))
+  )
+  metric_rank <- match(out$metric, categories$metric)
+  columns <- c(
+    intersect("model_type", names(out)), "category", "metric",
+    "mean", "sd", "median", "min", "max", "q25", "q75"
+  )
+  out <- out[order(type_rank, metric_rank), columns]
   rownames(out) <- NULL
   out
 }

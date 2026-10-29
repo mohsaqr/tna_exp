@@ -204,3 +204,5 @@ subsequence_comparison  <- compare_sequences(tna_model_clus, sub = 3:5, min_freq
 plot(subsequence_comparison, cells = TRUE)
 ```
 
+```{r, child = "_tutorials.md"}
+```

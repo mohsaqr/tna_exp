@@ -82,3 +82,6 @@ cents_withoutloops <- centralities(
 )
 plot(cents_withoutloops, ncol = 2, model = tna_model)
 ```
+
+```{r, child = "_tutorials.md"}
+```

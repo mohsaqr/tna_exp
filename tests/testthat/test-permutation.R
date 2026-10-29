@@ -146,3 +146,32 @@ test_that("summary of a permutation test is a tidy edge table", {
   expect_equal(names(by_pair)[1L], "pair")
   expect_equal(nrow(by_pair), length(w))
 })
+
+test_that("summary of a permutation test returns the centralities on request", {
+  groups <- group_tna(group_regulation, group = rep(c("a", "b"), each = 1000))
+  set.seed(31)
+  perm <- permutation_test(groups$a, groups$b, iter = 9,
+                           measures = c("InStrength", "Betweenness"))
+  cent <- summary(perm, what = "centralities", digits = 3)
+  expect_named(cent, c("state", "centrality", "diff_true", "effect_size",
+                       "p_value"))
+  expect_equal(nrow(cent), 9L * 2L)
+  expect_equal(cent$p_value, perm$centralities$stats$p_value)
+  expect_equal(cent$diff_true, round(perm$centralities$stats$diff_true, 3))
+  # The edge table is still the default
+  expect_named(summary(perm), c("from", "to", "diff_true", "effect_size",
+                                "p_value"))
+  set.seed(32)
+  by_pair <- summary(
+    permutation_test(groups, iter = 9, measures = "InStrength"),
+    what = "centralities"
+  )
+  expect_equal(unique(by_pair$pair), "a vs. b")
+  expect_equal(nrow(by_pair), 9L)
+  set.seed(33)
+  edges_only <- permutation_test(groups$a, groups$b, iter = 9)
+  expect_error(
+    summary(edges_only, what = "centralities"),
+    class = "tna_error_permutation"
+  )
+})

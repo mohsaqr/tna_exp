@@ -110,3 +110,5 @@ gtna <- group_tna(by_user, group = "achievement")
 plot(gtna)
 ```
 
+```{r, child = "_tutorials.md"}
+```

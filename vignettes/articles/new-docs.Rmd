@@ -557,3 +557,6 @@ print(g)
 **tna** v1.1.0 | MIT License | Mohammed Saqr, Santtu Tikka, Sonsoles Lopez-Pernas
 
 Reference: Saqr M., Lopez-Pernas S., et al. (2025). Transition Network Analysis. *Proc. LAK '25*, 351-361. [doi:10.1145/3706468.3706513](https://doi.org/10.1145/3706468.3706513)
+
+```{r, child = "../_tutorials.md"}
+```

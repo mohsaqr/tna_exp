@@ -49,3 +49,6 @@ triads <- cliques(tna_model, size = 3, threshold = 0.05)
 plot(dyads, ask = FALSE)
 plot(triads, ask = FALSE)
 ```
+
+```{r, child = "_tutorials.md"}
+```

@@ -254,3 +254,6 @@ The plot shows the network of significant differences. Only edges that passed th
 | You want to find states that connect distant parts of the sequence | `atna()` |
 
 ATNA and TNA can give different answers about which states are most central. A state might have weak immediate transitions (low importance in TNA) but strong long-range influence (high importance in ATNA). If the two methods agree on what matters, that's good evidence the finding is solid. If they disagree, the disagreement itself is informative — it tells you the state's role depends on the time scale you're looking at.
+
+```{r, child = "../_tutorials.md"}
+```

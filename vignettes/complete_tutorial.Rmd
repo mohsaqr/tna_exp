@@ -206,6 +206,9 @@ Centrality_stability <- estimate_centrality_stability(model, iter = 100)
 plot(Centrality_stability)
 ```
 
+```{r, child = "_tutorials.md"}
+```
+
 ```{r, include = FALSE}
 options(old_options)
 ```

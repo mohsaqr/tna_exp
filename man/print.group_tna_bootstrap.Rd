@@ -59,6 +59,7 @@ Validation functions
 \code{\link{summary.tna_bootstrap}()},
 \code{\link{summary.tna_markov_order}()},
 \code{\link{summary.tna_permutation}()},
+\code{\link{summary.tna_reliability}()},
 \code{\link{summary.tna_stability}()}
 }
 \concept{validation}

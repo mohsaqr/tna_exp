@@ -298,3 +298,6 @@ plot(Permutation)
 Centrality_stability <- estimate_centrality_stability(model_scaled, iter = 100)
 plot(Centrality_stability)
 ```
+
+```{r, child = "../_tutorials.md"}
+```

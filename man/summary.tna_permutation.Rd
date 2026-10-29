@@ -5,12 +5,16 @@
 \alias{summary.group_tna_permutation}
 \title{Summarize Permutation Test Results}
 \usage{
-\method{summary}{tna_permutation}(object, digits = 2L, ...)
+\method{summary}{tna_permutation}(object, what = "edges", digits = 2L, ...)
 
-\method{summary}{group_tna_permutation}(object, digits = 2L, ...)
+\method{summary}{group_tna_permutation}(object, what = "edges", digits = 2L, ...)
 }
 \arguments{
 \item{object}{A \code{tna_permutation} or a \code{group_tna_permutation} object.}
+
+\item{what}{A \code{character} string, the results to return: \code{"edges"} (the
+default) or \code{"centralities"}. The centralities are available when the
+test was run with \code{measures}.}
 
 \item{digits}{An \code{integer}, the number of decimals of \code{diff_true} and
 \code{effect_size}. The p-values are not rounded. The default is 2.}
@@ -18,21 +22,26 @@
 \item{...}{Ignored.}
 }
 \value{
-A \code{data.frame} with one row per edge (and per pair of groups, in
-the first column \code{pair}, for a \code{group_tna_permutation} object) and the
-columns \code{from}, \code{to}, \code{diff_true} (the observed difference in the edge
-weight), \code{effect_size} (the difference divided by the standard deviation
-of the permuted differences, \code{NA} when they do not vary), and \code{p_value}.
+A \code{data.frame} with one row per edge, or per state and centrality
+measure, and per pair of groups (in the first column \code{pair}) for a
+\code{group_tna_permutation} object. For the edges, the columns are \code{from},
+\code{to}, \code{diff_true} (the observed difference in the edge weight),
+\code{effect_size} (the difference divided by the standard deviation of the
+permuted differences, \code{NA} when they do not vary), and \code{p_value}. For
+the centralities, \code{state} and \code{centrality} replace \code{from} and \code{to}.
+An error of class \code{tna_error_permutation} is raised when
+\code{what = "centralities"} and the test was run without \code{measures}.
 }
 \description{
-Returns the edge-level results of a permutation test as a tidy table.
-The results for the centrality measures are shown by \code{\link[=print]{print()}}.
+Returns the results of a permutation test as a tidy table, for the edges
+or for the centrality measures.
 }
 \examples{
 model <- group_model(engagement_mmm)
 # Small number of iterations for CRAN
-perm <- permutation_test(model, iter = 20)
+perm <- permutation_test(model, iter = 20, measures = "InStrength")
 summary(perm)
+summary(perm, what = "centralities")
 
 }
 \seealso{
@@ -70,6 +79,7 @@ Validation functions
 \code{\link{summary.group_tna_bootstrap}()},
 \code{\link{summary.tna_bootstrap}()},
 \code{\link{summary.tna_markov_order}()},
+\code{\link{summary.tna_reliability}()},
 \code{\link{summary.tna_stability}()}
 }
 \concept{validation}
