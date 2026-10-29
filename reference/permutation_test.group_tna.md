@@ -27,7 +27,9 @@ permutation_test(
 
 - x:
 
-  A `group_tna` object
+  A `group_tna` object. Grouped models with scaled edge weights, and
+  their networks, are not resampled (an error of class
+  `tna_error_scaling`).
 
 - groups:
 
@@ -98,11 +100,13 @@ Validation functions
 [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md),
 [`deprune()`](https://sonsoles.me/tna/reference/deprune.md),
 [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md),
+[`markov_order()`](https://sonsoles.me/tna/reference/markov_order.md),
 [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md),
 [`plot.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/plot.group_tna_bootstrap.md),
 [`plot.group_tna_permutation()`](https://sonsoles.me/tna/reference/plot.group_tna_permutation.md),
 [`plot.group_tna_stability()`](https://sonsoles.me/tna/reference/plot.group_tna_stability.md),
 [`plot.tna_bootstrap()`](https://sonsoles.me/tna/reference/plot.tna_bootstrap.md),
+[`plot.tna_markov_order()`](https://sonsoles.me/tna/reference/plot.tna_markov_order.md),
 [`plot.tna_permutation()`](https://sonsoles.me/tna/reference/plot.tna_permutation.md),
 [`plot.tna_reliability()`](https://sonsoles.me/tna/reference/plot.tna_reliability.md),
 [`plot.tna_stability()`](https://sonsoles.me/tna/reference/plot.tna_stability.md),
@@ -111,8 +115,10 @@ Validation functions
 [`print.group_tna_stability()`](https://sonsoles.me/tna/reference/print.group_tna_stability.md),
 [`print.summary.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.group_tna_bootstrap.md),
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
+[`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
 [`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
+[`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
 [`print.tna_stability()`](https://sonsoles.me/tna/reference/print.tna_stability.md),
@@ -121,7 +127,10 @@ Validation functions
 [`reliability()`](https://sonsoles.me/tna/reference/reliability.md),
 [`reprune()`](https://sonsoles.me/tna/reference/reprune.md),
 [`summary.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.group_tna_bootstrap.md),
-[`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md)
+[`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
+[`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
+[`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples
 
@@ -133,42 +142,42 @@ permutation_test(model, iter = 20)
 #> # A tibble: 9 × 4
 #>   edge_name                diff_true effect_size p_value
 #>   <chr>                        <dbl>       <dbl>   <dbl>
-#> 1 Disengaged -> Disengaged  -0.230       -19.0    0.0476
-#> 2 Engaged -> Disengaged     -0.288       -13.3    0.0476
-#> 3 Moderate -> Disengaged     0.00235       0.204  0.857 
-#> 4 Disengaged -> Engaged      0.0706        6.46   0.0476
-#> 5 Engaged -> Engaged        -0.00994      -0.523  0.714 
-#> 6 Moderate -> Engaged        0.0706        7.91   0.0476
-#> 7 Disengaged -> Moderate     0.160        17.9    0.0476
-#> 8 Engaged -> Moderate        0.298        14.5    0.0476
-#> 9 Moderate -> Moderate      -0.0730       -5.76   0.0476
+#> 1 Disengaged -> Disengaged  -0.230       -15.5    0.0476
+#> 2 Engaged -> Disengaged     -0.288       -17.7    0.0476
+#> 3 Moderate -> Disengaged     0.00235       0.185  0.857 
+#> 4 Disengaged -> Engaged      0.0706        7.51   0.0476
+#> 5 Engaged -> Engaged        -0.00994      -0.466  0.667 
+#> 6 Moderate -> Engaged        0.0706        5.91   0.0476
+#> 7 Disengaged -> Moderate     0.160        13.8    0.0476
+#> 8 Engaged -> Moderate        0.298        11.8    0.0476
+#> 9 Moderate -> Moderate      -0.0730       -4.10   0.0476
 #> 
 #> Cluster 1 vs. Cluster 3 :
 #> # A tibble: 9 × 4
 #>   edge_name                diff_true effect_size p_value
 #>   <chr>                        <dbl>       <dbl>   <dbl>
-#> 1 Disengaged -> Disengaged  -0.195       -15.5    0.0476
-#> 2 Engaged -> Disengaged     -0.0422       -5.67   0.0476
-#> 3 Moderate -> Disengaged    -0.0609       -7.65   0.0476
-#> 4 Disengaged -> Engaged      0.0471        6.13   0.0476
-#> 5 Engaged -> Engaged        -0.00360      -0.337  0.762 
-#> 6 Moderate -> Engaged       -0.0256       -3.99   0.0476
-#> 7 Disengaged -> Moderate     0.147        16.7    0.0476
-#> 8 Engaged -> Moderate        0.0458        3.94   0.0476
-#> 9 Moderate -> Moderate       0.0864        7.24   0.0476
+#> 1 Disengaged -> Disengaged  -0.195       -19.2    0.0476
+#> 2 Engaged -> Disengaged     -0.0422       -5.78   0.0476
+#> 3 Moderate -> Disengaged    -0.0609       -7.75   0.0476
+#> 4 Disengaged -> Engaged      0.0471        7.13   0.0476
+#> 5 Engaged -> Engaged        -0.00360      -0.349  0.619 
+#> 6 Moderate -> Engaged       -0.0256       -2.68   0.0476
+#> 7 Disengaged -> Moderate     0.147        25.6    0.0476
+#> 8 Engaged -> Moderate        0.0458        3.63   0.0476
+#> 9 Moderate -> Moderate       0.0864        7.00   0.0476
 #> 
 #> Cluster 2 vs. Cluster 3 :
 #> # A tibble: 9 × 4
 #>   edge_name                diff_true effect_size p_value
 #>   <chr>                        <dbl>       <dbl>   <dbl>
-#> 1 Disengaged -> Disengaged   0.0358        5.69   0.0476
-#> 2 Engaged -> Disengaged      0.246        21.6    0.0476
-#> 3 Moderate -> Disengaged    -0.0632       -6.93   0.0476
-#> 4 Disengaged -> Engaged     -0.0234       -3.48   0.0476
-#> 5 Engaged -> Engaged         0.00633       0.421  0.667 
-#> 6 Moderate -> Engaged       -0.0962       -8.04   0.0476
-#> 7 Disengaged -> Moderate    -0.0124       -6.56   0.0476
-#> 8 Engaged -> Moderate       -0.252       -23.2    0.0476
-#> 9 Moderate -> Moderate       0.159        10.0    0.0476
+#> 1 Disengaged -> Disengaged   0.0358        5.37   0.0476
+#> 2 Engaged -> Disengaged      0.246        18.3    0.0476
+#> 3 Moderate -> Disengaged    -0.0632       -3.94   0.0476
+#> 4 Disengaged -> Engaged     -0.0234       -3.56   0.0476
+#> 5 Engaged -> Engaged         0.00633       0.346  0.762 
+#> 6 Moderate -> Engaged       -0.0962       -7.26   0.0476
+#> 7 Disengaged -> Moderate    -0.0124       -3.65   0.0476
+#> 8 Engaged -> Moderate       -0.252       -15.7    0.0476
+#> 9 Moderate -> Moderate       0.159         7.13   0.0476
 #> 
 ```

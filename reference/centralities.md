@@ -33,7 +33,8 @@ centralities(x, loops = FALSE, normalize = FALSE, invert = TRUE, measures)
 - normalize:
 
   A `logical` value indicating whether the centralities should be
-  normalized. The default is `FALSE`.
+  normalized. The default is `FALSE`. `Diffusion` is always normalized
+  (see 'Details').
 
 - invert:
 
@@ -90,7 +91,13 @@ The following measures are provided:
 
 - `Diffusion`: Diffusion centrality of Banerjee et.al. (2014). It
   measures the influence of a node in spreading information through the
-  network.
+  network. Diffusion is always min-max normalized to the range from 0 to
+  1, whatever the value of `normalize`, because its raw values grow with
+  powers of the edge weights (for a frequency model they easily exceed
+  `1e30`). When the raw values are equal for every state, for example in
+  a relative transition network with `loops = TRUE` where every row sums
+  to one, the normalized values are `NaN`: the measure does not
+  distinguish the states.
 
 - `Clustering`: Signed clustering coefficient of Zhang and
   Horvath (2005) based on the symmetric adjacency matrix (sum of the

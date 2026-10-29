@@ -286,7 +286,7 @@ plot(Permutation, minimum = 0.01)
 
 print(Permutation$edges$stats)
 #>             edge_name diff_true effect_size p_value
-#> 1      adapt -> adapt   0.00000         NaN   1.000
+#> 1      adapt -> adapt   0.00000          NA   1.000
 #> 2   cohesion -> adapt   0.00533       1.991   0.061
 #> 3  consensus -> adapt  -0.00132      -0.763   0.412
 #> 4 coregulate -> adapt   0.01122       2.002   0.048

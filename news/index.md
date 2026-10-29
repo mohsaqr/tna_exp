@@ -1,5 +1,169 @@
 # Changelog
 
+## tna 1.5.0
+
+- [`compare_sequences()`](https://sonsoles.me/tna/reference/compare_sequences.md)
+  now rejects arguments it does not use. A misspelled argument such as
+  `correction = "fdr"` (the argument is `adjust`) was silently ignored
+  and the default Bonferroni correction applied; the vignette on grouped
+  sequences had this mistake and now uses `adjust = "fdr"` as its text
+  describes.
+
+- Fixed
+  [`build_model()`](https://sonsoles.me/tna/reference/build_model.md)
+  and
+  [`group_model()`](https://sonsoles.me/tna/reference/group_model.md)
+  for data with a single time point: the sequences were joined into one
+  row, which created transitions that do not exist (and
+  [`group_model()`](https://sonsoles.me/tna/reference/group_model.md)
+  failed).
+
+- Fixed
+  [`group_model()`](https://sonsoles.me/tna/reference/group_model.md)
+  and [`group_tna()`](https://sonsoles.me/tna/reference/group_model.md)
+  with a `character` `group`: when the data did not start with the
+  alphabetically first group, every network was labelled with another
+  group’s name. Groups keep their order of first appearance and now hold
+  their own sequences.
+
+- Fixed scaling across groups (`groupwise = FALSE`, the default)
+  dropping the state names of the weight matrices, which made
+  [`communities()`](https://sonsoles.me/tna/reference/communities.md)
+  and [`compare()`](https://sonsoles.me/tna/reference/compare.md) fail.
+
+- Fixed
+  [`centralities()`](https://sonsoles.me/tna/reference/centralities.md)
+  naming the states `1`, `2`, … instead of their labels when the only
+  measures requested were `Diffusion` or `BetweennessRSP` (whose
+  computations return unnamed values); the centrality table of
+  `permutation_test(measures = "Diffusion")` had the same problem.
+
+- New [`summary()`](https://rdrr.io/r/base/summary.html) methods for
+  `tna_permutation`, `group_tna_permutation`, `tna_stability`, and
+  `group_tna_stability` objects return tidy tables: one row per edge
+  (`from`, `to`, `diff_true`, `effect_size`, `p_value`) and one row per
+  measure (`measure`, `cs_coefficient`).
+
+- Permutation effect sizes are `NA` where the permuted differences do
+  not vary, instead of `Inf` or `NaN`
+  ([`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md)
+  for edges and centralities, and
+  [`compare_sequences()`](https://sonsoles.me/tna/reference/compare_sequences.md)).
+  Whether they vary is judged against the magnitude of the compared
+  values, so the rule does not depend on the measurement scale.
+
+- Grouped models with scaled edge weights (`group_model(scaling = )`,
+  with either value of `groupwise`) and the networks they contain are no
+  longer resampled:
+  [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md),
+  [`bootstrap_cliques()`](https://sonsoles.me/tna/reference/bootstrap_cliques.md),
+  [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md),
+  [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md),
+  [`reliability()`](https://sonsoles.me/tna/reference/reliability.md),
+  and
+  [`compare_sequences()`](https://sonsoles.me/tna/reference/compare_sequences.md)
+  raise an error of class `tna_error_scaling`. Scaling across groups
+  depends on every group, so a resample of one group cannot reproduce
+  it. Before,
+  [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md) and
+  [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md)
+  refused such a group as a whole, but
+  [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md)
+  on the group, and every resampling function on one of its networks
+  (for example `bootstrap(model[[1]])`), rebuilt the resamples without
+  the scaling and compared them with the scaled network. Resampling of
+  single scaled models (`tna(x, scaling = )`) is unchanged.
+
+- Fixed `centralities(measures = "BetweennessRSP")` returning a single
+  row for a network with a state that has no outgoing transitions;
+  `BetweennessRSP` is `NA` for every state there.
+
+- [`summary()`](https://rdrr.io/r/base/summary.html) of an
+  [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md)
+  result keeps its columns when nothing could be estimated, and a
+  grouped summary no longer fails when one group has no results.
+
+- New
+  [`markov_order()`](https://sonsoles.me/tna/reference/markov_order.md)
+  tests whether sequences are described by a first-order Markov chain,
+  the assumption of a transition network, or depend on states further
+  back. Each order is tested against the order below with the
+  likelihood-ratio statistic (Anderson & Goodman, 1957) and a
+  conditional permutation test that shuffles the next states within each
+  context. The orders are tested in sequence, and the results also
+  report the log-likelihood, AIC, and BIC of the multi-order model of
+  each order (Scholtes, 2017). Methods for `tna` and `group_tna`
+  objects, with [`print()`](https://rdrr.io/r/base/print.html),
+  [`summary()`](https://rdrr.io/r/base/summary.html), and
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) methods.
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) draws two
+  panels, as Nestimate does: the log-likelihood, AIC, and BIC across the
+  orders with the selected order marked, and the permutation null
+  density of each order with the observed statistic (`panel = "ic"` or
+  `"permutation"` draws one; unknown arguments are errors). The results
+  agree with `Nestimate::markov_order_test()`; the function is named
+  [`markov_order()`](https://sonsoles.me/tna/reference/markov_order.md)
+  so that it does not mask Nestimate’s when both packages are attached.
+  Because the tests stop at the first order that does not reject, a
+  dependence that skips an order is not selected: a warning of class
+  `tna_warning_markov_order` and a printed note flag a higher order
+  whose test rejects and AIC or BIC choosing another order. The same
+  warning is raised when `iter` is too small for any p-value to fall
+  below `level`.
+
+- [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md)
+  gains the argument `edges`: with `edges = TRUE`, the stability of the
+  edge weights is estimated alongside the centralities and returned as
+  the element `Edges`. Only the edges present in the network are
+  compared, because an edge absent from the data cannot appear in a
+  subsample and would only add agreeing zeros.
+
+- `Diffusion` centrality is now always normalized to the range from 0 to
+  1 (min-max), whatever the value of `normalize`, in
+  [`centralities()`](https://sonsoles.me/tna/reference/centralities.md)
+  and in everything that uses it (`permutation_test(measures = )`,
+  [`compare()`](https://sonsoles.me/tna/reference/compare.md),
+  [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md),
+  plots). Its raw values grow with powers of the edge weights and exceed
+  `1e30` for frequency models. Where diffusion does not vary across the
+  states (a relative model with `loops = TRUE`), it is `NaN`.
+
+- Fixed resampling of edge betweenness networks. The resampling
+  functions rebuilt a model from
+  [`betweenness_network()`](https://sonsoles.me/tna/reference/betweenness_network.md)
+  with all weights equal to zero, so
+  [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md)
+  gave the smallest possible p-value and an infinite effect size to
+  every edge whose betweenness differed,
+  [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md)
+  returned no edges, every CS-coefficient of
+  [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md)
+  was 0, and
+  [`reliability()`](https://sonsoles.me/tna/reference/reliability.md)
+  compared empty networks.
+  [`betweenness_network()`](https://sonsoles.me/tna/reference/betweenness_network.md)
+  now records the model it was built from. In
+  [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md),
+  [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md), and
+  [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md),
+  every resample rebuilds that model and recomputes edge betweenness, so
+  [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md)
+  on two edge betweenness networks tests their differences in edge
+  betweenness;
+  [`reliability()`](https://sonsoles.me/tna/reference/reliability.md)
+  uses the transitions of that model.
+  [`betweenness_network()`](https://sonsoles.me/tna/reference/betweenness_network.md)
+  also has a method for `group_tna` objects, so
+  `permutation_test(betweenness_network(models))` compares edge
+  betweenness between all groups in one call. The results agree with
+  `Nestimate::permutation()` on `Nestimate::net_edge_betweenness()`
+  objects.
+
+  Edge betweenness networks created by earlier versions must be rebuilt
+  to be resampled, and
+  [`betweenness_network()`](https://sonsoles.me/tna/reference/betweenness_network.md)
+  refuses a network that is already an edge betweenness network.
+
 ## tna 1.4.0
 
 - New `actor` argument for sequences nested in actors (for example,

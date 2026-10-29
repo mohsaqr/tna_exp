@@ -45,11 +45,12 @@ compare_sequences(
 - x:
 
   A `group_tna` object or a `data.frame` containing sequence data in
-  wide format.
+  wide format. A `group_tna` object with scaled edge weights is not
+  resampled (an error of class `tna_error_scaling`).
 
 - ...:
 
-  Not used.
+  Not used. A misspelled or unknown argument is an error.
 
 - group:
 

@@ -31,6 +31,8 @@ permutation_test(
 - x:
 
   A `tna` object containing sequence data for the first `tna` model.
+  Grouped models with scaled edge weights, and their networks, are not
+  resampled (an error of class `tna_error_scaling`).
 
 - ...:
 
@@ -111,11 +113,13 @@ Validation functions
 [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md),
 [`deprune()`](https://sonsoles.me/tna/reference/deprune.md),
 [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md),
+[`markov_order()`](https://sonsoles.me/tna/reference/markov_order.md),
 [`permutation_test.group_tna()`](https://sonsoles.me/tna/reference/permutation_test.group_tna.md),
 [`plot.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/plot.group_tna_bootstrap.md),
 [`plot.group_tna_permutation()`](https://sonsoles.me/tna/reference/plot.group_tna_permutation.md),
 [`plot.group_tna_stability()`](https://sonsoles.me/tna/reference/plot.group_tna_stability.md),
 [`plot.tna_bootstrap()`](https://sonsoles.me/tna/reference/plot.tna_bootstrap.md),
+[`plot.tna_markov_order()`](https://sonsoles.me/tna/reference/plot.tna_markov_order.md),
 [`plot.tna_permutation()`](https://sonsoles.me/tna/reference/plot.tna_permutation.md),
 [`plot.tna_reliability()`](https://sonsoles.me/tna/reference/plot.tna_reliability.md),
 [`plot.tna_stability()`](https://sonsoles.me/tna/reference/plot.tna_stability.md),
@@ -124,8 +128,10 @@ Validation functions
 [`print.group_tna_stability()`](https://sonsoles.me/tna/reference/print.group_tna_stability.md),
 [`print.summary.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.group_tna_bootstrap.md),
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
+[`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
 [`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
+[`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
 [`print.tna_stability()`](https://sonsoles.me/tna/reference/print.tna_stability.md),
@@ -134,7 +140,10 @@ Validation functions
 [`reliability()`](https://sonsoles.me/tna/reference/reliability.md),
 [`reprune()`](https://sonsoles.me/tna/reference/reprune.md),
 [`summary.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.group_tna_bootstrap.md),
-[`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md)
+[`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
+[`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
+[`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples
 
@@ -146,15 +155,15 @@ permutation_test(model_x, model_y, iter = 20)
 #> # A tibble: 81 × 4
 #>    edge_name           diff_true effect_size p_value
 #>    <chr>                   <dbl>       <dbl>   <dbl>
-#>  1 adapt -> adapt       0            NaN      1     
-#>  2 cohesion -> adapt    0.00541        0.943  0.714 
-#>  3 consensus -> adapt  -0.000679      -0.176  0.667 
-#>  4 coregulate -> adapt  0.00769        0.658  0.667 
-#>  5 discuss -> adapt    -0.130         -6.68   0.0476
-#>  6 emotion -> adapt     0.0101         1.36   0.381 
-#>  7 monitor -> adapt    -0.00480       -0.389  0.952 
-#>  8 plan -> adapt        0.00339        1.50   0.143 
-#>  9 synthesis -> adapt  -0.159         -3.06   0.0476
-#> 10 adapt -> cohesion   -0.0907        -0.991  0.238 
+#>  1 adapt -> adapt       0             NA      1     
+#>  2 cohesion -> adapt    0.00541        0.943  0.857 
+#>  3 consensus -> adapt  -0.000679      -0.238  0.571 
+#>  4 coregulate -> adapt  0.00769        0.866  0.667 
+#>  5 discuss -> adapt    -0.130         -6.18   0.0476
+#>  6 emotion -> adapt     0.0101         1.32   0.429 
+#>  7 monitor -> adapt    -0.00480       -0.418  0.952 
+#>  8 plan -> adapt        0.00339        1.31   0.0476
+#>  9 synthesis -> adapt  -0.159         -1.95   0.0952
+#> 10 adapt -> cohesion   -0.0907        -1.60   0.0952
 #> # ℹ 71 more rows
 ```

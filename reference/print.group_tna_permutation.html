@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,12 +75,14 @@
 <code><a href="bootstrap.html">bootstrap()</a></code>,
 <code><a href="deprune.html">deprune()</a></code>,
 <code><a href="estimate_centrality_stability.html">estimate_cs()</a></code>,
+<code><a href="markov_order.html">markov_order()</a></code>,
 <code><a href="permutation_test.html">permutation_test()</a></code>,
 <code><a href="permutation_test.group_tna.html">permutation_test.group_tna()</a></code>,
 <code><a href="plot.group_tna_bootstrap.html">plot.group_tna_bootstrap()</a></code>,
 <code><a href="plot.group_tna_permutation.html">plot.group_tna_permutation()</a></code>,
 <code><a href="plot.group_tna_stability.html">plot.group_tna_stability()</a></code>,
 <code><a href="plot.tna_bootstrap.html">plot.tna_bootstrap()</a></code>,
+<code><a href="plot.tna_markov_order.html">plot.tna_markov_order()</a></code>,
 <code><a href="plot.tna_permutation.html">plot.tna_permutation()</a></code>,
 <code><a href="plot.tna_reliability.html">plot.tna_reliability()</a></code>,
 <code><a href="plot.tna_stability.html">plot.tna_stability()</a></code>,
@@ -88,8 +90,10 @@
 <code><a href="print.group_tna_stability.html">print.group_tna_stability()</a></code>,
 <code><a href="print.summary.group_tna_bootstrap.html">print.summary.group_tna_bootstrap()</a></code>,
 <code><a href="print.summary.tna_bootstrap.html">print.summary.tna_bootstrap()</a></code>,
+<code><a href="print.summary.tna_markov_order.html">print.summary.tna_markov_order()</a></code>,
 <code><a href="print.tna_bootstrap.html">print.tna_bootstrap()</a></code>,
 <code><a href="print.tna_clustering.html">print.tna_clustering()</a></code>,
+<code><a href="print.tna_markov_order.html">print.tna_markov_order()</a></code>,
 <code><a href="print.tna_permutation.html">print.tna_permutation()</a></code>,
 <code><a href="print.tna_reliability.html">print.tna_reliability()</a></code>,
 <code><a href="print.tna_stability.html">print.tna_stability()</a></code>,
@@ -98,7 +102,10 @@
 <code><a href="reliability.html">reliability()</a></code>,
 <code><a href="reprune.html">reprune()</a></code>,
 <code><a href="summary.group_tna_bootstrap.html">summary.group_tna_bootstrap()</a></code>,
-<code><a href="summary.tna_bootstrap.html">summary.tna_bootstrap()</a></code></p></div>
+<code><a href="summary.tna_bootstrap.html">summary.tna_bootstrap()</a></code>,
+<code><a href="summary.tna_markov_order.html">summary.tna_markov_order()</a></code>,
+<code><a href="summary.tna_permutation.html">summary.tna_permutation()</a></code>,
+<code><a href="summary.tna_stability.html">summary.tna_stability()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -111,43 +118,43 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   edge_name                diff_true effect_size p_value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Disengaged -&gt; Disengaged  -<span style="color: #BB0000;">0.230</span>       -<span style="color: #BB0000;">19.6</span>    0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Engaged -&gt; Disengaged     -<span style="color: #BB0000;">0.288</span>       -<span style="color: #BB0000;">20.3</span>    0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Moderate -&gt; Disengaged     0.002<span style="text-decoration: underline;">35</span>       0.276  0.619 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Disengaged -&gt; Engaged      0.070<span style="text-decoration: underline;">6</span>        6.87   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Engaged -&gt; Engaged        -<span style="color: #BB0000;">0.009</span><span style="color: #BB0000; text-decoration: underline;">94</span>      -<span style="color: #BB0000;">0.444</span>  0.762 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Moderate -&gt; Engaged        0.070<span style="text-decoration: underline;">6</span>        6.37   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> Disengaged -&gt; Moderate     0.160        14.3    0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> Engaged -&gt; Moderate        0.298        12.1    0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> Moderate -&gt; Moderate      -<span style="color: #BB0000;">0.073</span><span style="color: #BB0000; text-decoration: underline;">0</span>       -<span style="color: #BB0000;">5.94</span>   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Disengaged -&gt; Disengaged  -<span style="color: #BB0000;">0.230</span>       -<span style="color: #BB0000;">15.7</span>    0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Engaged -&gt; Disengaged     -<span style="color: #BB0000;">0.288</span>       -<span style="color: #BB0000;">22.5</span>    0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Moderate -&gt; Disengaged     0.002<span style="text-decoration: underline;">35</span>       0.165  0.810 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Disengaged -&gt; Engaged      0.070<span style="text-decoration: underline;">6</span>        6.57   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Engaged -&gt; Engaged        -<span style="color: #BB0000;">0.009</span><span style="color: #BB0000; text-decoration: underline;">94</span>      -<span style="color: #BB0000;">0.539</span>  0.667 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Moderate -&gt; Engaged        0.070<span style="text-decoration: underline;">6</span>        7.29   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> Disengaged -&gt; Moderate     0.160        13.7    0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> Engaged -&gt; Moderate        0.298        16.2    0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> Moderate -&gt; Moderate      -<span style="color: #BB0000;">0.073</span><span style="color: #BB0000; text-decoration: underline;">0</span>       -<span style="color: #BB0000;">4.75</span>   0.047<span style="text-decoration: underline;">6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cluster 1 vs. Cluster 3 :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   edge_name                diff_true effect_size p_value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Disengaged -&gt; Disengaged  -<span style="color: #BB0000;">0.195</span>       -<span style="color: #BB0000;">16.7</span>    0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Engaged -&gt; Disengaged     -<span style="color: #BB0000;">0.042</span><span style="color: #BB0000; text-decoration: underline;">2</span>       -<span style="color: #BB0000;">7.33</span>   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Moderate -&gt; Disengaged    -<span style="color: #BB0000;">0.060</span><span style="color: #BB0000; text-decoration: underline;">9</span>       -<span style="color: #BB0000;">5.37</span>   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Disengaged -&gt; Engaged      0.047<span style="text-decoration: underline;">1</span>        6.13   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Engaged -&gt; Engaged        -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">60</span>      -<span style="color: #BB0000;">0.270</span>  0.905 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Moderate -&gt; Engaged       -<span style="color: #BB0000;">0.025</span><span style="color: #BB0000; text-decoration: underline;">6</span>       -<span style="color: #BB0000;">2.67</span>   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> Disengaged -&gt; Moderate     0.147        21.8    0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> Engaged -&gt; Moderate        0.045<span style="text-decoration: underline;">8</span>        4.06   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> Moderate -&gt; Moderate       0.086<span style="text-decoration: underline;">4</span>        5.51   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Disengaged -&gt; Disengaged  -<span style="color: #BB0000;">0.195</span>       -<span style="color: #BB0000;">14.5</span>    0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Engaged -&gt; Disengaged     -<span style="color: #BB0000;">0.042</span><span style="color: #BB0000; text-decoration: underline;">2</span>       -<span style="color: #BB0000;">8.14</span>   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Moderate -&gt; Disengaged    -<span style="color: #BB0000;">0.060</span><span style="color: #BB0000; text-decoration: underline;">9</span>       -<span style="color: #BB0000;">7.87</span>   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Disengaged -&gt; Engaged      0.047<span style="text-decoration: underline;">1</span>        6.27   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Engaged -&gt; Engaged        -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">60</span>      -<span style="color: #BB0000;">0.254</span>  0.905 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Moderate -&gt; Engaged       -<span style="color: #BB0000;">0.025</span><span style="color: #BB0000; text-decoration: underline;">6</span>       -<span style="color: #BB0000;">3.42</span>   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> Disengaged -&gt; Moderate     0.147        18.9    0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> Engaged -&gt; Moderate        0.045<span style="text-decoration: underline;">8</span>        3.92   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> Moderate -&gt; Moderate       0.086<span style="text-decoration: underline;">4</span>        8.42   0.047<span style="text-decoration: underline;">6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cluster 2 vs. Cluster 3 :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   edge_name                diff_true effect_size p_value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Disengaged -&gt; Disengaged   0.035<span style="text-decoration: underline;">8</span>        4.43   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Engaged -&gt; Disengaged      0.246        22.6    0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Moderate -&gt; Disengaged    -<span style="color: #BB0000;">0.063</span><span style="color: #BB0000; text-decoration: underline;">2</span>       -<span style="color: #BB0000;">5.45</span>   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Disengaged -&gt; Engaged     -<span style="color: #BB0000;">0.023</span><span style="color: #BB0000; text-decoration: underline;">4</span>       -<span style="color: #BB0000;">2.91</span>   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Engaged -&gt; Engaged         0.006<span style="text-decoration: underline;">33</span>       0.435  0.810 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Moderate -&gt; Engaged       -<span style="color: #BB0000;">0.096</span><span style="color: #BB0000; text-decoration: underline;">2</span>      -<span style="color: #BB0000;">11.4</span>    0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> Disengaged -&gt; Moderate    -<span style="color: #BB0000;">0.012</span><span style="color: #BB0000; text-decoration: underline;">4</span>       -<span style="color: #BB0000;">3.61</span>   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> Engaged -&gt; Moderate       -<span style="color: #BB0000;">0.252</span>       -<span style="color: #BB0000;">15.9</span>    0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> Moderate -&gt; Moderate       0.159        12.2    0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Disengaged -&gt; Disengaged   0.035<span style="text-decoration: underline;">8</span>        4.32   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Engaged -&gt; Disengaged      0.246        21.7    0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Moderate -&gt; Disengaged    -<span style="color: #BB0000;">0.063</span><span style="color: #BB0000; text-decoration: underline;">2</span>       -<span style="color: #BB0000;">5.52</span>   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Disengaged -&gt; Engaged     -<span style="color: #BB0000;">0.023</span><span style="color: #BB0000; text-decoration: underline;">4</span>       -<span style="color: #BB0000;">3.06</span>   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Engaged -&gt; Engaged         0.006<span style="text-decoration: underline;">33</span>       0.391  0.619 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Moderate -&gt; Engaged       -<span style="color: #BB0000;">0.096</span><span style="color: #BB0000; text-decoration: underline;">2</span>       -<span style="color: #BB0000;">6.39</span>   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> Disengaged -&gt; Moderate    -<span style="color: #BB0000;">0.012</span><span style="color: #BB0000; text-decoration: underline;">4</span>       -<span style="color: #BB0000;">5.09</span>   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> Engaged -&gt; Moderate       -<span style="color: #BB0000;">0.252</span>       -<span style="color: #BB0000;">12.7</span>    0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> Moderate -&gt; Moderate       0.159         9.14   0.047<span style="text-decoration: underline;">6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

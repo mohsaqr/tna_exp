@@ -21,7 +21,8 @@ estimate_cs(
   certainty,
   progressbar = NULL,
   detailed = NULL,
-  actor = NULL
+  actor = NULL,
+  edges = FALSE
 )
 
 estimate_centrality_stability(
@@ -37,7 +38,8 @@ estimate_centrality_stability(
   certainty,
   progressbar = NULL,
   detailed = NULL,
-  actor = NULL
+  actor = NULL,
+  edges = FALSE
 )
 
 # S3 method for class 'tna'
@@ -54,7 +56,8 @@ estimate_cs(
   certainty = 0.95,
   progressbar = FALSE,
   detailed = NULL,
-  actor = NULL
+  actor = NULL,
+  edges = FALSE
 )
 
 # S3 method for class 'tna'
@@ -71,7 +74,8 @@ estimate_centrality_stability(
   certainty = 0.95,
   progressbar = FALSE,
   detailed = NULL,
-  actor = NULL
+  actor = NULL,
+  edges = FALSE
 )
 
 # S3 method for class 'group_tna'
@@ -88,7 +92,8 @@ estimate_cs(
   certainty = 0.95,
   progressbar = FALSE,
   detailed = NULL,
-  actor = NULL
+  actor = NULL,
+  edges = FALSE
 )
 
 # S3 method for class 'group_tna'
@@ -105,7 +110,8 @@ estimate_centrality_stability(
   certainty = 0.95,
   progressbar = FALSE,
   detailed = NULL,
-  actor = NULL
+  actor = NULL,
+  edges = FALSE
 )
 ```
 
@@ -115,7 +121,8 @@ estimate_centrality_stability(
 
   A `tna` or a `group_tna` object representing the temporal network
   analysis data. The object should be created from a sequence data
-  object.
+  object. Grouped models with scaled edge weights, and their networks,
+  are not resampled (an error of class `tna_error_scaling`).
 
 - loops:
 
@@ -186,10 +193,17 @@ estimate_centrality_stability(
   actors dropped, and each actor's sequences are dropped together. The
   default `NULL` drops single sequences.
 
+- edges:
+
+  A `logical` value. If `TRUE`, the stability of the edge weights is
+  also estimated and returned as the element `Edges`. The default is
+  `FALSE`.
+
 ## Value
 
 A `tna_stability` object which is a `list` with an element for each
-`measure` with the following elements:
+`measure` (and an element `Edges` when `edges = TRUE`) with the
+following elements:
 
 - `cs_coefficient`: The centrality stability (CS) coefficient of the
   measure.
@@ -211,22 +225,41 @@ centrality stability (CS) coefficient, which represents the proportion
 of dropped cases at which the correlations drop below a given threshold
 (default 0.7).
 
+With `edges = TRUE`, the stability of the edge weights is estimated in
+the same way: in each subsample the network is estimated again and its
+edge weights are correlated with the edge weights of the original
+network (Epskamp et al., 2018). Only the edges present in the original
+network are compared, self-loops included. An edge that is absent from
+the original data cannot appear in a subsample, so including the absent
+edges would add pairs of zeros that always agree and inflate the
+correlation. The `loops`, `normalize`, and `invert` arguments do not
+affect the edge weights.
+
 The results can be visualized by plotting the output object showing the
 stability of the centrality measures across different drop proportions,
 along with confidence intervals. The CS-coefficients are displayed in
 the subtitle.
+
+## References
+
+Epskamp, S., Borsboom, D., & Fried, E. I. (2018). Estimating
+psychological networks and their accuracy: A tutorial paper. *Behavior
+Research Methods*, 50(1), 195–212.
+[doi:10.3758/s13428-017-0862-1](https://doi.org/10.3758/s13428-017-0862-1)
 
 ## See also
 
 Validation functions
 [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md),
 [`deprune()`](https://sonsoles.me/tna/reference/deprune.md),
+[`markov_order()`](https://sonsoles.me/tna/reference/markov_order.md),
 [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md),
 [`permutation_test.group_tna()`](https://sonsoles.me/tna/reference/permutation_test.group_tna.md),
 [`plot.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/plot.group_tna_bootstrap.md),
 [`plot.group_tna_permutation()`](https://sonsoles.me/tna/reference/plot.group_tna_permutation.md),
 [`plot.group_tna_stability()`](https://sonsoles.me/tna/reference/plot.group_tna_stability.md),
 [`plot.tna_bootstrap()`](https://sonsoles.me/tna/reference/plot.tna_bootstrap.md),
+[`plot.tna_markov_order()`](https://sonsoles.me/tna/reference/plot.tna_markov_order.md),
 [`plot.tna_permutation()`](https://sonsoles.me/tna/reference/plot.tna_permutation.md),
 [`plot.tna_reliability()`](https://sonsoles.me/tna/reference/plot.tna_reliability.md),
 [`plot.tna_stability()`](https://sonsoles.me/tna/reference/plot.tna_stability.md),
@@ -235,8 +268,10 @@ Validation functions
 [`print.group_tna_stability()`](https://sonsoles.me/tna/reference/print.group_tna_stability.md),
 [`print.summary.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.group_tna_bootstrap.md),
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
+[`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
 [`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
+[`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
 [`print.tna_stability()`](https://sonsoles.me/tna/reference/print.tna_stability.md),
@@ -245,7 +280,10 @@ Validation functions
 [`reliability()`](https://sonsoles.me/tna/reference/reliability.md),
 [`reprune()`](https://sonsoles.me/tna/reference/reprune.md),
 [`summary.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.group_tna_bootstrap.md),
-[`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md)
+[`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
+[`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
+[`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples
 
@@ -263,5 +301,17 @@ estimate_cs(
 #> 
 #>  InStrength OutStrength 
 #>         0.9         0.9 
+# Stability of the edge weights alongside the centralities
+estimate_cs(
+  model,
+  drop_prop = seq(0.3, 0.9, by = 0.2),
+  measures = "InStrength",
+  iter = 10,
+  edges = TRUE
+)
+#> Centrality and Edge Stability Coefficients
+#> 
+#> InStrength      Edges 
+#>        0.9        0.9 
 # }
 ```

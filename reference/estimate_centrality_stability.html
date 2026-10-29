@@ -13,7 +13,7 @@ centralities and those computed using sampled subsets."><meta property="og:image
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  <span class="va">certainty</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  edges <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">estimate_centrality_stability</span><span class="op">(</span></span>
@@ -87,7 +88,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  <span class="va">certainty</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  edges <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'tna'</span></span>
@@ -104,7 +106,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  certainty <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  edges <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'tna'</span></span>
@@ -121,7 +124,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  certainty <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  edges <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'group_tna'</span></span>
@@ -138,7 +142,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  certainty <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  edges <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'group_tna'</span></span>
@@ -155,7 +160,8 @@ centralities and those computed using sampled subsets.</p>
 <span>  certainty <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  progressbar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  detailed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  actor <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  actor <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  edges <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -165,7 +171,9 @@ centralities and those computed using sampled subsets.</p>
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A <code>tna</code> or a <code>group_tna</code> object representing the temporal network
-analysis data. The object should be created from a sequence data object.</p></dd>
+analysis data. The object should be created from a sequence data object.
+Grouped models with scaled edge weights, and their networks, are not
+resampled (an error of class <code>tna_error_scaling</code>).</p></dd>
 
 
 <dt id="arg-loops">loops<a class="anchor" aria-label="anchor" href="#arg-loops"></a></dt>
@@ -235,11 +243,18 @@ object). When given, <code>drop_prop</code> is the proportion of actors dropped,
 and each actor's sequences are dropped together. The default <code>NULL</code>
 drops single sequences.</p></dd>
 
+
+<dt id="arg-edges">edges<a class="anchor" aria-label="anchor" href="#arg-edges"></a></dt>
+<dd><p>A <code>logical</code> value. If <code>TRUE</code>, the stability of the edge
+weights is also estimated and returned as the element <code>Edges</code>. The
+default is <code>FALSE</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A <code>tna_stability</code> object which is a <code>list</code> with an element for each
-<code>measure</code> with the following elements:</p><ul><li><p><code>cs_coefficient</code>: The centrality stability (CS) coefficient
+<code>measure</code> (and an element <code>Edges</code> when <code>edges = TRUE</code>) with the following
+elements:</p><ul><li><p><code>cs_coefficient</code>: The centrality stability (CS) coefficient
 of the measure.</p></li>
 <li><p><code>correlations</code>: A <code>matrix</code> of correlations between the original
 centrality and the resampled centralities for each drop proportion.</p></li>
@@ -255,22 +270,39 @@ centralities is calculated for each drop proportion. The stability of each
 centrality measure is then summarized using a centrality stability (CS)
 coefficient, which represents the proportion of dropped cases at which
 the correlations drop below a given threshold (default 0.7).</p>
+<p>With <code>edges = TRUE</code>, the stability of the edge weights is estimated in the
+same way: in each subsample the network is estimated again and its edge
+weights are correlated with the edge weights of the original network
+(Epskamp et al., 2018). Only the edges present in the original network
+are compared, self-loops included. An edge that is absent from the
+original data cannot appear in a subsample, so including the absent edges
+would add pairs of zeros that always agree and inflate the correlation.
+The <code>loops</code>, <code>normalize</code>, and <code>invert</code> arguments do not affect the edge
+weights.</p>
 <p>The results can be visualized by plotting the output object showing the
 stability of the centrality measures across different drop proportions,
 along with confidence intervals. The CS-coefficients are displayed in the
 subtitle.</p>
     </div>
     <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Epskamp, S., Borsboom, D., &amp; Fried, E. I. (2018). Estimating psychological
+networks and their accuracy: A tutorial paper. <em>Behavior Research Methods</em>,
+50(1), 195–212. <a href="https://doi.org/10.3758/s13428-017-0862-1" class="external-link">doi:10.3758/s13428-017-0862-1</a></p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Validation functions
 <code><a href="bootstrap.html">bootstrap()</a></code>,
 <code><a href="deprune.html">deprune()</a></code>,
+<code><a href="markov_order.html">markov_order()</a></code>,
 <code><a href="permutation_test.html">permutation_test()</a></code>,
 <code><a href="permutation_test.group_tna.html">permutation_test.group_tna()</a></code>,
 <code><a href="plot.group_tna_bootstrap.html">plot.group_tna_bootstrap()</a></code>,
 <code><a href="plot.group_tna_permutation.html">plot.group_tna_permutation()</a></code>,
 <code><a href="plot.group_tna_stability.html">plot.group_tna_stability()</a></code>,
 <code><a href="plot.tna_bootstrap.html">plot.tna_bootstrap()</a></code>,
+<code><a href="plot.tna_markov_order.html">plot.tna_markov_order()</a></code>,
 <code><a href="plot.tna_permutation.html">plot.tna_permutation()</a></code>,
 <code><a href="plot.tna_reliability.html">plot.tna_reliability()</a></code>,
 <code><a href="plot.tna_stability.html">plot.tna_stability()</a></code>,
@@ -279,8 +311,10 @@ subtitle.</p>
 <code><a href="print.group_tna_stability.html">print.group_tna_stability()</a></code>,
 <code><a href="print.summary.group_tna_bootstrap.html">print.summary.group_tna_bootstrap()</a></code>,
 <code><a href="print.summary.tna_bootstrap.html">print.summary.tna_bootstrap()</a></code>,
+<code><a href="print.summary.tna_markov_order.html">print.summary.tna_markov_order()</a></code>,
 <code><a href="print.tna_bootstrap.html">print.tna_bootstrap()</a></code>,
 <code><a href="print.tna_clustering.html">print.tna_clustering()</a></code>,
+<code><a href="print.tna_markov_order.html">print.tna_markov_order()</a></code>,
 <code><a href="print.tna_permutation.html">print.tna_permutation()</a></code>,
 <code><a href="print.tna_reliability.html">print.tna_reliability()</a></code>,
 <code><a href="print.tna_stability.html">print.tna_stability()</a></code>,
@@ -289,7 +323,10 @@ subtitle.</p>
 <code><a href="reliability.html">reliability()</a></code>,
 <code><a href="reprune.html">reprune()</a></code>,
 <code><a href="summary.group_tna_bootstrap.html">summary.group_tna_bootstrap()</a></code>,
-<code><a href="summary.tna_bootstrap.html">summary.tna_bootstrap()</a></code></p></div>
+<code><a href="summary.tna_bootstrap.html">summary.tna_bootstrap()</a></code>,
+<code><a href="summary.tna_markov_order.html">summary.tna_markov_order()</a></code>,
+<code><a href="summary.tna_permutation.html">summary.tna_permutation()</a></code>,
+<code><a href="summary.tna_stability.html">summary.tna_stability()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -307,8 +344,19 @@ subtitle.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  InStrength OutStrength </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         0.9         0.9 </span>
+<span class="r-in"><span><span class="co"># Stability of the edge weights alongside the centralities</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_cs</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span>,</span></span>
+<span class="r-in"><span>  drop_prop <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.9</span>, by <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  measures <span class="op">=</span> <span class="st">"InStrength"</span>,</span></span>
+<span class="r-in"><span>  iter <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>  edges <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Centrality and Edge Stability Coefficients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> InStrength      Edges </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        0.9        0.9 </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

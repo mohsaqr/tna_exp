@@ -9,7 +9,7 @@ information about the measures."><meta property="og:image" content="https://sons
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,8 @@ network when computing the centrality measures. The default is <code>FALSE</code
 
 <dt id="arg-normalize">normalize<a class="anchor" aria-label="anchor" href="#arg-normalize"></a></dt>
 <dd><p>A <code>logical</code> value indicating whether the centralities
-should be normalized. The default is <code>FALSE</code>.</p></dd>
+should be normalized. The default is <code>FALSE</code>. <code>Diffusion</code> is always
+normalized (see 'Details').</p></dd>
 
 
 <dt id="arg-invert">invert<a class="anchor" aria-label="anchor" href="#arg-invert"></a></dt>
@@ -123,7 +124,13 @@ paths (Kivimäki et al. 2016). It measures the extent to which a
 node lies on the shortest paths between other nodes.</p></li>
 <li><p><code>Diffusion</code>: Diffusion centrality of Banerjee et.al. (2014).
 It measures the influence of a node in spreading information through
-the network.</p></li>
+the network. Diffusion is always min-max normalized to the range
+from 0 to 1, whatever the value of <code>normalize</code>, because its raw
+values grow with powers of the edge weights (for a frequency model
+they easily exceed <code>1e30</code>). When the raw values are equal for every
+state, for example in a relative transition network with
+<code>loops = TRUE</code> where every row sums to one, the normalized values are
+<code>NaN</code>: the measure does not distinguish the states.</p></li>
 <li><p><code>Clustering</code>: Signed clustering coefficient of Zhang and Horvath (2005)
 based on the symmetric adjacency matrix (sum of the adjacency matrix
 and its transpose). It measures the degree to which nodes tend to

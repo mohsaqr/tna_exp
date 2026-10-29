@@ -11,7 +11,7 @@ or a mixture Markov model."><meta property="og:image" content="https://sonsoles.
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -178,7 +178,12 @@ positive ranks, unlike <code>"minmax"</code> when all weights are positive.</p><
 
 <dt id="arg-groupwise">groupwise<a class="anchor" aria-label="anchor" href="#arg-groupwise"></a></dt>
 <dd><p>A <code>logical</code> value that indicates whether scaling methods
-should be applied by group (<code>TRUE</code>) or globally (<code>FALSE</code>, the default).</p></dd>
+should be applied by group (<code>TRUE</code>) or globally (<code>FALSE</code>, the default).
+A grouped model with scaled edge weights (either way) and its networks
+cannot be resampled: <code><a href="bootstrap.html">bootstrap()</a></code>, <code><a href="permutation_test.html">permutation_test()</a></code>,
+<code><a href="estimate_centrality_stability.html">estimate_cs()</a></code>, <code><a href="reliability.html">reliability()</a></code>, and <code><a href="compare_sequences.html">compare_sequences()</a></code> raise an
+error of class <code>tna_error_scaling</code>. Scaling across groups depends on
+every group, so a resample of one group cannot reproduce it.</p></dd>
 
 
 <dt id="arg-cols">cols<a class="anchor" aria-label="anchor" href="#arg-cols"></a></dt>

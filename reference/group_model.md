@@ -140,7 +140,18 @@ group_atna(x, ...)
 - groupwise:
 
   A `logical` value that indicates whether scaling methods should be
-  applied by group (`TRUE`) or globally (`FALSE`, the default).
+  applied by group (`TRUE`) or globally (`FALSE`, the default). A
+  grouped model with scaled edge weights (either way) and its networks
+  cannot be resampled:
+  [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md),
+  [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md),
+  [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md),
+  [`reliability()`](https://sonsoles.me/tna/reference/reliability.md),
+  and
+  [`compare_sequences()`](https://sonsoles.me/tna/reference/compare_sequences.md)
+  raise an error of class `tna_error_scaling`. Scaling across groups
+  depends on every group, so a resample of one group cannot reproduce
+  it.
 
 - cols:
 

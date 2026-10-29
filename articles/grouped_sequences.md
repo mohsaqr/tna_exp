@@ -92,7 +92,7 @@ least 5 times, and apply FDR correction for multiple comparisons.
 subsequence_comparison  <- compare_sequences(achievers,
                                                   sub = 3:5,
                                                   min_freq = 5,
-                                                  correction = "fdr")
+                                                  adjust = "fdr")
 plot(subsequence_comparison, cells = TRUE)
 ```
 
@@ -316,7 +316,7 @@ just as we did for the pre-existing groups above.
 
 ``` r
 
-subsequence_comparison  <- compare_sequences(tna_model_clus, sub = 3:5, min_freq = 5, correction = "fdr")
+subsequence_comparison  <- compare_sequences(tna_model_clus, sub = 3:5, min_freq = 5, adjust = "fdr")
 plot(subsequence_comparison, cells = TRUE)
 ```
 

@@ -914,7 +914,8 @@ plot(comp)
 Compare subsequence patterns between groups. Pass `group_tna` directly.
 
     # For group_tna (groups already defined)
-    compare_sequences(x, sub, min_freq = 5L, correction = "bonferroni", ...)
+    compare_sequences(x, sub, min_freq = 5L, test = TRUE, iter = 1000L,
+                      adjust = "bonferroni", actor = NULL)
 
 ``` r
 
@@ -970,7 +971,7 @@ print(perm)
     #> # A tibble: 81 × 4
     #>    edge_name           diff_true effect_size p_value
     #>    <chr>                   <dbl>       <dbl>   <dbl>
-    #>  1 adapt -> adapt       0            NaN     1      
+    #>  1 adapt -> adapt       0             NA     1      
     #>  2 cohesion -> adapt    0.00541        0.949 0.802  
     #>  3 consensus -> adapt  -0.000679      -0.175 0.752  
     #>  4 coregulate -> adapt  0.00769        0.568 0.624  
@@ -1184,9 +1185,9 @@ g <- as.igraph(model)
 print(g)
 ```
 
-    #> IGRAPH e7805fa DNW- 9 78 -- 
+    #> IGRAPH 9798b4b DNW- 9 78 -- 
     #> + attr: name (v/c), weight (e/n)
-    #> + edges from e7805fa (vertex names):
+    #> + edges from 9798b4b (vertex names):
     #>  [1] adapt     ->cohesion   adapt     ->consensus  adapt     ->coregulate
     #>  [4] adapt     ->discuss    adapt     ->emotion    adapt     ->monitor   
     #>  [7] adapt     ->plan       cohesion  ->adapt      cohesion  ->cohesion  

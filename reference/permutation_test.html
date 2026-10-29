@@ -15,7 +15,7 @@ probabilities, effect sizes, estimated p-values, and confidence intervals."><met
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,9 @@ probabilities, effect sizes, estimated p-values, and confidence intervals.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A <code>tna</code> object containing sequence data for the first <code>tna</code> model.</p></dd>
+<dd><p>A <code>tna</code> object containing sequence data for the first <code>tna</code> model.
+Grouped models with scaled edge weights, and their networks, are not
+resampled (an error of class <code>tna_error_scaling</code>).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -155,11 +157,13 @@ Hypotheses</em> (3rd ed.). Springer.</p>
 <code><a href="bootstrap.html">bootstrap()</a></code>,
 <code><a href="deprune.html">deprune()</a></code>,
 <code><a href="estimate_centrality_stability.html">estimate_cs()</a></code>,
+<code><a href="markov_order.html">markov_order()</a></code>,
 <code><a href="permutation_test.group_tna.html">permutation_test.group_tna()</a></code>,
 <code><a href="plot.group_tna_bootstrap.html">plot.group_tna_bootstrap()</a></code>,
 <code><a href="plot.group_tna_permutation.html">plot.group_tna_permutation()</a></code>,
 <code><a href="plot.group_tna_stability.html">plot.group_tna_stability()</a></code>,
 <code><a href="plot.tna_bootstrap.html">plot.tna_bootstrap()</a></code>,
+<code><a href="plot.tna_markov_order.html">plot.tna_markov_order()</a></code>,
 <code><a href="plot.tna_permutation.html">plot.tna_permutation()</a></code>,
 <code><a href="plot.tna_reliability.html">plot.tna_reliability()</a></code>,
 <code><a href="plot.tna_stability.html">plot.tna_stability()</a></code>,
@@ -168,8 +172,10 @@ Hypotheses</em> (3rd ed.). Springer.</p>
 <code><a href="print.group_tna_stability.html">print.group_tna_stability()</a></code>,
 <code><a href="print.summary.group_tna_bootstrap.html">print.summary.group_tna_bootstrap()</a></code>,
 <code><a href="print.summary.tna_bootstrap.html">print.summary.tna_bootstrap()</a></code>,
+<code><a href="print.summary.tna_markov_order.html">print.summary.tna_markov_order()</a></code>,
 <code><a href="print.tna_bootstrap.html">print.tna_bootstrap()</a></code>,
 <code><a href="print.tna_clustering.html">print.tna_clustering()</a></code>,
+<code><a href="print.tna_markov_order.html">print.tna_markov_order()</a></code>,
 <code><a href="print.tna_permutation.html">print.tna_permutation()</a></code>,
 <code><a href="print.tna_reliability.html">print.tna_reliability()</a></code>,
 <code><a href="print.tna_stability.html">print.tna_stability()</a></code>,
@@ -178,7 +184,10 @@ Hypotheses</em> (3rd ed.). Springer.</p>
 <code><a href="reliability.html">reliability()</a></code>,
 <code><a href="reprune.html">reprune()</a></code>,
 <code><a href="summary.group_tna_bootstrap.html">summary.group_tna_bootstrap()</a></code>,
-<code><a href="summary.tna_bootstrap.html">summary.tna_bootstrap()</a></code></p></div>
+<code><a href="summary.tna_bootstrap.html">summary.tna_bootstrap()</a></code>,
+<code><a href="summary.tna_markov_order.html">summary.tna_markov_order()</a></code>,
+<code><a href="summary.tna_permutation.html">summary.tna_permutation()</a></code>,
+<code><a href="summary.tna_stability.html">summary.tna_stability()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -190,16 +199,16 @@ Hypotheses</em> (3rd ed.). Springer.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 81 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    edge_name           diff_true effect_size p_value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> adapt -&gt; adapt       0            <span style="color: #BB0000;">NaN</span>      1     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> cohesion -&gt; adapt    0.005<span style="text-decoration: underline;">41</span>        0.943  0.714 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> consensus -&gt; adapt  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">679</span>      -<span style="color: #BB0000;">0.176</span>  0.667 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> coregulate -&gt; adapt  0.007<span style="text-decoration: underline;">69</span>        0.658  0.667 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> discuss -&gt; adapt    -<span style="color: #BB0000;">0.130</span>         -<span style="color: #BB0000;">6.68</span>   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> emotion -&gt; adapt     0.010<span style="text-decoration: underline;">1</span>         1.36   0.381 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> monitor -&gt; adapt    -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">80</span>       -<span style="color: #BB0000;">0.389</span>  0.952 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> plan -&gt; adapt        0.003<span style="text-decoration: underline;">39</span>        1.50   0.143 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> synthesis -&gt; adapt  -<span style="color: #BB0000;">0.159</span>         -<span style="color: #BB0000;">3.06</span>   0.047<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> adapt -&gt; cohesion   -<span style="color: #BB0000;">0.090</span><span style="color: #BB0000; text-decoration: underline;">7</span>        -<span style="color: #BB0000;">0.991</span>  0.238 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> adapt -&gt; adapt       0             <span style="color: #BB0000;">NA</span>      1     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> cohesion -&gt; adapt    0.005<span style="text-decoration: underline;">41</span>        0.943  0.857 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> consensus -&gt; adapt  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">679</span>      -<span style="color: #BB0000;">0.238</span>  0.571 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> coregulate -&gt; adapt  0.007<span style="text-decoration: underline;">69</span>        0.866  0.667 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> discuss -&gt; adapt    -<span style="color: #BB0000;">0.130</span>         -<span style="color: #BB0000;">6.18</span>   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> emotion -&gt; adapt     0.010<span style="text-decoration: underline;">1</span>         1.32   0.429 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> monitor -&gt; adapt    -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">80</span>       -<span style="color: #BB0000;">0.418</span>  0.952 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> plan -&gt; adapt        0.003<span style="text-decoration: underline;">39</span>        1.31   0.047<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> synthesis -&gt; adapt  -<span style="color: #BB0000;">0.159</span>         -<span style="color: #BB0000;">1.95</span>   0.095<span style="text-decoration: underline;">2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> adapt -&gt; cohesion   -<span style="color: #BB0000;">0.090</span><span style="color: #BB0000; text-decoration: underline;">7</span>        -<span style="color: #BB0000;">1.60</span>   0.095<span style="text-decoration: underline;">2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 71 more rows</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
