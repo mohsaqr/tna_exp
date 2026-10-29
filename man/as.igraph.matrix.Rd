@@ -23,6 +23,10 @@ An \code{igraph} object.
 \description{
 Coerce a Weight Matrix into an \code{igraph} Object.
 }
+\examples{
+weights <- matrix(c(0, 0.6, 0.4, 0.5, 0, 0.5, 0.2, 0.8, 0), 3, 3)
+as.igraph(weights)
+}
 \seealso{
 Helper functions
 \code{\link{as.igraph.group_tna}()},

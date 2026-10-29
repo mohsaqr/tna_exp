@@ -364,6 +364,11 @@ print.tna_clustering <- function(x, ...) {
 #' @param ... Arguments passed to the generic `print` method.
 #' @return `x` (invisibly).
 #' @examples
+#' # A small subset without the permutation test
+#' idx <- c(1:100, 1001:1100)
+#' group <- rep(c("High", "Low"), each = 100)
+#' comp <- compare_sequences(group_regulation[idx, ], group, test = FALSE)
+#' print(comp)
 #' \donttest{
 #' idx <- c(1:500, 1001:1500)
 #' group <- c(rep("High", 500), rep("Low", 500))

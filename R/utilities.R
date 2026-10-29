@@ -144,6 +144,8 @@ igraph::as.igraph
 #' @param x A `tna` object.
 #' @param ... Ignored.
 #' @return An `igraph` object.
+#' @examples
+#' as.igraph(tna(group_regulation))
 as.igraph.tna <- function(x, mode = "directed", ...) {
   check_missing(x)
   check_class(x, "tna")
@@ -162,6 +164,9 @@ as.igraph.tna <- function(x, mode = "directed", ...) {
 #' @param x A `matrix` of edge weights.
 #' @param ... Ignored.
 #' @return An `igraph` object.
+#' @examples
+#' weights <- matrix(c(0, 0.6, 0.4, 0.5, 0, 0.5, 0.2, 0.8, 0), 3, 3)
+#' as.igraph(weights)
 as.igraph.matrix <- function(x, mode = "directed", ...) {
   check_missing(x)
   check_class(x, "matrix")
@@ -179,6 +184,9 @@ as.igraph.matrix <- function(x, mode = "directed", ...) {
 #' @inheritParams igraph::as.igraph
 #' @param which The number or name of the group.
 #' @return An `igraph` object.
+#' @examples
+#' model <- group_model(engagement_mmm)
+#' as.igraph(model, which = 1)
 as.igraph.group_tna <- function(x, which, ...) {
   check_missing(x)
   check_missing(which)

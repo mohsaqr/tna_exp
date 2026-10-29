@@ -120,6 +120,9 @@ permutation_test.tna <- function(x, y, adjust = "none", iter = 1000,
 #' of the groups. If `TRUE`, only comparisons between consecutive pairs
 #' of groups are performed.
 #' @inheritParams permutation_test.tna
+#' @return A `group_tna_permutation` object, which is a `list` of
+#'   `tna_permutation` objects (see [permutation_test()]), one per compared
+#'   pair of groups, named after the pair.
 #' @examples
 #' model <- group_model(engagement_mmm)
 #' # Small number of iterations for CRAN

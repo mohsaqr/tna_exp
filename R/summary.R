@@ -283,6 +283,15 @@ summary.group_tna_permutation <- function(object, digits = 2L, ...) {
 #'   `group` for a `group_tna_stability` object, with the columns `measure`
 #'   and `cs_coefficient`.
 #' @examples
+#' # A small subset and few iterations
+#' small <- estimate_cs(
+#'   tna(group_regulation[1:200, ]),
+#'   drop_prop = c(0.3, 0.6),
+#'   measures = "InStrength",
+#'   iter = 5,
+#'   edges = TRUE
+#' )
+#' summary(small)
 #' \donttest{
 #' model <- tna(group_regulation)
 #' # Small number of iterations and drop proportions for CRAN

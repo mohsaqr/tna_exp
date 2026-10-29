@@ -62,6 +62,11 @@ distinct permutations to reach \code{level}. Cannot be combined with
 
 \item{...}{Additional arguments passed to \code{\link[=centralities]{centralities()}}.}
 }
+\value{
+A \code{group_tna_permutation} object, which is a \code{list} of
+\code{tna_permutation} objects (see \code{\link[=permutation_test]{permutation_test()}}), one per compared
+pair of groups, named after the pair.
+}
 \description{
 Test edge weight differences between all pairs or a subset of pairs of
 a \code{group_tna} object. See \code{\link[=permutation_test.tna]{permutation_test.tna()}} for more details.

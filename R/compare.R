@@ -437,6 +437,10 @@ rv_coefficient <- function(x, y) {
 #'   and p-values of the tests.
 #'
 #' @examples
+#' # A small subset without the permutation test
+#' idx <- c(1:100, 1001:1100)
+#' group <- rep(c("High", "Low"), each = 100)
+#' compare_sequences(group_regulation[idx, ], group, test = FALSE)
 #' \donttest{
 #' # Use a subset to keep the example fast.
 #' idx <- c(1:500, 1001:1500)

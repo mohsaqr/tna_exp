@@ -24,6 +24,15 @@ and \code{cs_coefficient}.
 Summarize Case-Dropping Stability Results
 }
 \examples{
+# A small subset and few iterations
+small <- estimate_cs(
+  tna(group_regulation[1:200, ]),
+  drop_prop = c(0.3, 0.6),
+  measures = "InStrength",
+  iter = 5,
+  edges = TRUE
+)
+summary(small)
 \donttest{
 model <- tna(group_regulation)
 # Small number of iterations and drop proportions for CRAN

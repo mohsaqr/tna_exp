@@ -173,6 +173,8 @@ plot.tna <- function(x, node_list, use_list_order = TRUE,
 #' @family validation
 #' @param x A `tna_bootstrap` object.
 #' @param ... Additional arguments passed to [plot.tna()].
+#' @return A `cograph_network` plot of the bootstrapped network (see
+#'   [plot.tna()]), invisibly.
 #' @examples
 #' model <- tna(group_regulation)
 #' # Small number of iterations for CRAN
@@ -676,6 +678,11 @@ plot.tna_stability <- function(x, level = 0.05, ...) {
 #' @param ... Not used.
 #' @return A `ggplot` object.
 #' @examples
+#' # A small subset without the permutation test
+#' idx <- c(1:100, 1001:1100)
+#' group <- rep(c("High", "Low"), each = 100)
+#' comp <- compare_sequences(group_regulation[idx, ], group, test = FALSE)
+#' plot(comp)
 #' \donttest{
 #' idx <- c(1:500, 1001:1500)
 #' group <- c(rep("High", 500), rep("Low", 500))
@@ -797,6 +804,7 @@ plot.tna_sequence_comparison <- function(x, n = 10, legend = TRUE,
 #'   histogram (`type = "histogram"`). The default is `30`. Ignored for the
 #'   other plot types.
 #' @param ... Ignored
+#' @return A `ggplot` object.
 #' @examples
 #' # Small number of iterations for CRAN
 #' model <- tna(engagement)
@@ -1928,6 +1936,8 @@ plot.group_tna <- function(x, title, which, ...) {
 #' @param x A `group_tna_bootstrap` object.
 #' @param title A `character` vector of titles to use for each plot.
 #' @param ... Additional arguments passed to [plot.tna()].
+#' @return A `list` with the plot of each group (see
+#'   [plot.tna_bootstrap()]), invisibly.
 #' @examples
 #' model <- group_model(engagement_mmm)
 #' # Small number of iterations for CRAN
@@ -2127,10 +2137,9 @@ plot_compare.group_tna <- function(x, i = NULL, j = NULL, ...) {
 #' @param ... Ignored.
 #' @return A `ggplot` object.
 #' @examples
-#' \donttest{
 #' model <- group_model(engagement_mmm)
-#' # Default
 #' plot_frequencies(model)
+#' \donttest{
 #' # Default labels outside and custom colors
 #' plot_frequencies(
 #'   model,

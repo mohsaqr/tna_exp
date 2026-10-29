@@ -23,6 +23,9 @@ An \code{igraph} object.
 \description{
 Coerce a \code{tna} Object into an \code{igraph} Object.
 }
+\examples{
+as.igraph(tna(group_regulation))
+}
 \seealso{
 Helper functions
 \code{\link{as.igraph.group_tna}()},

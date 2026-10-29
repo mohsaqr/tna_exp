@@ -1,3 +1,17 @@
+# tna 1.5.1
+
+* Every help page now has examples that run: small examples on a subset of
+  the data come before the `\donttest{}` blocks of `compare_sequences()`,
+  `estimate_cs()`, `plot_frequencies()` for groups, and the print, plot and
+  summary methods of sequence comparisons and stability results. The
+  `as.igraph()` methods have examples.
+* `permutation_test()` for groups and the `plot()` methods of bootstrap and
+  reliability results document what they return.
+* The vignette "A showcase of the main tna functions" restores the
+  `options()` it changes.
+* The plots of the README are no longer part of the package, which reduces
+  the installed size from 6.3 to 4.1 MB.
+
 # tna 1.5.0
 
 * `compare_sequences()` now rejects arguments it does not use. A misspelled

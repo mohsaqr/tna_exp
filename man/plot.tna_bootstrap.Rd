@@ -11,6 +11,10 @@
 
 \item{...}{Additional arguments passed to \code{\link[=plot.tna]{plot.tna()}}.}
 }
+\value{
+A \code{cograph_network} plot of the bootstrapped network (see
+\code{\link[=plot.tna]{plot.tna()}}), invisibly.
+}
 \description{
 Plot a Bootstrapped Transition Network Analysis Model
 }

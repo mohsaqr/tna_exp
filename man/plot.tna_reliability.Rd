@@ -21,6 +21,9 @@ other plot types.}
 
 \item{...}{Ignored}
 }
+\value{
+A \code{ggplot} object.
+}
 \description{
 Plot Reliability Analysis Results
 }

@@ -260,6 +260,13 @@ estimate_centrality_stability <- estimate_cs
 #' instead, which is a `list` of `tna_stability` objects.
 #'
 #' @examples
+#' # A small subset and few iterations
+#' estimate_cs(
+#'   tna(group_regulation[1:200, ]),
+#'   drop_prop = c(0.3, 0.6),
+#'   measures = "InStrength",
+#'   iter = 5
+#' )
 #' \donttest{
 #' model <- tna(group_regulation)
 #' # Small number of iterations and drop proportions for CRAN

@@ -19,6 +19,10 @@ An \code{igraph} object.
 \description{
 Coerce a Specific Group from a \code{group_tna} Object into an \code{igraph} Object.
 }
+\examples{
+model <- group_model(engagement_mmm)
+as.igraph(model, which = 1)
+}
 \seealso{
 Helper functions
 \code{\link{as.igraph.matrix}()},

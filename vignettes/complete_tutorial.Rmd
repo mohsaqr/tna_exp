@@ -23,10 +23,7 @@ suppressPackageStartupMessages({
   library("dplyr")
   library("gt")
 })
-options(scipen = 99)
-options(digits = 2)
-options(max.print = 30)
-options(width = 83)
+old_options <- options(scipen = 99, digits = 2, max.print = 30, width = 83)
 ```
 
 
@@ -207,4 +204,8 @@ print(Permutation$centralities$stats)
 # Results of the Case-Dropping Bootstrap for Centrality Indices
 Centrality_stability <- estimate_centrality_stability(model, iter = 100)
 plot(Centrality_stability)
+```
+
+```{r, include = FALSE}
+options(old_options)
 ```

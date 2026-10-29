@@ -13,6 +13,10 @@
 
 \item{...}{Additional arguments passed to \code{\link[=plot.tna]{plot.tna()}}.}
 }
+\value{
+A \code{list} with the plot of each group (see
+\code{\link[=plot.tna_bootstrap]{plot.tna_bootstrap()}}), invisibly.
+}
 \description{
 Plot a Bootstrapped Grouped Transition Network Analysis Model
 }

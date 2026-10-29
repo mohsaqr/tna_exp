@@ -89,6 +89,10 @@ permutation samples divided by their standard deviation times square root of
 the number of observations.
 }
 \examples{
+# A small subset without the permutation test
+idx <- c(1:100, 1001:1100)
+group <- rep(c("High", "Low"), each = 100)
+compare_sequences(group_regulation[idx, ], group, test = FALSE)
 \donttest{
 # Use a subset to keep the example fast.
 idx <- c(1:500, 1001:1500)
