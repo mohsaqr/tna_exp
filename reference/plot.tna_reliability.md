@@ -35,6 +35,10 @@ plot(x, type = "histogram", metric = "Median Abs. Diff.", bins = 30, ...)
 
   Ignored
 
+## Value
+
+A `ggplot` object.
+
 ## See also
 
 Validation functions

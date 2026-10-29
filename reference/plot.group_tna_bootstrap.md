@@ -24,6 +24,12 @@ plot(x, title, ...)
   Additional arguments passed to
   [`plot.tna()`](https://sonsoles.me/tna/reference/plot.tna.md).
 
+## Value
+
+A `list` with the plot of each group (see
+[`plot.tna_bootstrap()`](https://sonsoles.me/tna/reference/plot.tna_bootstrap.md)),
+invisibly.
+
 ## See also
 
 Validation functions

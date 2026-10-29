@@ -73,42 +73,42 @@ print(perm)
 #> # A tibble: 9 × 4
 #>   edge_name                diff_true effect_size p_value
 #>   <chr>                        <dbl>       <dbl>   <dbl>
-#> 1 Disengaged -> Disengaged  -0.230       -15.7    0.0476
-#> 2 Engaged -> Disengaged     -0.288       -22.5    0.0476
-#> 3 Moderate -> Disengaged     0.00235       0.165  0.810 
-#> 4 Disengaged -> Engaged      0.0706        6.57   0.0476
-#> 5 Engaged -> Engaged        -0.00994      -0.539  0.667 
-#> 6 Moderate -> Engaged        0.0706        7.29   0.0476
-#> 7 Disengaged -> Moderate     0.160        13.7    0.0476
-#> 8 Engaged -> Moderate        0.298        16.2    0.0476
-#> 9 Moderate -> Moderate      -0.0730       -4.75   0.0476
+#> 1 Disengaged -> Disengaged  -0.230       -14.9    0.0476
+#> 2 Engaged -> Disengaged     -0.288       -16.9    0.0476
+#> 3 Moderate -> Disengaged     0.00235       0.190  0.810 
+#> 4 Disengaged -> Engaged      0.0706        7.42   0.0476
+#> 5 Engaged -> Engaged        -0.00994      -0.725  0.524 
+#> 6 Moderate -> Engaged        0.0706        7.37   0.0476
+#> 7 Disengaged -> Moderate     0.160        17.8    0.0476
+#> 8 Engaged -> Moderate        0.298        24.3    0.0476
+#> 9 Moderate -> Moderate      -0.0730       -5.69   0.0476
 #> 
 #> Cluster 1 vs. Cluster 3 :
 #> # A tibble: 9 × 4
 #>   edge_name                diff_true effect_size p_value
 #>   <chr>                        <dbl>       <dbl>   <dbl>
-#> 1 Disengaged -> Disengaged  -0.195       -14.5    0.0476
-#> 2 Engaged -> Disengaged     -0.0422       -8.14   0.0476
-#> 3 Moderate -> Disengaged    -0.0609       -7.87   0.0476
-#> 4 Disengaged -> Engaged      0.0471        6.27   0.0476
-#> 5 Engaged -> Engaged        -0.00360      -0.254  0.905 
-#> 6 Moderate -> Engaged       -0.0256       -3.42   0.0476
-#> 7 Disengaged -> Moderate     0.147        18.9    0.0476
-#> 8 Engaged -> Moderate        0.0458        3.92   0.0476
-#> 9 Moderate -> Moderate       0.0864        8.42   0.0476
+#> 1 Disengaged -> Disengaged  -0.195       -17.3    0.0476
+#> 2 Engaged -> Disengaged     -0.0422       -5.89   0.0476
+#> 3 Moderate -> Disengaged    -0.0609       -6.91   0.0476
+#> 4 Disengaged -> Engaged      0.0471        5.43   0.0476
+#> 5 Engaged -> Engaged        -0.00360      -0.246  0.810 
+#> 6 Moderate -> Engaged       -0.0256       -3.55   0.0476
+#> 7 Disengaged -> Moderate     0.147        24.2    0.0476
+#> 8 Engaged -> Moderate        0.0458        3.72   0.0476
+#> 9 Moderate -> Moderate       0.0864        8.20   0.0476
 #> 
 #> Cluster 2 vs. Cluster 3 :
 #> # A tibble: 9 × 4
 #>   edge_name                diff_true effect_size p_value
 #>   <chr>                        <dbl>       <dbl>   <dbl>
-#> 1 Disengaged -> Disengaged   0.0358        4.32   0.0476
-#> 2 Engaged -> Disengaged      0.246        21.7    0.0476
-#> 3 Moderate -> Disengaged    -0.0632       -5.52   0.0476
-#> 4 Disengaged -> Engaged     -0.0234       -3.06   0.0476
-#> 5 Engaged -> Engaged         0.00633       0.391  0.619 
-#> 6 Moderate -> Engaged       -0.0962       -6.39   0.0476
-#> 7 Disengaged -> Moderate    -0.0124       -5.09   0.0476
-#> 8 Engaged -> Moderate       -0.252       -12.7    0.0476
-#> 9 Moderate -> Moderate       0.159         9.14   0.0476
+#> 1 Disengaged -> Disengaged   0.0358        5.50   0.0476
+#> 2 Engaged -> Disengaged      0.246        17.1    0.0476
+#> 3 Moderate -> Disengaged    -0.0632       -5.75   0.0476
+#> 4 Disengaged -> Engaged     -0.0234       -4.06   0.0476
+#> 5 Engaged -> Engaged         0.00633       0.414  0.714 
+#> 6 Moderate -> Engaged       -0.0962       -8.81   0.0476
+#> 7 Disengaged -> Moderate    -0.0124       -5.04   0.0476
+#> 8 Engaged -> Moderate       -0.252       -13.8    0.0476
+#> 9 Moderate -> Moderate       0.159        11.4    0.0476
 #> 
 ```

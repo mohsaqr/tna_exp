@@ -1,5 +1,25 @@
 # Changelog
 
+## tna 1.5.1
+
+- Every help page now has examples that run: small examples on a subset
+  of the data come before the `\donttest{}` blocks of
+  [`compare_sequences()`](https://sonsoles.me/tna/reference/compare_sequences.md),
+  [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md),
+  [`plot_frequencies()`](https://sonsoles.me/tna/reference/plot_frequencies.md)
+  for groups, and the print, plot and summary methods of sequence
+  comparisons and stability results. The
+  [`as.igraph()`](https://r.igraph.org/reference/as.igraph.html) methods
+  have examples.
+- [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md)
+  for groups and the
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) methods of
+  bootstrap and reliability results document what they return.
+- The vignette “A showcase of the main tna functions” restores the
+  [`options()`](https://rdrr.io/r/base/options.html) it changes.
+- The plots of the README are no longer part of the package, which
+  reduces the installed size from 6.3 to 4.1 MB.
+
 ## tna 1.5.0
 
 - [`compare_sequences()`](https://sonsoles.me/tna/reference/compare_sequences.md)

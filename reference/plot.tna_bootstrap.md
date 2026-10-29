@@ -20,6 +20,12 @@ plot(x, ...)
   Additional arguments passed to
   [`plot.tna()`](https://sonsoles.me/tna/reference/plot.tna.md).
 
+## Value
+
+A `cograph_network` plot of the bootstrapped network (see
+[`plot.tna()`](https://sonsoles.me/tna/reference/plot.tna.md)),
+invisibly.
+
 ## See also
 
 Validation functions

@@ -35,3 +35,14 @@ An `igraph` object.
 Helper functions
 [`as.igraph.group_tna()`](https://sonsoles.me/tna/reference/as.igraph.group_tna.md),
 [`as.igraph.tna()`](https://sonsoles.me/tna/reference/as.igraph.tna.md)
+
+## Examples
+
+``` r
+weights <- matrix(c(0, 0.6, 0.4, 0.5, 0, 0.5, 0.2, 0.8, 0), 3, 3)
+as.igraph(weights)
+#> IGRAPH 2816c4f D-W- 3 6 -- 
+#> + attr: weight (e/n)
+#> + edges from 2816c4f:
+#> [1] 1->2 1->3 2->1 2->3 3->1 3->2
+```

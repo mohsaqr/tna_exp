@@ -70,6 +70,18 @@ Validation functions
 ## Examples
 
 ``` r
+# A small subset and few iterations
+small <- estimate_cs(
+  tna(group_regulation[1:200, ]),
+  drop_prop = c(0.3, 0.6),
+  measures = "InStrength",
+  iter = 5,
+  edges = TRUE
+)
+summary(small)
+#>      measure cs_coefficient
+#> 1 InStrength            0.6
+#> 2      Edges            0.6
 # \donttest{
 model <- tna(group_regulation)
 # Small number of iterations and drop proportions for CRAN

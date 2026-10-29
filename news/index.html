@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,14 @@
       <small>Source: <a href="https://github.com/sonsoleslp/tna/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.1" id="tna-151">tna 1.5.1<a class="anchor" aria-label="anchor" href="#tna-151"></a></h2>
+<ul><li>Every help page now has examples that run: small examples on a subset of the data come before the <code>\donttest{}</code> blocks of <code><a href="../reference/compare_sequences.html">compare_sequences()</a></code>, <code><a href="../reference/estimate_centrality_stability.html">estimate_cs()</a></code>, <code><a href="../reference/plot_frequencies.html">plot_frequencies()</a></code> for groups, and the print, plot and summary methods of sequence comparisons and stability results. The <code><a href="https://r.igraph.org/reference/as.igraph.html" class="external-link">as.igraph()</a></code> methods have examples.</li>
+<li>
+<code><a href="../reference/permutation_test.html">permutation_test()</a></code> for groups and the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> methods of bootstrap and reliability results document what they return.</li>
+<li>The vignette “A showcase of the main tna functions” restores the <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code> it changes.</li>
+<li>The plots of the README are no longer part of the package, which reduces the installed size from 6.3 to 4.1 MB.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.0" id="tna-150">tna 1.5.0<a class="anchor" aria-label="anchor" href="#tna-150"></a></h2>
 <ul><li><p><code><a href="../reference/compare_sequences.html">compare_sequences()</a></code> now rejects arguments it does not use. A misspelled argument such as <code>correction = "fdr"</code> (the argument is <code>adjust</code>) was silently ignored and the default Bonferroni correction applied; the vignette on grouped sequences had this mistake and now uses <code>adjust = "fdr"</code> as its text describes.</p></li>
