@@ -216,3 +216,111 @@ summary.group_tna_bootstrap <- function(object, ...) {
     class = c("summary.group_tna_bootstrap", "data.frame")
   )
 }
+
+#' Summarize Permutation Test Results
+#'
+#' Returns the edge-level results of a permutation test as a tidy table.
+#' The results for the centrality measures are shown by [print()].
+#'
+#' @export
+#' @family validation
+#' @param object A `tna_permutation` or a `group_tna_permutation` object.
+#' @param digits An `integer`, the number of decimals of `diff_true` and
+#'   `effect_size`. The p-values are not rounded. The default is 2.
+#' @param ... Ignored.
+#' @return A `data.frame` with one row per edge (and per pair of groups, in
+#'   the first column `pair`, for a `group_tna_permutation` object) and the
+#'   columns `from`, `to`, `diff_true` (the observed difference in the edge
+#'   weight), `effect_size` (the difference divided by the standard deviation
+#'   of the permuted differences, `NA` when they do not vary), and `p_value`.
+#' @examples
+#' model <- group_model(engagement_mmm)
+#' # Small number of iterations for CRAN
+#' perm <- permutation_test(model, iter = 20)
+#' summary(perm)
+#'
+summary.tna_permutation <- function(object, digits = 2L, ...) {
+  check_missing(object)
+  check_class(object, "tna_permutation")
+  check_values(digits)
+  diffs <- object$edges$diffs_true
+  stats <- object$edges$stats
+  # The edges are in column-major order of the weight matrix
+  data.frame(
+    from = rep(rownames(diffs), times = ncol(diffs)),
+    to = rep(colnames(diffs), each = nrow(diffs)),
+    diff_true = round(stats$diff_true, digits),
+    effect_size = round(stats$effect_size, digits),
+    p_value = stats$p_value
+  )
+}
+
+#' @export
+#' @rdname summary.tna_permutation
+summary.group_tna_permutation <- function(object, digits = 2L, ...) {
+  check_missing(object)
+  check_class(object, "group_tna_permutation")
+  tables <- Map(
+    function(y, pair) {
+      data.frame(pair = pair, summary.tna_permutation(y, digits = digits))
+    },
+    object,
+    names(object)
+  )
+  out <- do.call(rbind, unname(tables))
+  rownames(out) <- NULL
+  out
+}
+
+#' Summarize Case-Dropping Stability Results
+#'
+#' @export
+#' @family validation
+#' @param object A `tna_stability` or a `group_tna_stability` object.
+#' @param ... Ignored.
+#' @return A `data.frame` with one row per centrality measure (and `Edges`,
+#'   when the edge weights were assessed), and per group in the first column
+#'   `group` for a `group_tna_stability` object, with the columns `measure`
+#'   and `cs_coefficient`.
+#' @examples
+#' \donttest{
+#' model <- tna(group_regulation)
+#' # Small number of iterations and drop proportions for CRAN
+#' stability <- estimate_cs(
+#'   model,
+#'   drop_prop = seq(0.3, 0.9, by = 0.2),
+#'   measures = "InStrength",
+#'   iter = 10,
+#'   edges = TRUE
+#' )
+#' summary(stability)
+#' }
+#'
+summary.tna_stability <- function(object, ...) {
+  check_missing(object)
+  check_class(object, "tna_stability")
+  # as.character() keeps the column when nothing was estimated
+  data.frame(
+    measure = as.character(names(object)),
+    cs_coefficient = vapply(object, "[[", numeric(1L), "cs_coefficient"),
+    row.names = NULL
+  )
+}
+
+#' @export
+#' @rdname summary.tna_stability
+summary.group_tna_stability <- function(object, ...) {
+  check_missing(object)
+  check_class(object, "group_tna_stability")
+  tables <- Map(
+    function(y, group) {
+      table <- summary.tna_stability(y)
+      data.frame(group = rep(group, nrow(table)), table)
+    },
+    object,
+    names(object)
+  )
+  out <- do.call(rbind, unname(tables))
+  rownames(out) <- NULL
+  out
+}

@@ -23,7 +23,8 @@ a square \code{matrix} representing edge weights.}
 network when computing the centrality measures. The default is \code{FALSE}.}
 
 \item{normalize}{A \code{logical} value indicating whether the centralities
-should be normalized. The default is \code{FALSE}.}
+should be normalized. The default is \code{FALSE}. \code{Diffusion} is always
+normalized (see 'Details').}
 
 \item{invert}{A \code{logical} value indicating whether the weights should be
 inverted for distance-based measures. The default is \code{TRUE}.}
@@ -65,7 +66,13 @@ paths (Kivimäki et al. 2016). It measures the extent to which a
 node lies on the shortest paths between other nodes.
 \item \code{Diffusion}: Diffusion centrality of Banerjee et.al. (2014).
 It measures the influence of a node in spreading information through
-the network.
+the network. Diffusion is always min-max normalized to the range
+from 0 to 1, whatever the value of \code{normalize}, because its raw
+values grow with powers of the edge weights (for a frequency model
+they easily exceed \code{1e30}). When the raw values are equal for every
+state, for example in a relative transition network with
+\code{loops = TRUE} where every row sums to one, the normalized values are
+\code{NaN}: the measure does not distinguish the states.
 \item \code{Clustering}: Signed clustering coefficient of Zhang and Horvath (2005)
 based on the symmetric adjacency matrix (sum of the adjacency matrix
 and its transpose). It measures the degree to which nodes tend to

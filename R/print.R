@@ -290,7 +290,13 @@ print.tna_stability <- function(x, ...) {
   check_class(x, "tna_stability")
   cs_coefs <- unlist(lapply(x, "[[", "cs_coefficient"))
   names(cs_coefs) <- names(x)
-  cat("Centrality Stability Coefficients\n\n")
+  cat(
+    ifelse_(
+      "Edges" %in% names(x),
+      "Centrality and Edge Stability Coefficients\n\n",
+      "Centrality Stability Coefficients\n\n"
+    )
+  )
   print(cs_coefs, ...)
   invisible(x)
 }

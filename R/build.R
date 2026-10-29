@@ -567,7 +567,7 @@ create_seqdata <- function(x, cols, alphabet, concat = 1L,
     }
     colors <- color_palette(length(labels))
     x[, cols] <- as.data.frame(
-      lapply(x[, cols], function(y) factor(y, levels = alphabet))
+      lapply(x[, cols, drop = FALSE], function(y) factor(y, levels = alphabet))
     )
   }
   # Non-sequence columns, one row per sequence (e.g. actor ids)
@@ -588,7 +588,7 @@ create_seqdata <- function(x, cols, alphabet, concat = 1L,
   x <- as.matrix(
     as.data.frame(
       lapply(
-        x[, cols],
+        x[, cols, drop = FALSE],
         function(y) {
           as.integer(replace(y, which(!y %in% alphabet), NA))
         }
@@ -660,7 +660,7 @@ initialize_model <- function(x, type, scaling, params, transitions = FALSE) {
   inits <- factor(x[, 1L], levels = seq_len(a), labels = alphabet)
   inits <- as.vector(table(inits))
   trans <- compute_transitions(x, a, type, params)
-  weights <- compute_weights(trans, type, scaling, a)
+  weights <- compute_weights(trans, type, scaling, a, params)
   inits <- inits / sum(inits)
   names(inits) <- alphabet
   dimnames(weights) <- list(alphabet, alphabet)
@@ -680,6 +680,11 @@ initialize_model <- function(x, type, scaling, params, transitions = FALSE) {
 #' @param params Parameters for the transition model.
 #' @noRd
 compute_transitions <- function(m, a, type, params) {
+  if (identical(type, "betweenness")) {
+    # Transitions are counted as in the model the network was built from
+    source <- betweenness_source(params)
+    return(compute_transitions(m, a, source$type, params))
+  }
   if (isTRUE(params$windowed)) {
     return(compute_transitions_windowed(m, a, type, params))
   }
@@ -908,11 +913,20 @@ get_transitions <- function(x) { # nocov start
 #' @param type Type of the transition network as a `character` string.
 #' @param scaling Scaling methods to apply as a `character` vector.
 #' @param a An `integer`, the number of states.
+#' @param params A `list` of parameters for the transition model. Required
+#'   when `type` is `"betweenness"`.
 #' @return A `matrix` of transition probabilities or frequencies,
 #' based on `type`.
 #' @noRd
-compute_weights <- function(transitions, type, scaling, a) {
+compute_weights <- function(transitions, type, scaling, a, params = NULL) {
   weights <- apply(transitions, c(2, 3), sum)
+  if (identical(type, "betweenness")) {
+    source <- betweenness_source(params)
+    weights <- scale_weights(weights, source$type, source$scaling, a)
+    return(
+      edge_betweenness_weights(weights, source$directed, source$invert)
+    )
+  }
   scale_weights(weights, type, scaling, a)
 }
 
@@ -928,7 +942,6 @@ scale_weights <- function(weights, type, scaling, a) {
     rs <- .rowSums(weights, m = a, n = a)
     pos <- which(rs > 0)
     weights[pos, ] <- weights[pos, ] / rs[pos]
-    weights[!pos, ] <- NA
   }
   for (i in seq_along(scaling)) {
     if (scaling[i] == "minmax") {

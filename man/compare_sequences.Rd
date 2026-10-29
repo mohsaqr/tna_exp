@@ -33,9 +33,10 @@ compare_sequences(x, ...)
 }
 \arguments{
 \item{x}{A \code{group_tna} object or a \code{data.frame} containing sequence data in
-wide format.}
+wide format. A \code{group_tna} object with scaled edge weights is not
+resampled (an error of class \code{tna_error_scaling}).}
 
-\item{...}{Not used.}
+\item{...}{Not used. A misspelled or unknown argument is an error.}
 
 \item{group}{A \code{vector} indicating the group assignment of each
 row of the data/sequence. Must have the same length as the number of

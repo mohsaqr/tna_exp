@@ -9,6 +9,8 @@
 #' @export
 #' @family validation
 #' @param x A `tna` object containing sequence data for the first `tna` model.
+#'   Grouped models with scaled edge weights, and their networks, are not
+#'   resampled (an error of class `tna_error_scaling`).
 #' @param y A `tna` object containing sequence data for the second `tna` model.
 #' @param adjust A `character` string for the method to adjust p-values with
 #' for multiple comparisons. The default is `"none"` for no adjustment.
@@ -68,6 +70,8 @@ permutation_test.tna <- function(x, y, adjust = "none", iter = 1000,
   check_missing(y)
   check_tna_seq(x)
   check_tna_seq(y)
+  check_not_scaled_group(x, "The permutation test")
+  check_not_scaled_group(y, "The permutation test")
   check_values(iter, strict = TRUE)
   check_flag(paired)
   check_actor(actor, paired)
@@ -105,7 +109,9 @@ permutation_test.tna <- function(x, y, adjust = "none", iter = 1000,
 #'
 #' @export
 #' @family validation
-#' @param x A `group_tna` object
+#' @param x A `group_tna` object.
+#'   Grouped models with scaled edge weights, and their networks, are not
+#'   resampled (an error of class `tna_error_scaling`).
 #' @param groups An `integer` vector or a `character` vector of group indices
 #' or names, respectively, defining which groups to compare. When not provided,
 #' all pairs are compared (the default).
@@ -126,11 +132,7 @@ permutation_test.group_tna <- function(x, groups, adjust = "none",
                                        ...) {
   check_missing(x)
   check_class(x, "group_tna")
-  stopifnot_(
-    length(attr(x, "scaling")) == 0L || attr(x, "groupwise"),
-    "Permutation test is not supported for
-     grouped models with globally scaled edge weights."
-  )
+  check_not_scaled_group(x, "The permutation test")
   check_values(iter, strict = TRUE)
   check_flag(paired)
   check_actor(actor, paired)
@@ -234,6 +236,16 @@ permutation_test_ <- function(x, y, adjust, iter, paired, level,
   type <- attr(x, "type")
   scaling <- attr(x, "scaling")
   params <- attr(x, "params")
+  if ("betweenness" %in% c(type, attr(y, "type"))) {
+    stopifnot_(
+      identical(type, attr(y, "type")) &&
+        identical(params$betweenness, attr(y, "params")$betweenness),
+      "Edge betweenness networks {.arg x} and {.arg y} must both be built
+       with {.fn betweenness_network} from the same type of model and with
+       the same {.arg directed} and {.arg invert} values.",
+      class = "tna_error_betweenness"
+    )
+  }
   n_measures <- length(measures)
   include_centralities <- n_measures > 0L
   if (include_centralities) {
@@ -288,8 +300,12 @@ permutation_test_ <- function(x, y, adjust, iter, paired, level,
     idx_x <- seq_len(n_perm_x)
     trans_perm_x <- combined_trans[perm_idx[idx_x], , , drop = FALSE]
     trans_perm_y <- combined_trans[perm_idx[-idx_x], , , drop = FALSE]
-    weights_perm_x <- compute_weights(trans_perm_x, type, scaling, a)
-    weights_perm_y <- compute_weights(trans_perm_y, type, scaling, a)
+    weights_perm_x <- compute_weights(
+      trans_perm_x, type, scaling, a, params
+    )
+    weights_perm_y <- compute_weights(
+      trans_perm_y, type, scaling, a, params
+    )
     if (include_centralities) {
       cent_perm_x <- centralities(weights_perm_x, measures = measures, ...)
       cent_perm_y <- centralities(weights_perm_y, measures = measures, ...)
@@ -313,7 +329,11 @@ permutation_test_ <- function(x, y, adjust, iter, paired, level,
   edge_stats <- data.frame(
     edge_name = edge_names,
     diff_true = c(edge_diffs_true),
-    effect_size = c(edge_diffs_true) / c(edge_diffs_sd),
+    effect_size = effect_size(
+      c(edge_diffs_true),
+      c(edge_diffs_sd),
+      c(pmax(abs(weights_x), abs(weights_y)))
+    ),
     p_value = c(edge_p_values)
   )
   out <- list(
@@ -333,7 +353,11 @@ permutation_test_ <- function(x, y, adjust, iter, paired, level,
     cent_diffs_sig <- cent_diffs_true * (cent_p_values < level)
     cent_stats <- expand.grid(state = cent_x$state, centrality = measures)
     cent_stats$diff_true <- c(cent_diffs_true)
-    cent_stats$effect_size <- c(cent_diffs_true) / c(cent_diffs_sd)
+    cent_stats$effect_size <- effect_size(
+      c(cent_diffs_true),
+      c(cent_diffs_sd),
+      c(pmax(abs(as.matrix(cent_x[, -1L])), abs(as.matrix(cent_y[, -1L]))))
+    )
     cent_stats$p_value <- c(cent_p_values)
     cent_diffs_true <- cbind(
       data.frame(state = cent_x$state),
@@ -358,11 +382,7 @@ permutation_test_ <- function(x, y, adjust, iter, paired, level,
 }
 
 permutation_test_patterns <- function(x, len, iter, adjust, actor = NULL) {
-  stopifnot_(
-    length(attr(x, "scaling")) == 0L || attr(x, "groupwise"),
-    "Permutation test is not supported for
-     grouped models with globally scaled edge weights."
-  )
+  check_not_scaled_group(x, "The permutation test")
   check_values(iter, strict = TRUE)
   data <- combine_data(x)
   group <- data$.group
@@ -407,8 +427,13 @@ permutation_test_patterns <- function(x, len, iter, adjust, actor = NULL) {
   for (j in seq_len(k)) {
     stat_perm_mean <- apply(stat_perm[[j]], 1, mean)
     stat_perm_sd <- apply(stat_perm[[j]], 1, stats::sd)
+    stat_scale <- pmax(abs(stat_true[[j]]), apply(abs(stat_perm[[j]]), 1, max))
     out[[j]] <- data.frame(
-      effect_size = (stat_true[[j]] - stat_perm_mean) / stat_perm_sd,
+      effect_size = effect_size(
+        stat_true[[j]] - stat_perm_mean,
+        stat_perm_sd,
+        stat_scale
+      ),
       p_value = stats::p.adjust(
         (stat_p_value[[j]] + 1) / (iter + 1),
         method = adjust
@@ -426,4 +451,26 @@ pattern_statistic <- function(x) {
   cs <- .colSums(x, m = nr, n = nc)
   expected <- outer(rs, cs) / n
   sqrt(.rowSums((x - expected)^2, m = nr, n = nc))
+}
+
+#' Standardized Effect Size of a Permutation Test
+#'
+#' @param diff A `numeric` vector of observed differences.
+#' @param sd A `numeric` vector of the standard deviations of the permuted
+#'   differences.
+#' @param scale A `numeric` vector of the magnitudes of the values whose
+#'   differences are taken (e.g. the larger absolute weight of the two
+#'   networks).
+#' @return `diff / sd`, or `NA` where the permuted differences do not vary
+#'   (the effect size is then undefined).
+#' @noRd
+effect_size <- function(diff, sd, scale) {
+  # A standard deviation at the rounding level of the compared values is
+  # zero; judging it against their own magnitude keeps the rule free of
+  # the measurement scale
+  defined <- !is.na(sd) & !is.na(scale) &
+    sd > sqrt(.Machine$double.eps) * abs(scale)
+  out <- rep(NA_real_, length(diff))
+  out[defined] <- diff[defined] / sd[defined]
+  out
 }

@@ -27,7 +27,13 @@
 #'     node lies on the shortest paths between other nodes.
 #'   * `Diffusion`: Diffusion centrality of Banerjee et.al. (2014).
 #'     It measures the influence of a node in spreading information through
-#'     the network.
+#'     the network. Diffusion is always min-max normalized to the range
+#'     from 0 to 1, whatever the value of `normalize`, because its raw
+#'     values grow with powers of the edge weights (for a frequency model
+#'     they easily exceed `1e30`). When the raw values are equal for every
+#'     state, for example in a relative transition network with
+#'     `loops = TRUE` where every row sums to one, the normalized values are
+#'     `NaN`: the measure does not distinguish the states.
 #'   * `Clustering`: Signed clustering coefficient of Zhang and Horvath (2005)
 #'     based on the symmetric adjacency matrix (sum of the adjacency matrix
 #'     and its transpose). It measures the degree to which nodes tend to
@@ -43,7 +49,8 @@
 #' @param loops A `logical` value indicating whether to include loops in the
 #'   network when computing the centrality measures. The default is `FALSE`.
 #' @param normalize A `logical` value indicating whether the centralities
-#'   should be normalized. The default is `FALSE`.
+#'   should be normalized. The default is `FALSE`. `Diffusion` is always
+#'   normalized (see 'Details').
 #' @param invert A `logical` value indicating whether the weights should be
 #'   inverted for distance-based measures. The default is `TRUE`.
 #' @param measures A `character` vector indicating which centrality
@@ -125,8 +132,14 @@ centralities_ <- function(x, loops, normalize, invert, measures) {
     out[, measures] <- as.data.frame(
       lapply(out[, measures, drop = FALSE], ranger)
     )
+  } else if ("Diffusion" %in% measures) {
+    # Raw diffusion grows with powers of the weights, so it is always scaled
+    out$Diffusion <- ranger(out$Diffusion)
   }
-  rn <- rownames(out)
+  # Diffusion and BetweennessRSP return unnamed vectors: name the states
+  # from the weight matrix, not from the first measure computed
+  rn <- ifelse_(is.null(rownames(x)), rownames(out), rownames(x))
+  rownames(out) <- rn
   out <- tibble::rownames_to_column(out, "state")
   out$state <- factor(out$state, levels = rn)
   structure(
@@ -154,7 +167,7 @@ diffusion <- function(mat) {
 #' @rdname estimate_centrality_stability
 estimate_cs <- function(x, loops, normalize, invert, measures, iter, method,
                         drop_prop, threshold, certainty, progressbar = NULL, 
-                        detailed = NULL, actor = NULL) {
+                        detailed = NULL, actor = NULL, edges = FALSE) {
   UseMethod("estimate_cs")
 }
 
@@ -177,6 +190,16 @@ estimate_centrality_stability <- estimate_cs
 #' coefficient, which represents the proportion of dropped cases at which
 #' the correlations drop below a given threshold (default 0.7).
 #'
+#' With `edges = TRUE`, the stability of the edge weights is estimated in the
+#' same way: in each subsample the network is estimated again and its edge
+#' weights are correlated with the edge weights of the original network
+#' (Epskamp et al., 2018). Only the edges present in the original network
+#' are compared, self-loops included. An edge that is absent from the
+#' original data cannot appear in a subsample, so including the absent edges
+#' would add pairs of zeros that always agree and inflate the correlation.
+#' The `loops`, `normalize`, and `invert` arguments do not affect the edge
+#' weights.
+#'
 #' The results can be visualized by plotting the output object showing the
 #' stability of the centrality measures across different drop proportions,
 #' along with confidence intervals. The CS-coefficients are displayed in the
@@ -187,6 +210,8 @@ estimate_centrality_stability <- estimate_cs
 #' @rdname estimate_centrality_stability
 #' @param x A `tna` or a `group_tna` object representing the temporal network
 #'   analysis data. The object should be created from a sequence data object.
+#'   Grouped models with scaled edge weights, and their networks, are not
+#'   resampled (an error of class `tna_error_scaling`).
 #' @param loops A `logical` value indicating whether to include loops in the
 #'   network when computing the centrality measures. The default is `FALSE`.
 #' @param normalize A `logical` value indicating whether to normalize
@@ -219,8 +244,12 @@ estimate_centrality_stability <- estimate_cs
 #'   object). When given, `drop_prop` is the proportion of actors dropped,
 #'   and each actor's sequences are dropped together. The default `NULL`
 #'   drops single sequences.
+#' @param edges A `logical` value. If `TRUE`, the stability of the edge
+#'   weights is also estimated and returned as the element `Edges`. The
+#'   default is `FALSE`.
 #' @return A `tna_stability` object which is a `list` with an element for each
-#' `measure` with the following elements:
+#' `measure` (and an element `Edges` when `edges = TRUE`) with the following
+#' elements:
 #'
 #' * `cs_coefficient`: The centrality stability (CS) coefficient
 #'   of the measure.
@@ -240,7 +269,19 @@ estimate_centrality_stability <- estimate_cs
 #'   measures = c("InStrength", "OutStrength"),
 #'   iter = 10
 #' )
+#' # Stability of the edge weights alongside the centralities
+#' estimate_cs(
+#'   model,
+#'   drop_prop = seq(0.3, 0.9, by = 0.2),
+#'   measures = "InStrength",
+#'   iter = 10,
+#'   edges = TRUE
+#' )
 #' }
+#' @references
+#' Epskamp, S., Borsboom, D., & Fried, E. I. (2018). Estimating psychological
+#' networks and their accuracy: A tutorial paper. *Behavior Research Methods*,
+#' 50(1), 195--212. \doi{10.3758/s13428-017-0862-1}
 #'
 estimate_cs.tna <- function(x, loops = FALSE, normalize = FALSE, invert = TRUE,
                             measures = c(
@@ -249,9 +290,11 @@ estimate_cs.tna <- function(x, loops = FALSE, normalize = FALSE, invert = TRUE,
                             drop_prop = seq(0.1, 0.9, by = 0.1),
                             threshold = 0.7, certainty = 0.95,
                             progressbar = FALSE, detailed = NULL,
-                            actor = NULL) {
+                            actor = NULL, edges = FALSE) {
   check_tna_seq(x)
+  check_not_scaled_group(x, "Case-dropping")
   check_actor(actor)
+  check_flag(edges)
   check_flag(loops)
   check_flag(normalize)
   check_flag(invert)
@@ -283,30 +326,47 @@ estimate_cs.tna <- function(x, loops = FALSE, normalize = FALSE, invert = TRUE,
     }
   }
   n_prop <- length(drop_prop)
-  centralities_orig <- centralities_(
-    x = x$weights,
-    loops = loops,
-    normalize = normalize,
-    invert = invert,
-    measures = measures
-  )
-  sds_orig <- centralities_orig |>
-    dplyr::summarize(
-      dplyr::across(
-        dplyr::all_of(measures),
-        stats::sd
-      )
-    )
-  valid_measures <- which(sds_orig > 0)
-  centralities_orig <- centralities_orig[, 1L + valid_measures]
-  measures <- measures[valid_measures]
   n_measures <- length(measures)
+  if (n_measures > 0L) {
+    centralities_orig <- centralities_(
+      x = x$weights,
+      loops = loops,
+      normalize = normalize,
+      invert = invert,
+      measures = measures
+    )
+    sds_orig <- centralities_orig |>
+      dplyr::summarize(
+        dplyr::across(
+          dplyr::all_of(measures),
+          stats::sd
+        )
+      )
+    valid_measures <- which(sds_orig > 0)
+    centralities_orig <- centralities_orig[, 1L + valid_measures]
+    measures <- measures[valid_measures]
+    n_measures <- length(measures)
+  }
+  # An edge that is absent from the full data is absent from every subsample,
+  # so only the edges of the network are compared (self-loops included)
+  edge_mask <- !is.na(x$weights) & x$weights != 0
+  edges_orig <- x$weights[edge_mask]
+  if (edges && !isTRUE(stats::sd(edges_orig) > 0)) {
+    warning_(
+      "The edge weights of {.arg x} do not vary, so their stability
+       is not estimated.",
+      class = "tna_warning_edges"
+    )
+    edges <- FALSE
+  }
+  targets <- c(measures, onlyif(edges, "Edges"))
+  n_targets <- length(targets)
   stability <- replicate(
-    n_measures,
+    n_targets,
     matrix(NA, nrow = iter, ncol = n_prop),
     simplify = FALSE
   )
-  names(stability) <- measures
+  names(stability) <- targets
   if (progressbar) {
     cli::cli_progress_bar(
       name = "Computing centrality stability",
@@ -322,55 +382,63 @@ estimate_cs.tna <- function(x, loops = FALSE, normalize = FALSE, invert = TRUE,
       )
       next
     }
-    corr_prop <- matrix(nrow = iter, ncol = n_measures)
+    corr_prop <- matrix(nrow = iter, ncol = n_targets)
     for (j in seq_len(iter)) {
       keep <- keep_cases(n_cases - n_drop)
       trans_sub <- trans[keep, , , drop = FALSE]
-      weight_sub <- compute_weights(trans_sub, type, scaling, a)
-      centralities_sub <- centralities_(
-        x = weight_sub,
-        loops = loops,
-        invert = invert,
-        normalize = normalize,
-        measures = measures
-      )
-      sds_sub <- centralities_sub |>
-        dplyr::summarize(
-          dplyr::across(
-            dplyr::all_of(measures),
-            stats::sd
-          )
+      weight_sub <- compute_weights(trans_sub, type, scaling, a, params)
+      corr_measures <- numeric(0L)
+      if (n_measures > 0L) {
+        centralities_sub <- centralities_(
+          x = weight_sub,
+          loops = loops,
+          invert = invert,
+          normalize = normalize,
+          measures = measures
         )
-      corr_prop[j, ] <- vapply(
-        measures,
-        function(measure) {
-          centrality_sub <- centralities_sub[[measure]]
-          centrality_orig <- centralities_orig[[measure]]
-          sd_sub <- sds_sub[measure]
-          ifelse_(
-            sd_sub > 0,
-            stats::cor(
-              centrality_sub,
-              centrality_orig,
-              method = method,
-              use = "complete.obs"
-            ),
-            NA_real_
+        sds_sub <- centralities_sub |>
+          dplyr::summarize(
+            dplyr::across(
+              dplyr::all_of(measures),
+              stats::sd
+            )
           )
-        },
-        numeric(1L)
+        corr_measures <- vapply(
+          measures,
+          function(measure) {
+            centrality_sub <- centralities_sub[[measure]]
+            centrality_orig <- centralities_orig[[measure]]
+            # NaN when a normalized measure (Diffusion) is constant
+            sd_sub <- sds_sub[[measure]]
+            ifelse_(
+              isTRUE(sd_sub > 0),
+              stats::cor(
+                centrality_sub,
+                centrality_orig,
+                method = method,
+                use = "complete.obs"
+              ),
+              NA_real_
+            )
+          },
+          numeric(1L)
+        )
+      }
+      corr_edges <- onlyif(
+        edges,
+        stability_cor(weight_sub[edge_mask], edges_orig, method)
       )
+      corr_prop[j, ] <- c(corr_measures, corr_edges)
       if (progressbar) {
         cli::cli_progress_update()
       }
     }
-    for (k in seq_len(n_measures)) {
-      measure <- measures[k]
-      stability[[measure]][, i] <- corr_prop[, k]
+    for (k in seq_len(n_targets)) {
+      stability[[targets[k]]][, i] <- corr_prop[, k]
     }
   }
   out <- list()
-  for (measure in measures) {
+  for (measure in targets) {
     cs_coef <- calculate_cs(
       stability[[measure]],
       threshold,
@@ -396,6 +464,21 @@ estimate_cs.tna <- function(x, loops = FALSE, normalize = FALSE, invert = TRUE,
 #' @export
 #' @rdname estimate_centrality_stability
 estimate_centrality_stability.tna <- estimate_cs.tna
+
+#' Correlate Resampled Values with the Original Values
+#'
+#' @param sub A `numeric` vector of values from a subsample.
+#' @param orig A `numeric` vector of the original values.
+#' @param method See [stats::cor()].
+#' @return The correlation, or `NA` when `sub` does not vary.
+#' @noRd
+stability_cor <- function(sub, orig, method) {
+  ifelse_(
+    isTRUE(stats::sd(sub, na.rm = TRUE) > 0),
+    stats::cor(sub, orig, method = method, use = "complete.obs"),
+    NA_real_
+  )
+}
 
 #' Calculate Centrality Stability
 #'
@@ -423,7 +506,8 @@ rsp_bet <- function(mat, beta = 0.01) {
   n <- ncol(mat)
   D <- .rowSums(mat, m = n, n = n)
   if (any(D == 0)) {
-    return(NA)
+    # Undefined with a sink state: one NA per state
+    return(rep(NA_real_, n))
   }
   P_ref <- diag(D^-1) %*% mat
   C <- mat^-1
@@ -497,9 +581,10 @@ estimate_cs.group_tna <- function(x, loops = FALSE, normalize = FALSE,
                                   drop_prop = seq(0.1, 0.9, by = 0.1),
                                   threshold = 0.7, certainty = 0.95,
                                   progressbar = FALSE, detailed = NULL,
-                                  actor = NULL) {
+                                  actor = NULL, edges = FALSE) {
   check_missing(x)
   check_class(x, "group_tna")
+  check_not_scaled_group(x, "Case-dropping")
   check_actor(actor)
   actors <- group_actor(x, actor)
   if (!is.null(detailed)) {
@@ -520,7 +605,8 @@ estimate_cs.group_tna <- function(x, loops = FALSE, normalize = FALSE,
           threshold = threshold,
           certainty = certainty,
           progressbar = progressbar,
-          actor = actor
+          actor = actor,
+          edges = edges
         )
       },
       x,

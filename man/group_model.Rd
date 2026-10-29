@@ -120,7 +120,12 @@ positive ranks, unlike \code{"minmax"} when all weights are positive.
 }}
 
 \item{groupwise}{A \code{logical} value that indicates whether scaling methods
-should be applied by group (\code{TRUE}) or globally (\code{FALSE}, the default).}
+should be applied by group (\code{TRUE}) or globally (\code{FALSE}, the default).
+A grouped model with scaled edge weights (either way) and its networks
+cannot be resampled: \code{\link[=bootstrap]{bootstrap()}}, \code{\link[=permutation_test]{permutation_test()}},
+\code{\link[=estimate_cs]{estimate_cs()}}, \code{\link[=reliability]{reliability()}}, and \code{\link[=compare_sequences]{compare_sequences()}} raise an
+error of class \code{tna_error_scaling}. Scaling across groups depends on
+every group, so a resample of one group cannot reproduce it.}
 
 \item{cols}{An \code{expression} giving a tidy selection of the
 columns that should be considered as sequence data.

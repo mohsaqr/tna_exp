@@ -1,6 +1,6 @@
 Package: tna
 Title: Transition Network Analysis (TNA)
-Version: 1.4.0
+Version: 1.5.0
 Authors@R: c(
     person("Mohammed", "Saqr", role = "aut"),
     person("Santtu", "Tikka", role = "aut"),
@@ -28,9 +28,10 @@ Imports:
     dplyr,
     ggplot2,
     graphics,
+    grid,
     igraph,
     RColorBrewer,
-    rlang,
+    rlang (>= 1.0.0),
     stats,
     tibble,
     tidyr,

@@ -142,6 +142,13 @@ reference:
     - reliability
     - print.tna_reliability
     - plot.tna_reliability
+    - markov_order
+    - print.tna_markov_order
+    - summary.tna_markov_order
+    - print.summary.tna_markov_order
+    - plot.tna_markov_order
+    - summary.tna_permutation
+    - summary.tna_stability
 
   - title: Groups
     contents:

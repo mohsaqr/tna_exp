@@ -30,6 +30,11 @@
 #'   if `NA` values are detected.
 #' @param groupwise A `logical` value that indicates whether scaling methods
 #'   should be applied by group (`TRUE`) or globally (`FALSE`, the default).
+#'   A grouped model with scaled edge weights (either way) and its networks
+#'   cannot be resampled: [bootstrap()], [permutation_test()],
+#'   [estimate_cs()], [reliability()], and [compare_sequences()] raise an
+#'   error of class `tna_error_scaling`. Scaling across groups depends on
+#'   every group, so a resample of one group cannot reproduce it.
 #' @inheritParams build_model
 #' @param ... Ignored.
 #' @return An object of class `group_tna` which is a `list` containing one
@@ -103,12 +108,11 @@ group_model.default <- function(x, group, type = "relative",
       )
     )
   }
-  if (!is.factor(group)) {
-    labels <- ifelse_(
-      is.character(group),
-      unique(group),
-      paste0("Group ", seq_len(n_unique(group[!is.na(group)])))
-    )
+  if (is.character(group)) {
+    # Groups in order of first appearance, each with its own sequences
+    group <- factor(group, levels = unique(group[!is.na(group)]))
+  } else if (!is.factor(group)) {
+    labels <- paste0("Group ", seq_len(n_unique(group[!is.na(group)])))
     group <- factor(group, labels = labels)
   }
   group <- ifelse_(group_na && !na.rm, addNA(group), group)
@@ -119,6 +123,12 @@ group_model.default <- function(x, group, type = "relative",
     levs
   )
   group_scaling <- ifelse_(groupwise, scaling, character(0L))
+  # The networks of a scaled group remember it, so they are not resampled
+  group_params <- ifelse_(
+    length(scaling) > 0L,
+    c(params, list(group_scaling = scaling)),
+    params
+  )
   groups <- vector(mode = "list", length = n_group)
   group <- as.integer(group)
   # TODO remove workaround if TraMineR is fixed
@@ -165,11 +175,11 @@ group_model.default <- function(x, group, type = "relative",
       type = type,
       scaling = group_scaling,
       data = d,
-      params = params
+      params = group_params
     )
   }
   names(groups) <- names(clusters)
-  if (!groupwise && length(scaling > 0)) {
+  if (!groupwise && length(scaling) > 0L) {
     weights <- scale_weights_global(
       weights = lapply(clusters, "[[", "weights"),
       type = type,
@@ -339,7 +349,6 @@ scale_weights_global <- function(weights, type, scaling, a) {
       rs <- .rowSums(w, m = a, n = a)
       pos <- which(rs > 0)
       w[pos, ] <- w[pos, ] / rs[pos]
-      w[!pos, ] <- NA
       weights[[i]] <- w
     }
   }
@@ -355,7 +364,12 @@ scale_weights_global <- function(weights, type, scaling, a) {
   }
   idx <- seq_len(a^2)
   for (i in seq_len(g)) {
-    weights[[i]] <- matrix(weights_vec[idx], nrow = a, ncol = a)
+    weights[[i]] <- matrix(
+      weights_vec[idx],
+      nrow = a,
+      ncol = a,
+      dimnames = dimnames(weights[[i]])
+    )
     idx <- idx + a^2
   }
   weights

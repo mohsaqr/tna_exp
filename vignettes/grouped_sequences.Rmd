@@ -83,7 +83,7 @@ We can also compare the frequency of subsequences across groups. Here we look at
 subsequence_comparison  <- compare_sequences(achievers,
                                                   sub = 3:5,
                                                   min_freq = 5,
-                                                  correction = "fdr")
+                                                  adjust = "fdr")
 plot(subsequence_comparison, cells = TRUE)
 ```
 
@@ -200,7 +200,7 @@ plot(
 Finally, we can compare subsequence frequencies across the clusters, just as we did for the pre-existing groups above.
 
 ```{r}
-subsequence_comparison  <- compare_sequences(tna_model_clus, sub = 3:5, min_freq = 5, correction = "fdr")
+subsequence_comparison  <- compare_sequences(tna_model_clus, sub = 3:5, min_freq = 5, adjust = "fdr")
 plot(subsequence_comparison, cells = TRUE)
 ```
 

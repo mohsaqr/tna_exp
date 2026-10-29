@@ -406,7 +406,8 @@ Compare subsequence patterns between groups. Pass `group_tna` directly.
 
 ```
 # For group_tna (groups already defined)
-compare_sequences(x, sub, min_freq = 5L, correction = "bonferroni", ...)
+compare_sequences(x, sub, min_freq = 5L, test = TRUE, iter = 1000L,
+                  adjust = "bonferroni", actor = NULL)
 ```
 
 ```{r}

@@ -417,3 +417,19 @@ test_that("build_model.matrix handles negative inits", {
     "non-negative"
   )
 })
+
+test_that("data with a single time point give no transitions", {
+  single <- data.frame(T1 = c("A", "B", "A"))
+  weights <- build_model(single)$weights
+  expect_equal(unname(weights), matrix(0, 2, 2))
+  expect_s3_class(
+    group_model(single, group = factor(c("x", "x", "y"))),
+    "group_tna"
+  )
+  # Adding a second column gives exactly the transitions of that column
+  two <- data.frame(T1 = c("A", "B", "A"), T2 = c("B", "B", "A"))
+  expect_equal(
+    unname(build_model(two, type = "frequency")$weights),
+    matrix(c(1, 0, 1, 1), 2)
+  )
+})

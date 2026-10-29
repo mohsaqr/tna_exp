@@ -1,3 +1,103 @@
+# tna 1.5.0
+
+* `compare_sequences()` now rejects arguments it does not use. A misspelled
+  argument such as `correction = "fdr"` (the argument is `adjust`) was
+  silently ignored and the default Bonferroni correction applied; the
+  vignette on grouped sequences had this mistake and now uses
+  `adjust = "fdr"` as its text describes.
+* Fixed `build_model()` and `group_model()` for data with a single time
+  point: the sequences were joined into one row, which created transitions
+  that do not exist (and `group_model()` failed).
+* Fixed `group_model()` and `group_tna()` with a `character` `group`: when the
+  data did not start with the alphabetically first group, every network was
+  labelled with another group's name. Groups keep their order of first
+  appearance and now hold their own sequences.
+* Fixed scaling across groups (`groupwise = FALSE`, the default) dropping
+  the state names of the weight matrices, which made `communities()` and
+  `compare()` fail.
+* Fixed `centralities()` naming the states `1`, `2`, ... instead of their
+  labels when the only measures requested were `Diffusion` or
+  `BetweennessRSP` (whose computations return unnamed values); the
+  centrality table of `permutation_test(measures = "Diffusion")` had the same
+  problem.
+* New `summary()` methods for `tna_permutation`, `group_tna_permutation`,
+  `tna_stability`, and `group_tna_stability` objects return tidy tables: one
+  row per edge (`from`, `to`, `diff_true`, `effect_size`, `p_value`) and one
+  row per measure (`measure`, `cs_coefficient`).
+* Permutation effect sizes are `NA` where the permuted differences do not
+  vary, instead of `Inf` or `NaN` (`permutation_test()` for edges and
+  centralities, and `compare_sequences()`). Whether they vary is judged
+  against the magnitude of the compared values, so the rule does not depend
+  on the measurement scale.
+* Grouped models with scaled edge weights (`group_model(scaling = )`, with
+  either value of `groupwise`) and the networks they contain are no longer
+  resampled: `bootstrap()`, `bootstrap_cliques()`, `permutation_test()`,
+  `estimate_cs()`, `reliability()`, and `compare_sequences()` raise an error
+  of class `tna_error_scaling`. Scaling across groups depends on every
+  group, so a resample of one group cannot reproduce it. Before,
+  `bootstrap()` and `permutation_test()` refused such a group as a whole,
+  but `estimate_cs()` on the group, and every resampling function on one of
+  its networks (for example `bootstrap(model[[1]])`), rebuilt the resamples
+  without the scaling and compared them with the scaled network. Resampling
+  of single scaled models (`tna(x, scaling = )`) is unchanged.
+* Fixed `centralities(measures = "BetweennessRSP")` returning a single row
+  for a network with a state that has no outgoing transitions;
+  `BetweennessRSP` is `NA` for every state there.
+* `summary()` of an `estimate_cs()` result keeps its columns when nothing
+  could be estimated, and a grouped summary no longer fails when one group
+  has no results.
+
+* New `markov_order()` tests whether sequences are described by a
+  first-order Markov chain, the assumption of a transition network, or depend
+  on states further back. Each order is tested against the order below with
+  the likelihood-ratio statistic (Anderson & Goodman, 1957) and a conditional
+  permutation test that shuffles the next states within each context. The
+  orders are tested in sequence, and the results also report the
+  log-likelihood, AIC, and BIC of the multi-order model of each order
+  (Scholtes, 2017). Methods for `tna` and `group_tna` objects, with `print()`,
+  `summary()`, and `plot()` methods. `plot()` draws two panels, as
+  Nestimate does: the log-likelihood, AIC, and BIC across the orders with the
+  selected order marked, and the permutation null density of each order with
+  the observed statistic (`panel = "ic"` or `"permutation"` draws one;
+  unknown arguments are errors). The results agree with
+  `Nestimate::markov_order_test()`; the function is named `markov_order()`
+  so that it does not mask Nestimate's when both packages are attached.
+  Because the tests stop at the first order that does not reject, a
+  dependence that skips an order is not selected: a warning of class
+  `tna_warning_markov_order` and a printed note flag a higher order whose
+  test rejects and AIC or BIC choosing another order. The same warning is
+  raised when `iter` is too small for any p-value to fall below `level`.
+* `estimate_cs()` gains the argument `edges`: with `edges = TRUE`, the
+  stability of the edge weights is estimated alongside the centralities and
+  returned as the element `Edges`. Only the edges present in the network are
+  compared, because an edge absent from the data cannot appear in a
+  subsample and would only add agreeing zeros.
+* `Diffusion` centrality is now always normalized to the range from 0 to 1
+  (min-max), whatever the value of `normalize`, in `centralities()` and in
+  everything that uses it (`permutation_test(measures = )`, `compare()`,
+  `estimate_cs()`, plots). Its raw values grow with powers of the edge
+  weights and exceed `1e30` for frequency models. Where diffusion does not
+  vary across the states (a relative model with `loops = TRUE`), it is `NaN`.
+* Fixed resampling of edge betweenness networks. The resampling functions
+  rebuilt a model from `betweenness_network()` with all weights equal to
+  zero, so `permutation_test()` gave the smallest possible p-value and an
+  infinite effect size to every edge whose betweenness differed,
+  `bootstrap()` returned no edges, every CS-coefficient of `estimate_cs()`
+  was 0, and `reliability()` compared empty networks.
+  `betweenness_network()` now records the model it was built from. In
+  `permutation_test()`, `bootstrap()`, and `estimate_cs()`, every resample
+  rebuilds that model and recomputes edge betweenness, so
+  `permutation_test()` on two edge betweenness networks tests their
+  differences in edge betweenness; `reliability()` uses the transitions of
+  that model. `betweenness_network()` also has a method for `group_tna`
+  objects, so `permutation_test(betweenness_network(models))` compares edge
+  betweenness between all groups in one call. The results agree with
+  `Nestimate::permutation()` on `Nestimate::net_edge_betweenness()` objects.
+
+  Edge betweenness networks created by earlier versions must be rebuilt to
+  be resampled, and `betweenness_network()` refuses a network that is
+  already an edge betweenness network.
+
 # tna 1.4.0
 
 * New `actor` argument for sequences nested in actors (for example, several

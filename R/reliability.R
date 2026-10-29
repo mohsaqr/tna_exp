@@ -6,6 +6,8 @@
 #' @export
 #' @family validation
 #' @param x A `tna` object.
+#'   Grouped models with scaled edge weights, and their networks, are not
+#'   resampled (an error of class `tna_error_scaling`).
 #' @param types A `character` vector giving the model types to fit.
 #'   See [build_model()] for available options.
 #' @param split A `numeric` value between `0` and `1` specifying the proportion
@@ -35,6 +37,7 @@ reliability <- function(x, ...) {
 reliability.tna <- function(x, types = "relative", split = 0.5, iter = 1000,
                             scaling = "none", actor = NULL, ...) {
   check_tna_seq(x)
+  check_not_scaled_group(x, "The reliability analysis")
   check_actor(actor)
   check_values(iter, strict = TRUE)
   check_range(split, lower = 0.0, upper = 1.0)

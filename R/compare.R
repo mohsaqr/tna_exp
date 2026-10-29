@@ -401,7 +401,8 @@ rv_coefficient <- function(x, y) {
 #' @export
 #' @family comparison
 #' @param x A `group_tna` object or a `data.frame` containing sequence data in
-#'   wide format.
+#'   wide format. A `group_tna` object with scaled edge weights is not
+#'   resampled (an error of class `tna_error_scaling`).
 #' @param group A `vector` indicating the group assignment of each
 #'   row of the data/sequence. Must have the same length as the number of
 #'   rows/sequences of `x`. Alternatively, a single `character` string giving
@@ -429,7 +430,7 @@ rv_coefficient <- function(x, y) {
 #'   permutation test reassigns whole actors between the groups, and shuffles
 #'   the sequences of actors present in several groups within the actor
 #'   (Good, 2005). The default `NULL` permutes single sequences.
-#' @param ... Not used.
+#' @param ... Not used. A misspelled or unknown argument is an error.
 #' @return A `tna_sequence_comparison` object, which is a `data.frame` with
 #'   columns giving the names of the patterns, pattern frequencies, pattern
 #'   proportions (within patterns of the same length), effect sizes,
@@ -482,6 +483,7 @@ compare_sequences.group_tna <- function(x, sub, min_freq = 5L,
                                         test = TRUE, iter = 1000L,
                                         adjust = "bonferroni", actor = NULL,
                                         ...) {
+  rlang::check_dots_empty()
   check_missing(x)
   check_class(x, "group_tna")
   sub <- sub %m% seq(1, min(5, ncol(x[[1L]]$data)))

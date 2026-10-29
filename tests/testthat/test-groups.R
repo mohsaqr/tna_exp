@@ -136,3 +136,96 @@ test_that("group model can be constructed from a clustering result", {
     NA
   )
 })
+
+test_that("character groups keep their own sequences", {
+  seqs <- as.data.frame(matrix("A", 20, 3))
+  seqs[1:10, ] <- "B"
+  # The data start with "zeta", which is not the first group alphabetically
+  grp <- rep(c("zeta", "alpha"), each = 10)
+  by_character <- group_model(seqs, group = grp)
+  by_factor <- group_model(seqs, group = factor(grp))
+  expect_named(by_character, c("zeta", "alpha"))
+  expect_equal(by_character$zeta$weights["B", "B"], 1)
+  expect_equal(by_character$alpha$weights["A", "A"], 1)
+  expect_equal(by_character$zeta$weights, by_factor$zeta$weights)
+})
+
+test_that("scaling across groups keeps the state names", {
+  model <- group_model(engagement_mmm, scaling = "minmax")
+  expect_equal(
+    dimnames(model[[1L]]$weights),
+    list(model[[1L]]$labels, model[[1L]]$labels)
+  )
+  expect_no_error(communities(model))
+  expect_no_error(compare(model, 1, 2))
+})
+
+test_that("scaled groups and their networks are not resampled", {
+  groups_of <- function(...) {
+    group_model(group_regulation, group = rep(c("a", "b"), each = 1000), ...)
+  }
+  vapply(
+    c(FALSE, TRUE),
+    function(groupwise) {
+      scaled <- groups_of(scaling = "minmax", groupwise = groupwise)
+      expect_error(bootstrap(scaled, iter = 3), class = "tna_error_scaling")
+      expect_error(
+        permutation_test(scaled, iter = 3),
+        class = "tna_error_scaling"
+      )
+      expect_error(
+        estimate_cs(scaled, measures = "InStrength", iter = 3),
+        class = "tna_error_scaling"
+      )
+      expect_error(
+        compare_sequences(scaled, sub = 2, iter = 3),
+        class = "tna_error_scaling"
+      )
+      # One group's network on its own
+      expect_error(bootstrap(scaled$a, iter = 3), class = "tna_error_scaling")
+      expect_error(
+        bootstrap_cliques(scaled$a, iter = 3),
+        class = "tna_error_scaling"
+      )
+      expect_error(
+        permutation_test(scaled$a, scaled$b, iter = 3),
+        class = "tna_error_scaling"
+      )
+      expect_error(
+        estimate_cs(scaled$a, measures = "InStrength", iter = 3),
+        class = "tna_error_scaling"
+      )
+      expect_error(reliability(scaled$a, iter = 3), class = "tna_error_scaling")
+      # A pruned network is still a network of the scaled group
+      expect_error(
+        bootstrap(prune(scaled$a, threshold = 0.1), iter = 3),
+        class = "tna_error_scaling"
+      )
+      TRUE
+    },
+    logical(1L)
+  )
+  # A scaled group saved before its networks were marked is still refused
+  unmarked <- groups_of(scaling = "minmax")
+  unmarked[] <- lapply(unmarked, function(y) {
+    attr(y, "params")$group_scaling <- NULL
+    y
+  })
+  expect_error(bootstrap(unmarked, iter = 3), class = "tna_error_scaling")
+  expect_error(
+    permutation_test(unmarked, iter = 3),
+    class = "tna_error_scaling"
+  )
+  expect_error(
+    estimate_cs(unmarked, measures = "InStrength", iter = 3),
+    class = "tna_error_scaling"
+  )
+  # Unscaled groups and single scaled models are resampled as before
+  plain <- groups_of()
+  set.seed(1)
+  expect_s3_class(bootstrap(plain, iter = 3), "group_tna_bootstrap")
+  expect_null(attr(plain$a, "params")$group_scaling)
+  single <- tna(group_regulation, scaling = "minmax")
+  set.seed(2)
+  expect_s3_class(bootstrap(single, iter = 3), "tna_bootstrap")
+})
