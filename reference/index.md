@@ -19,6 +19,9 @@
 
   Print a `tna` Object
 
+- [`summary(`*`<tna>`*`)`](https://sonsoles.me/tna/reference/summary.tna.md)
+  : Calculate Summary of Network Metrics for a Transition Network
+
 - [`plot(`*`<tna>`*`)`](https://sonsoles.me/tna/reference/plot.tna.md) :
   Plot a Transition Network Analysis Model
 
@@ -111,9 +114,6 @@
 
 - [`simulate(`*`<group_tna>`*`)`](https://sonsoles.me/tna/reference/simulate.group_tna.md)
   : Simulate Data from a Group Transition Network Analysis Model
-
-- [`summary(`*`<tna>`*`)`](https://sonsoles.me/tna/reference/summary.tna.md)
-  : Calculate Summary of Network Metrics for a Transition Network
 
 ## Centralities
 
@@ -240,9 +240,8 @@
 - [`prune()`](https://sonsoles.me/tna/reference/prune.md) : Prune a
   Transition Network based on Transition Probabilities
 
-- [`deprune()`](https://sonsoles.me/tna/reference/deprune.md)
-  [`reprune(`*`<tna>`*`)`](https://sonsoles.me/tna/reference/deprune.md)
-  : Restore a Pruned Transition Network Analysis Model
+- [`deprune()`](https://sonsoles.me/tna/reference/deprune.md) : Restore
+  a Pruned Transition Network Analysis Model
 
 - [`reprune()`](https://sonsoles.me/tna/reference/reprune.md) : Restore
   Previous Pruning of a Transition Network Analysis Model
@@ -276,6 +275,9 @@
 
 - [`plot(`*`<tna_reliability>`*`)`](https://sonsoles.me/tna/reference/plot.tna_reliability.md)
   : Plot Reliability Analysis Results
+
+- [`summary(`*`<tna_reliability>`*`)`](https://sonsoles.me/tna/reference/summary.tna_reliability.md)
+  : Summarize Split-Half Reliability Results
 
 - [`markov_order()`](https://sonsoles.me/tna/reference/markov_order.md)
   : Test the Markov Order of Sequence Data

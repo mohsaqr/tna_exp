@@ -26,7 +26,8 @@ as.igraph(x, which, ...)
 
 ## Value
 
-An `igraph` object.
+An `igraph` object of the network of the group `which` (see
+[`as.igraph.tna()`](https://sonsoles.me/tna/reference/as.igraph.tna.md)).
 
 ## See also
 
@@ -39,9 +40,9 @@ Helper functions
 ``` r
 model <- group_model(engagement_mmm)
 as.igraph(model, which = 1)
-#> IGRAPH 81f88ad DNW- 3 9 -- 
+#> IGRAPH b4e0f75 DNW- 3 9 -- 
 #> + attr: name (v/c), weight (e/n)
-#> + edges from 81f88ad (vertex names):
+#> + edges from b4e0f75 (vertex names):
 #> [1] Disengaged->Disengaged Disengaged->Engaged    Disengaged->Moderate  
 #> [4] Engaged   ->Disengaged Engaged   ->Engaged    Engaged   ->Moderate  
 #> [7] Moderate  ->Disengaged Moderate  ->Engaged    Moderate  ->Moderate  

@@ -46,7 +46,6 @@ Validation functions
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
@@ -59,6 +58,7 @@ Validation functions
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
 [`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md),
 [`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples
@@ -70,7 +70,7 @@ boot <- bootstrap(model, iter = 10)
 print(summary(boot))
 #>        group       from         to      weight    p_value   sig     cr_lower
 #> 1  Cluster 1 Disengaged Disengaged 0.680794702 0.09090909 FALSE 0.5105960265
-#> 2  Cluster 1    Engaged Disengaged 0.020270270 0.18181818 FALSE 0.0152027027
+#> 2  Cluster 1    Engaged Disengaged 0.020270270 0.27272727 FALSE 0.0152027027
 #> 3  Cluster 1   Moderate Disengaged 0.120651574 0.09090909 FALSE 0.0904886803
 #> 4  Cluster 1 Disengaged    Engaged 0.158278146 0.09090909 FALSE 0.1187086093
 #> 5  Cluster 1    Engaged    Engaged 0.661642412 0.09090909 FALSE 0.4962318087
@@ -84,7 +84,7 @@ print(summary(boot))
 #> 13 Cluster 2 Disengaged    Engaged 0.087719298 0.09090909 FALSE 0.0657894737
 #> 14 Cluster 2    Engaged    Engaged 0.671581769 0.09090909 FALSE 0.5036863271
 #> 15 Cluster 2   Moderate    Engaged 0.053604436 0.27272727 FALSE 0.0402033272
-#> 16 Cluster 2 Disengaged   Moderate 0.001074114 0.81818182 FALSE 0.0008055854
+#> 16 Cluster 2 Disengaged   Moderate 0.001074114 0.63636364 FALSE 0.0008055854
 #> 17 Cluster 2    Engaged   Moderate 0.020107239 0.27272727 FALSE 0.0150804290
 #> 18 Cluster 2   Moderate   Moderate 0.828096118 0.09090909 FALSE 0.6210720887
 #> 19 Cluster 3 Disengaged Disengaged 0.875386574 0.09090909 FALSE 0.6565399309
@@ -97,31 +97,31 @@ print(summary(boot))
 #> 26 Cluster 3    Engaged   Moderate 0.272288472 0.09090909 FALSE 0.2042163543
 #> 27 Cluster 3   Moderate   Moderate 0.668660598 0.09090909 FALSE 0.5014954486
 #>       cr_upper     ci_lower    ci_upper
-#> 1  0.850993377 0.6693699728 0.695218717
-#> 2  0.025337838 0.0185972397 0.026370984
-#> 3  0.150814467 0.1123557911 0.126206650
-#> 4  0.197847682 0.1417159475 0.164447621
-#> 5  0.827053015 0.6519410044 0.671140072
-#> 6  0.155300939 0.1159768573 0.132138250
-#> 7  0.201158940 0.1571498000 0.173884031
-#> 8  0.397609148 0.3084454133 0.323201581
-#> 9  0.943884594 0.7514798939 0.771467232
-#> 10 1.139008235 0.8982174107 0.915887108
-#> 11 0.385388740 0.2949721974 0.346540255
-#> 12 0.147874307 0.1119902926 0.139083566
-#> 13 0.109649123 0.0832246456 0.100260577
-#> 14 0.839477212 0.6358707648 0.686519837
-#> 15 0.067005545 0.0372805074 0.063698138
-#> 16 0.001342642 0.0003489381 0.001770833
-#> 17 0.025134048 0.0143952582 0.028427839
-#> 18 1.035120148 0.7993477344 0.839117226
-#> 19 1.094233218 0.8655773181 0.882641205
-#> 20 0.078080636 0.0569835585 0.066727188
-#> 21 0.226918075 0.1732606485 0.194750151
-#> 22 0.138939422 0.1024966994 0.119885026
-#> 23 0.831558773 0.6448556203 0.683091179
-#> 24 0.187256177 0.1430896712 0.160337612
-#> 25 0.016827360 0.0110686955 0.015189053
-#> 26 0.340360591 0.2552398305 0.289469866
-#> 27 0.835825748 0.6563396307 0.675963428
+#> 1  0.850993377 0.6486858123 0.694624679
+#> 2  0.025337838 0.0136709907 0.025720440
+#> 3  0.150814467 0.1142299707 0.127398776
+#> 4  0.197847682 0.1436406869 0.181857632
+#> 5  0.827053015 0.6449211944 0.681228737
+#> 6  0.155300939 0.1167384729 0.128714591
+#> 7  0.201158940 0.1478017493 0.171318792
+#> 8  0.397609148 0.3048627171 0.333299296
+#> 9  0.943884594 0.7489337933 0.764574874
+#> 10 1.139008235 0.9042829497 0.917331881
+#> 11 0.385388740 0.2826049997 0.367432645
+#> 12 0.147874307 0.1000215282 0.138888889
+#> 13 0.109649123 0.0815474409 0.094902131
+#> 14 0.839477212 0.6152006331 0.697407038
+#> 15 0.067005545 0.0391720032 0.069142761
+#> 16 0.001342642 0.0004413775 0.001697097
+#> 17 0.025134048 0.0110640223 0.029568511
+#> 18 1.035120148 0.8036111111 0.840613477
+#> 19 1.094233218 0.8676258392 0.877983059
+#> 20 0.078080636 0.0557148704 0.072175131
+#> 21 0.226918075 0.1711410607 0.194412271
+#> 22 0.138939422 0.1077807903 0.116718260
+#> 23 0.831558773 0.6433114551 0.668836494
+#> 24 0.187256177 0.1446821268 0.167360508
+#> 25 0.016827360 0.0128677450 0.016510044
+#> 26 0.340360591 0.2673203700 0.287718082
+#> 27 0.835825748 0.6473557725 0.675728656
 ```

@@ -26,12 +26,12 @@ compare(
 - i:
 
   An `integer` index or the name of the principal cluster as a
-  `character` string.
+  `character` string. The default is the first cluster.
 
 - j:
 
   An `integer` index or the name of the secondary cluster as a
-  `character` string.
+  `character` string. The default is the second cluster.
 
 - scaling:
 
@@ -80,8 +80,7 @@ compare(
 
 - ...:
 
-  Additional arguments passed to
-  [`compare.tna()`](https://sonsoles.me/tna/reference/compare.md).
+  Ignored.
 
 ## Value
 

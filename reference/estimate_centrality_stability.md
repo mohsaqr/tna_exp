@@ -175,8 +175,8 @@ estimate_centrality_stability(
 
 - progressbar:
 
-  A `logical` value. If `TRUE`, a progress bar is displayed Defaults to
-  `FALSE`
+  A `logical` value. If `TRUE`, a progress bar is displayed. Defaults to
+  `FALSE`.
 
 - detailed:
 
@@ -209,7 +209,13 @@ following elements:
   measure.
 
 - `correlations`: A `matrix` of correlations between the original
-  centrality and the resampled centralities for each drop proportion.
+  centrality and the resampled centralities, with one row per resample
+  (`iter` rows) and one column per drop proportion.
+
+The drop proportions and the correlation threshold are stored in the
+attributes `drop_prop` and `threshold`. Use
+[`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
+for the CS-coefficients as a table.
 
 If `x` is a `group_tna` object, a `group_tna_stability` object is
 returned instead, which is a `list` of `tna_stability` objects.
@@ -270,7 +276,6 @@ Validation functions
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
@@ -283,6 +288,7 @@ Validation functions
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
 [`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md),
 [`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples
@@ -290,7 +296,7 @@ Validation functions
 ``` r
 # A small subset and few iterations
 estimate_cs(
-  tna(group_regulation[1:200, ]),
+  tna(head(group_regulation, 200)),
   drop_prop = c(0.3, 0.6),
   measures = "InStrength",
   iter = 5

@@ -1,5 +1,80 @@
 # Changelog
 
+## tna 1.5.3
+
+- Documentation revision. The help pages describe what the functions
+  return as they do now:
+  [`summary()`](https://rdrr.io/r/base/summary.html) of a model (a table
+  of 13 metrics, not a list),
+  [`communities()`](https://sonsoles.me/tna/reference/communities.md),
+  [`cliques()`](https://sonsoles.me/tna/reference/cliques.md),
+  [`compare()`](https://sonsoles.me/tna/reference/compare.md),
+  [`compare_sequences()`](https://sonsoles.me/tna/reference/compare_sequences.md)
+  (the default `sub` is `1:5`),
+  [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md),
+  [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md) (with
+  its `model` element),
+  [`reliability()`](https://sonsoles.me/tna/reference/reliability.md),
+  [`prepare_data()`](https://sonsoles.me/tna/reference/prepare_data.md),
+  [`import_data()`](https://sonsoles.me/tna/reference/import_data.md),
+  [`import_onehot()`](https://sonsoles.me/tna/reference/import_onehot.md),
+  [`simulate()`](https://sonsoles.me/tna/reference/simulate.md),
+  [`plot_compare()`](https://sonsoles.me/tna/reference/plot_compare.md),
+  and
+  [`pruning_details()`](https://sonsoles.me/tna/reference/pruning_details.md).
+  The default of `na.rm` in
+  [`group_model()`](https://sonsoles.me/tna/reference/group_model.md) is
+  `TRUE`, as in the code, and a missing `group` is an error.
+  [`prune()`](https://sonsoles.me/tna/reference/prune.md) documents its
+  four methods, including that only `"threshold"` and `"lowest"` keep
+  the network weakly connected, and
+  [`reprune()`](https://sonsoles.me/tna/reference/reprune.md) has its
+  own help page.
+- Examples no longer reach into result objects with `$` or subset the
+  data with brackets; `print(<tna_data>)` examples use the `data`
+  argument (they used `which`, which was ignored).
+  [`centralities()`](https://sonsoles.me/tna/reference/centralities.md),
+  [`prune()`](https://sonsoles.me/tna/reference/prune.md), and
+  [`cluster_sequences()`](https://sonsoles.me/tna/reference/cluster_data.md)
+  cite the methods they implement.
+- Vignettes and articles: the tables of the getting-started vignette,
+  the grouped-sequences vignette, and the README use
+  [`print()`](https://rdrr.io/r/base/print.html) and
+  [`summary()`](https://rdrr.io/r/base/summary.html) instead of
+  `$weights`, `$inits`, and `$centralities$stats`; the clusters are
+  built with `group_tna(<clustering>)`;
+  [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md) calls
+  no longer pass a `threshold` that the default method ignores; the time
+  threshold of
+  [`prepare_data()`](https://sonsoles.me/tna/reference/prepare_data.md)
+  is in seconds; the frequency and attention articles restore their
+  [`options()`](https://rdrr.io/r/base/options.html), and the frequency
+  article compares the scaled weights with
+  [`compare()`](https://sonsoles.me/tna/reference/compare.md).
+
+## tna 1.5.2
+
+- [`summary()`](https://rdrr.io/r/base/summary.html) of a permutation
+  test returns the centrality results with `what = "centralities"` (the
+  edges remain the default).
+- New [`summary()`](https://rdrr.io/r/base/summary.html) method for
+  [`reliability()`](https://sonsoles.me/tna/reference/reliability.md)
+  results: all 22 split-half metrics, with their category, as a tidy
+  table ([`print()`](https://rdrr.io/r/base/print.html) shows four).
+- New article “Validating a transition network” covering
+  [`markov_order()`](https://sonsoles.me/tna/reference/markov_order.md),
+  [`bootstrap()`](https://sonsoles.me/tna/reference/bootstrap.md) and
+  bootstrap pruning,
+  [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md),
+  [`reliability()`](https://sonsoles.me/tna/reference/reliability.md),
+  [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md)
+  (including edge betweenness),
+  [`compare_sequences()`](https://sonsoles.me/tna/reference/compare_sequences.md),
+  and the `actor` argument for nested data.
+- Every vignette and article ends with a list of the package articles,
+  the TNA tutorials and book chapters, and the Dynalytics resources
+  (package sites, tools, CarmNotes, and selected articles).
+
 ## tna 1.5.1
 
 - Every help page now has examples that run: small examples on a subset

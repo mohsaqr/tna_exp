@@ -28,14 +28,14 @@ plot(x, colors, posCol = "#009900", negCol = "red", edge_labels = TRUE, ...)
 
 - negCol:
 
-  Color for plotting edges when the the difference in edge weights is
+  Color for plotting edges when the difference in edge weights is
   negative. See
   [`cograph::splot()`](https://sonsoles.me/cograph/reference/splot.html).
 
 - edge_labels:
 
-  Boolean indicating whether edge labels should be ploted. Defaults to
-  `TRUE`
+  A `logical` value indicating whether edge labels should be plotted.
+  Defaults to `TRUE`.
 
 - ...:
 
@@ -52,7 +52,7 @@ plot(x, colors, posCol = "#009900", negCol = "red", edge_labels = TRUE, ...)
 
 A `cograph_network` object containing the significant edges (and, when
 `show_nonsig = TRUE`, the non-significant edges) according to the
-permutation test.
+permutation test, invisibly.
 
 ## See also
 
@@ -77,7 +77,6 @@ Validation functions
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
@@ -90,13 +89,14 @@ Validation functions
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
 [`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md),
 [`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples
 
 ``` r
-model_x <- tna(group_regulation[1:200, ])
-model_y <- tna(group_regulation[1001:1200, ])
+model_x <- tna(head(group_regulation, 200))
+model_y <- tna(tail(group_regulation, 200))
 # Small number of iterations for CRAN
 perm <- permutation_test(model_x, model_y, iter = 20)
 plot(perm)

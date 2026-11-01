@@ -21,8 +21,11 @@ summary(object, ...)
 
 ## Value
 
-A `summary.group_tna_bootstrap` object containing the weight, estimated
-p-value and confidence interval of each edge for each cluster.
+A `summary.group_tna_bootstrap` object, which is a `data.frame` with the
+columns of
+[`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md)
+preceded by the column `group`: one row per cluster and edge with a
+positive weight.
 
 ## See also
 
@@ -48,7 +51,6 @@ Validation functions
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
@@ -60,6 +62,7 @@ Validation functions
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
 [`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md),
 [`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples

@@ -53,7 +53,6 @@ Validation functions
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
@@ -65,14 +64,15 @@ Validation functions
 [`summary.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.group_tna_bootstrap.md),
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
-[`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md)
+[`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md)
 
 ## Examples
 
 ``` r
 # A small subset and few iterations
 small <- estimate_cs(
-  tna(group_regulation[1:200, ]),
+  tna(head(group_regulation, 200)),
   drop_prop = c(0.3, 0.6),
   measures = "InStrength",
   iter = 5,

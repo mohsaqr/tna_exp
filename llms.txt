@@ -189,8 +189,8 @@ Compare high achievers (first 1000) with low achievers (last 1000)
 
 ``` r
 
-tna_model_start_high <- tna(group_regulation[1:1000, ])
-tna_model_start_low <- tna(group_regulation[1001:2000, ])
+tna_model_start_high <- tna(head(group_regulation, 1000))
+tna_model_start_low <- tna(tail(group_regulation, 1000))
 comparison <- permutation_test(
   tna_model_start_high, 
   tna_model_start_low,
@@ -212,7 +212,7 @@ Compare centralities
 
 ``` r
 
-print(comparison$centralities$stats)
+summary(comparison, what = "centralities")
 ```
 
 |   state    | centrality |   diff_true | effect_size |     p_value |
@@ -281,6 +281,9 @@ print(comparison$centralities$stats)
   :
 
   Print a `tna` Object
+
+- [`summary(`*`<tna>`*`)`](https://sonsoles.me/tna/reference/summary.tna.md)
+  : Calculate Summary of Network Metrics for a Transition Network
 
 - [`plot(`*`<tna>`*`)`](https://sonsoles.me/tna/reference/plot.tna.md) :
   Plot a Transition Network Analysis Model
@@ -374,9 +377,6 @@ print(comparison$centralities$stats)
 
 - [`simulate(`*`<group_tna>`*`)`](https://sonsoles.me/tna/reference/simulate.group_tna.md)
   : Simulate Data from a Group Transition Network Analysis Model
-
-- [`summary(`*`<tna>`*`)`](https://sonsoles.me/tna/reference/summary.tna.md)
-  : Calculate Summary of Network Metrics for a Transition Network
 
 ## Centralities
 
@@ -503,9 +503,8 @@ print(comparison$centralities$stats)
 - [`prune()`](https://sonsoles.me/tna/reference/prune.md) : Prune a
   Transition Network based on Transition Probabilities
 
-- [`deprune()`](https://sonsoles.me/tna/reference/deprune.md)
-  [`reprune(`*`<tna>`*`)`](https://sonsoles.me/tna/reference/deprune.md)
-  : Restore a Pruned Transition Network Analysis Model
+- [`deprune()`](https://sonsoles.me/tna/reference/deprune.md) : Restore
+  a Pruned Transition Network Analysis Model
 
 - [`reprune()`](https://sonsoles.me/tna/reference/reprune.md) : Restore
   Previous Pruning of a Transition Network Analysis Model
@@ -539,6 +538,9 @@ print(comparison$centralities$stats)
 
 - [`plot(`*`<tna_reliability>`*`)`](https://sonsoles.me/tna/reference/plot.tna_reliability.md)
   : Plot Reliability Analysis Results
+
+- [`summary(`*`<tna_reliability>`*`)`](https://sonsoles.me/tna/reference/summary.tna_reliability.md)
+  : Summarize Split-Half Reliability Results
 
 - [`markov_order()`](https://sonsoles.me/tna/reference/markov_order.md)
   : Test the Markov Order of Sequence Data
@@ -623,6 +625,8 @@ print(comparison$centralities$stats)
 - [Frequency-based TNA](https://sonsoles.me/tna/articles/ftna.md):
 - [Using grouped sequence data with
   tna](https://sonsoles.me/tna/articles/grouped_sequences.md):
+- [Validating a transition
+  network](https://sonsoles.me/tna/articles/model-validation.md):
 - [tna — R Package
   Documentation](https://sonsoles.me/tna/articles/new-docs.md):
 - [How to prepare data for

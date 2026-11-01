@@ -28,7 +28,8 @@ as.igraph(x, mode = "directed", ...)
 
 ## Value
 
-An `igraph` object.
+An `igraph` object with one vertex per row of `x` and one weighted edge
+per non-zero element of `x`.
 
 ## See also
 
@@ -41,8 +42,8 @@ Helper functions
 ``` r
 weights <- matrix(c(0, 0.6, 0.4, 0.5, 0, 0.5, 0.2, 0.8, 0), 3, 3)
 as.igraph(weights)
-#> IGRAPH 2816c4f D-W- 3 6 -- 
+#> IGRAPH 1c97fa0 D-W- 3 6 -- 
 #> + attr: weight (e/n)
-#> + edges from 2816c4f:
+#> + edges from 1c97fa0:
 #> [1] 1->2 1->3 2->1 2->3 3->1 3->2
 ```

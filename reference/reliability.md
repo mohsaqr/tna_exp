@@ -49,7 +49,10 @@ reliability(
 
 - scaling:
 
-  See [`compare()`](https://sonsoles.me/tna/reference/compare.md).
+  A `character` string naming the scaling applied to the weights of the
+  two halves before they are compared. The default is `"none"`. See
+  [`compare()`](https://sonsoles.me/tna/reference/compare.md) for the
+  options.
 
 - actor:
 
@@ -62,7 +65,17 @@ reliability(
 
 ## Value
 
-A `tna_reliability` object.
+A `tna_reliability` object, which is a `list` with two tibbles:
+
+- `metrics`: One row per split and comparison metric, with the columns
+  `category`, `metric`, and `value` (and `model_type` when several
+  `types` are given).
+
+- `summary`: One row per metric with the `mean`, `sd`, `median`, `min`,
+  `max`, and quartiles (`q25`, `q75`) of the metric over the splits.
+
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md)
+returns all metrics with their category as a tidy table.
 
 ## See also
 
@@ -88,7 +101,6 @@ Validation functions
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
@@ -100,6 +112,7 @@ Validation functions
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
 [`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md),
 [`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples

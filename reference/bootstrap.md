@@ -134,9 +134,14 @@ elements:
 
 - `p_values`: The `matrix` of estimated p-values for the edge weights.
 
-- `summary`: A `data.frame` summarizing the edges, their weights,
-  p-values, statistical significance, consistency ranges, and confidence
-  intervals.
+- `summary`: A `data.frame` with one row per edge with a positive weight
+  and the columns `from`, `to`, `weight`, `p_value`, `sig`, `cr_lower`,
+  `cr_upper`, `ci_lower`, and `ci_upper`. The same table is returned by
+  [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md).
+
+- `model`: The `tna` model pruned to the significant edges (see
+  [`prune()`](https://sonsoles.me/tna/reference/prune.md) with
+  `method = "bootstrap"`).
 
 If `x` is a `group_tna` object, the output is a `group_tna_bootstrap`
 object, which is a `list` of `tna_bootstrap` objects.
@@ -186,7 +191,6 @@ Validation functions
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
@@ -199,6 +203,7 @@ Validation functions
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
 [`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md),
 [`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples

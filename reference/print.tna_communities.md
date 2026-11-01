@@ -42,7 +42,7 @@ print(comm)
 #>         walktrap      fast_greedy       label_prop          infomap 
 #>                1                3                1                1 
 #> edge_betweenness    leading_eigen        spinglass 
-#>                1                3                2 
+#>                1                3                3 
 #> 
 #> Community assignments
 #> 
@@ -57,13 +57,13 @@ print(comm)
 #> 8       plan        1           3          1       1                1
 #> 9  synthesis        1           1          1       1                1
 #>   leading_eigen spinglass
-#> 1             1         1
-#> 2             1         1
-#> 3             2         1
-#> 4             3         2
-#> 5             3         2
-#> 6             1         1
-#> 7             2         2
-#> 8             2         1
-#> 9             3         1
+#> 1             1         2
+#> 2             1         3
+#> 3             2         2
+#> 4             3         1
+#> 5             3         1
+#> 6             1         3
+#> 7             2         1
+#> 8             2         2
+#> 9             3         2
 ```

@@ -1,17 +1,16 @@
 # Summarize Permutation Test Results
 
-Returns the edge-level results of a permutation test as a tidy table.
-The results for the centrality measures are shown by
-[`print()`](https://rdrr.io/r/base/print.html).
+Returns the results of a permutation test as a tidy table, for the edges
+or for the centrality measures.
 
 ## Usage
 
 ``` r
 # S3 method for class 'tna_permutation'
-summary(object, digits = 2L, ...)
+summary(object, what = "edges", digits = 2L, ...)
 
 # S3 method for class 'group_tna_permutation'
-summary(object, digits = 2L, ...)
+summary(object, what = "edges", digits = 2L, ...)
 ```
 
 ## Arguments
@@ -19,6 +18,12 @@ summary(object, digits = 2L, ...)
 - object:
 
   A `tna_permutation` or a `group_tna_permutation` object.
+
+- what:
+
+  A `character` string, the results to return: `"edges"` (the default)
+  or `"centralities"`. The centralities are available when the test was
+  run with `measures`.
 
 - digits:
 
@@ -31,11 +36,15 @@ summary(object, digits = 2L, ...)
 
 ## Value
 
-A `data.frame` with one row per edge (and per pair of groups, in the
-first column `pair`, for a `group_tna_permutation` object) and the
-columns `from`, `to`, `diff_true` (the observed difference in the edge
-weight), `effect_size` (the difference divided by the standard deviation
-of the permuted differences, `NA` when they do not vary), and `p_value`.
+A `data.frame` with one row per edge, or per state and centrality
+measure, and per pair of groups (in the first column `pair`) for a
+`group_tna_permutation` object. For the edges, the columns are `from`,
+`to`, `diff_true` (the observed difference in the edge weight),
+`effect_size` (the difference divided by the standard deviation of the
+permuted differences, `NA` when they do not vary), and `p_value`. For
+the centralities, `state` and `centrality` replace `from` and `to`. An
+error of class `tna_error_permutation` is raised when
+`what = "centralities"` and the test was run without `measures`.
 
 ## See also
 
@@ -61,7 +70,6 @@ Validation functions
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
@@ -73,6 +81,7 @@ Validation functions
 [`summary.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.group_tna_bootstrap.md),
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md),
 [`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples
@@ -80,7 +89,7 @@ Validation functions
 ``` r
 model <- group_model(engagement_mmm)
 # Small number of iterations for CRAN
-perm <- permutation_test(model, iter = 20)
+perm <- permutation_test(model, iter = 20, measures = "InStrength")
 summary(perm)
 #>                       pair       from         to diff_true effect_size
 #> 1  Cluster 1 vs. Cluster 2 Disengaged Disengaged     -0.23      -13.89
@@ -138,4 +147,25 @@ summary(perm)
 #> 25 0.04761905
 #> 26 0.04761905
 #> 27 0.04761905
+summary(perm, what = "centralities")
+#>                      pair      state centrality diff_true effect_size
+#> 1 Cluster 1 vs. Cluster 2 Disengaged InStrength     -0.29      -12.28
+#> 2 Cluster 1 vs. Cluster 2    Engaged InStrength      0.14       10.13
+#> 3 Cluster 1 vs. Cluster 2   Moderate InStrength      0.46       14.09
+#> 4 Cluster 1 vs. Cluster 3 Disengaged InStrength     -0.10       -7.64
+#> 5 Cluster 1 vs. Cluster 3    Engaged InStrength      0.02        1.65
+#> 6 Cluster 1 vs. Cluster 3   Moderate InStrength      0.19       16.67
+#> 7 Cluster 2 vs. Cluster 3 Disengaged InStrength      0.18        9.09
+#> 8 Cluster 2 vs. Cluster 3    Engaged InStrength     -0.12       -6.73
+#> 9 Cluster 2 vs. Cluster 3   Moderate InStrength     -0.26      -19.83
+#>      p_value
+#> 1 0.04761905
+#> 2 0.04761905
+#> 3 0.04761905
+#> 4 0.04761905
+#> 5 0.09523810
+#> 6 0.04761905
+#> 7 0.04761905
+#> 8 0.04761905
+#> 9 0.04761905
 ```

@@ -28,7 +28,8 @@ as.igraph(x, mode = "directed", ...)
 
 ## Value
 
-An `igraph` object.
+An `igraph` object with one vertex per state and one weighted edge per
+non-zero element of the weight matrix of `x`.
 
 ## See also
 
@@ -40,9 +41,9 @@ Helper functions
 
 ``` r
 as.igraph(tna(group_regulation))
-#> IGRAPH fcff4e7 DNW- 9 78 -- 
+#> IGRAPH 6cd8c39 DNW- 9 78 -- 
 #> + attr: name (v/c), weight (e/n)
-#> + edges from fcff4e7 (vertex names):
+#> + edges from 6cd8c39 (vertex names):
 #>  [1] adapt     ->cohesion   adapt     ->consensus  adapt     ->coregulate
 #>  [4] adapt     ->discuss    adapt     ->emotion    adapt     ->monitor   
 #>  [7] adapt     ->plan       cohesion  ->adapt      cohesion  ->cohesion  

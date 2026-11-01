@@ -75,7 +75,9 @@ simulate(
 
 ## Value
 
-A `data.frame` of the simulated sequence data.
+A `data.frame` of the simulated sequence data, as for
+[`simulate.tna()`](https://sonsoles.me/tna/reference/simulate.tna.md),
+with the group of each sequence in the first column `group`.
 
 ## See also
 

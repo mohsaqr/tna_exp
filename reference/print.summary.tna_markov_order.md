@@ -51,7 +51,6 @@ Validation functions
 [`print.summary.group_tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.group_tna_bootstrap.md),
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
@@ -64,6 +63,7 @@ Validation functions
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
 [`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md),
 [`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples
@@ -74,7 +74,7 @@ summary(markov_order(model, max_order = 2, iter = 50))
 #>  order    loglik       aic       bic       g2  df p_value p_asymptotic
 #>      0 -53280.55 106577.10 106642.88                                  
 #>      1 -46660.94  93475.87  94109.05 13203.77  64   0.020        0.000
-#>      2 -46377.27  94110.53  99685.82   561.07 532   0.157        0.185
+#>      2 -46377.27  94110.53  99685.82   561.07 532   0.255        0.185
 #>  significant
 #>             
 #>          yes

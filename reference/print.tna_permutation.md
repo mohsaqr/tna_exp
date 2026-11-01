@@ -47,7 +47,6 @@ Validation functions
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
 [`print.tna_stability()`](https://sonsoles.me/tna/reference/print.tna_stability.md),
@@ -59,28 +58,29 @@ Validation functions
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
 [`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md),
 [`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples
 
 ``` r
-model_x <- tna(group_regulation[1:200, ])
-model_y <- tna(group_regulation[1001:1200, ])
+model_x <- tna(head(group_regulation, 200))
+model_y <- tna(tail(group_regulation, 200))
 # Small number of iterations for CRAN
 perm <- permutation_test(model_x, model_y, iter = 20)
 print(perm)
 #> # A tibble: 81 × 4
 #>    edge_name           diff_true effect_size p_value
 #>    <chr>                   <dbl>       <dbl>   <dbl>
-#>  1 adapt -> adapt       0             NA      1     
-#>  2 cohesion -> adapt    0.00541        0.958  0.762 
-#>  3 consensus -> adapt  -0.000679      -0.141  0.810 
-#>  4 coregulate -> adapt  0.00769        0.477  0.810 
-#>  5 discuss -> adapt    -0.130         -8.31   0.0476
-#>  6 emotion -> adapt     0.0101         1.71   0.190 
-#>  7 monitor -> adapt    -0.00480       -0.420  1     
-#>  8 plan -> adapt        0.00339        1.47   0.0476
-#>  9 synthesis -> adapt  -0.159         -1.44   0.286 
-#> 10 adapt -> cohesion   -0.0907        -0.881  0.476 
+#>  1 adapt -> adapt        0            NA      1     
+#>  2 cohesion -> adapt     0.00541       0.918  0.810 
+#>  3 consensus -> adapt    0.00106       0.345  0.905 
+#>  4 coregulate -> adapt   0.0111        0.777  0.619 
+#>  5 discuss -> adapt     -0.116        -6.85   0.0476
+#>  6 emotion -> adapt      0.00275       0.341  0.905 
+#>  7 monitor -> adapt     -0.0102       -0.981  0.429 
+#>  8 plan -> adapt         0.00180       0.623  0.476 
+#>  9 synthesis -> adapt   -0.0863       -1.56   0.143 
+#> 10 adapt -> cohesion    -0.0361       -0.489  0.714 
 #> # ℹ 71 more rows
 ```

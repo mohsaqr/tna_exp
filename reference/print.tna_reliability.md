@@ -17,7 +17,11 @@ print(x, summary_metrics, ...)
 
 - summary_metrics:
 
-  A `character` vector of metrics to display.
+  A `character` vector of metrics to display. The default is
+  `"Mean Abs. Diff."`, `"Median Abs. Diff."`, `"Pearson"`, and
+  `"Bray-Curtis"`. See
+  [`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md)
+  for all metrics.
 
 - ...:
 
@@ -51,7 +55,6 @@ Validation functions
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_stability()`](https://sonsoles.me/tna/reference/print.tna_stability.md),
@@ -63,6 +66,7 @@ Validation functions
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
 [`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md),
 [`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples
@@ -74,10 +78,10 @@ rel <- reliability(model, iter = 20)
 print(rel)
 #> Reliability summary
 #> # A tibble: 4 × 8
-#>   metric               mean       sd  median     min    max     q25     q75
-#>   <chr>               <dbl>    <dbl>   <dbl>   <dbl>  <dbl>   <dbl>   <dbl>
-#> 1 Mean Abs. Diff.   0.00681 0.00186  0.00691 0.00347 0.0107 0.00583 0.00805
-#> 2 Median Abs. Diff. 0.00532 0.00198  0.00510 0.00241 0.0114 0.00404 0.00611
-#> 3 Pearson           1.000   0.000216 1.000   0.999   1.000  1.000   1.000  
-#> 4 Bray-Curtis       0.0102  0.00279  0.0104  0.00520 0.0161 0.00874 0.0121 
+#>   metric               mean       sd  median     min     max     q25     q75
+#>   <chr>               <dbl>    <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>
+#> 1 Mean Abs. Diff.   0.00579 0.00168  0.00580 0.00249 0.00836 0.00446 0.00717
+#> 2 Median Abs. Diff. 0.00475 0.00216  0.00390 0.00112 0.00964 0.00366 0.00581
+#> 3 Pearson           1.000   0.000156 1.000   0.999   1.000   1.000   1.000  
+#> 4 Bray-Curtis       0.00868 0.00252  0.00870 0.00374 0.0125  0.00668 0.0108 
 ```

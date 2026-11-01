@@ -189,8 +189,8 @@ Compare high achievers (first 1000) with low achievers (last 1000)
 
 ``` r
 
-tna_model_start_high <- tna(group_regulation[1:1000, ])
-tna_model_start_low <- tna(group_regulation[1001:2000, ])
+tna_model_start_high <- tna(head(group_regulation, 1000))
+tna_model_start_low <- tna(tail(group_regulation, 1000))
 comparison <- permutation_test(
   tna_model_start_high, 
   tna_model_start_low,
@@ -212,7 +212,7 @@ Compare centralities
 
 ``` r
 
-print(comparison$centralities$stats)
+summary(comparison, what = "centralities")
 ```
 
 |   state    | centrality |   diff_true | effect_size |     p_value |

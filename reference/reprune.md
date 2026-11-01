@@ -7,6 +7,9 @@ Restore Previous Pruning of a Transition Network Analysis Model
 ``` r
 reprune(x, ...)
 
+# S3 method for class 'tna'
+reprune(x, ...)
+
 # S3 method for class 'group_tna'
 reprune(x, ...)
 ```
@@ -23,8 +26,10 @@ reprune(x, ...)
 
 ## Value
 
-A `tna` or `group_tna` object that has not been pruned. The previous
-pruning result can be reactivated with `reprune()`.
+A `tna` or `group_tna` object with the previous pruning of a model
+restored with
+[`deprune()`](https://sonsoles.me/tna/reference/deprune.md) applied
+again.
 
 ## See also
 
@@ -50,7 +55,6 @@ Validation functions
 [`print.summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.summary.tna_bootstrap.md),
 [`print.summary.tna_markov_order()`](https://sonsoles.me/tna/reference/print.summary.tna_markov_order.md),
 [`print.tna_bootstrap()`](https://sonsoles.me/tna/reference/print.tna_bootstrap.md),
-[`print.tna_clustering()`](https://sonsoles.me/tna/reference/print.tna_clustering.md),
 [`print.tna_markov_order()`](https://sonsoles.me/tna/reference/print.tna_markov_order.md),
 [`print.tna_permutation()`](https://sonsoles.me/tna/reference/print.tna_permutation.md),
 [`print.tna_reliability()`](https://sonsoles.me/tna/reference/print.tna_reliability.md),
@@ -62,6 +66,7 @@ Validation functions
 [`summary.tna_bootstrap()`](https://sonsoles.me/tna/reference/summary.tna_bootstrap.md),
 [`summary.tna_markov_order()`](https://sonsoles.me/tna/reference/summary.tna_markov_order.md),
 [`summary.tna_permutation()`](https://sonsoles.me/tna/reference/summary.tna_permutation.md),
+[`summary.tna_reliability()`](https://sonsoles.me/tna/reference/summary.tna_reliability.md),
 [`summary.tna_stability()`](https://sonsoles.me/tna/reference/summary.tna_stability.md)
 
 ## Examples
