@@ -1,5 +1,9 @@
 # Changelog
 
+## tna 1.5.5
+
+- NEWS.md wording.
+
 ## tna 1.5.4
 
 Corrections to numerical results. Results from the functions below can
@@ -176,8 +180,8 @@ differ from earlier versions.
 
 ## tna 1.5.1
 
-- Every help page now has examples that run: small examples on a subset
-  of the data come before the `\donttest{}` blocks of
+- Small examples on a subset of the data come before the `\donttest{}`
+  blocks of
   [`compare_sequences()`](https://sonsoles.me/tna/reference/compare_sequences.md),
   [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md),
   [`plot_frequencies()`](https://sonsoles.me/tna/reference/plot_frequencies.md)
@@ -291,19 +295,15 @@ differ from earlier versions.
   [`summary()`](https://rdrr.io/r/base/summary.html), and
   [`plot()`](https://rdrr.io/r/graphics/plot.default.html) methods.
   [`plot()`](https://rdrr.io/r/graphics/plot.default.html) draws two
-  panels, as Nestimate does: the log-likelihood, AIC, and BIC across the
-  orders with the selected order marked, and the permutation null
-  density of each order with the observed statistic (`panel = "ic"` or
-  `"permutation"` draws one; unknown arguments are errors). The results
-  agree with `Nestimate::markov_order_test()`; the function is named
-  [`markov_order()`](https://sonsoles.me/tna/reference/markov_order.md)
-  so that it does not mask Nestimate’s when both packages are attached.
-  Because the tests stop at the first order that does not reject, a
-  dependence that skips an order is not selected: a warning of class
-  `tna_warning_markov_order` and a printed note flag a higher order
-  whose test rejects and AIC or BIC choosing another order. The same
-  warning is raised when `iter` is too small for any p-value to fall
-  below `level`.
+  panels: the log-likelihood, AIC, and BIC across the orders with the
+  selected order marked, and the permutation null density of each order
+  with the observed statistic (`panel = "ic"` or `"permutation"` draws
+  one; unknown arguments are errors). Because the tests stop at the
+  first order that does not reject, a dependence that skips an order is
+  not selected: a warning of class `tna_warning_markov_order` and a
+  printed note flag a higher order whose test rejects and AIC or BIC
+  choosing another order. The same warning is raised when `iter` is too
+  small for any p-value to fall below `level`.
 
 - [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md)
   gains the argument `edges`: with `edges = TRUE`, the stability of the
@@ -349,9 +349,7 @@ differ from earlier versions.
   [`betweenness_network()`](https://sonsoles.me/tna/reference/betweenness_network.md)
   also has a method for `group_tna` objects, so
   `permutation_test(betweenness_network(models))` compares edge
-  betweenness between all groups in one call. The results agree with
-  `Nestimate::permutation()` on `Nestimate::net_edge_betweenness()`
-  objects.
+  betweenness between all groups in one call.
 
   Edge betweenness networks created by earlier versions must be rebuilt
   to be resampled, and
