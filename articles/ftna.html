@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -374,8 +374,8 @@ Spearman correlation measures that agreement in order.</p>
 <span></span>
 <span><span class="co"># Print and visualize the identified 5-cliques (quintuples)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">cliques_of_five</span><span class="op">)</span>  <span class="co"># Display details of 5-cliques</span></span>
-<span><span class="co">#&gt; Number of 5-cliques = 1 (weight threshold = 0.1)</span></span>
-<span><span class="co">#&gt; Showing 1 cliques starting from clique number 1</span></span>
+<span><span class="co">#&gt; Number of 5-cliques = 7 (weight threshold = 0.1)</span></span>
+<span><span class="co">#&gt; Showing 6 cliques starting from clique number 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Clique 1</span></span>
 <span><span class="co">#&gt;            consensus coregulate discuss emotion  plan</span></span>
@@ -384,8 +384,48 @@ Spearman correlation measures that agreement in order.</p>
 <span><span class="co">#&gt; discuss         0.51      0.133    0.31   0.167 0.018</span></span>
 <span><span class="co">#&gt; emotion         0.36      0.039    0.12   0.087 0.113</span></span>
 <span><span class="co">#&gt; plan            0.71      0.042    0.17   0.361 0.920</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Clique 2</span></span>
+<span><span class="co">#&gt;            consensus coregulate discuss monitor  plan</span></span>
+<span><span class="co">#&gt; consensus      0.207      0.474    0.48   0.118 1.000</span></span>
+<span><span class="co">#&gt; coregulate     0.106      0.018    0.22   0.068 0.188</span></span>
+<span><span class="co">#&gt; discuss        0.507      0.133    0.31   0.035 0.018</span></span>
+<span><span class="co">#&gt; monitor        0.091      0.033    0.21   0.010 0.123</span></span>
+<span><span class="co">#&gt; plan           0.714      0.042    0.17   0.186 0.920</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Clique 3</span></span>
+<span><span class="co">#&gt;            cohesion consensus coregulate emotion  plan</span></span>
+<span><span class="co">#&gt; cohesion      0.018      0.34      0.081   0.078 0.095</span></span>
+<span><span class="co">#&gt; consensus     0.038      0.21      0.474   0.184 1.000</span></span>
+<span><span class="co">#&gt; coregulate    0.028      0.11      0.018   0.135 0.188</span></span>
+<span><span class="co">#&gt; emotion       0.368      0.36      0.039   0.087 0.113</span></span>
+<span><span class="co">#&gt; plan          0.062      0.71      0.042   0.361 0.920</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Clique 4</span></span>
+<span><span class="co">#&gt;            cohesion coregulate discuss emotion  plan</span></span>
+<span><span class="co">#&gt; cohesion      0.018      0.081    0.04   0.078 0.095</span></span>
+<span><span class="co">#&gt; coregulate    0.028      0.018    0.22   0.135 0.188</span></span>
+<span><span class="co">#&gt; discuss       0.075      0.133    0.31   0.167 0.018</span></span>
+<span><span class="co">#&gt; emotion       0.368      0.039    0.12   0.087 0.113</span></span>
+<span><span class="co">#&gt; plan          0.062      0.042    0.17   0.361 0.920</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Clique 5</span></span>
+<span><span class="co">#&gt;            cohesion consensus coregulate discuss emotion</span></span>
+<span><span class="co">#&gt; cohesion      0.018      0.34      0.081    0.04   0.078</span></span>
+<span><span class="co">#&gt; consensus     0.038      0.21      0.474    0.48   0.184</span></span>
+<span><span class="co">#&gt; coregulate    0.028      0.11      0.018    0.22   0.135</span></span>
+<span><span class="co">#&gt; discuss       0.075      0.51      0.133    0.31   0.167</span></span>
+<span><span class="co">#&gt; emotion       0.368      0.36      0.039    0.12   0.087</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Clique 6</span></span>
+<span><span class="co">#&gt;           cohesion consensus discuss emotion  plan</span></span>
+<span><span class="co">#&gt; cohesion     0.018      0.34    0.04   0.078 0.095</span></span>
+<span><span class="co">#&gt; consensus    0.038      0.21    0.48   0.184 1.000</span></span>
+<span><span class="co">#&gt; discuss      0.075      0.51    0.31   0.167 0.018</span></span>
+<span><span class="co">#&gt; emotion      0.368      0.36    0.12   0.087 0.113</span></span>
+<span><span class="co">#&gt; plan         0.062      0.71    0.17   0.361 0.920</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cliques_of_five</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>   <span class="co"># Visualize 5-cliques in the network</span></span></code></pre></div>
-<p><img src="ftna_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="ftna_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"><img src="ftna_files/figure-html/unnamed-chunk-11-2.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"><img src="ftna_files/figure-html/unnamed-chunk-11-3.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"><img src="ftna_files/figure-html/unnamed-chunk-11-4.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"><img src="ftna_files/figure-html/unnamed-chunk-11-5.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"><img src="ftna_files/figure-html/unnamed-chunk-11-6.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="graph-level-measures">Graph level measures<a class="anchor" aria-label="anchor" href="#graph-level-measures"></a>
@@ -400,9 +440,9 @@ Spearman correlation measures that agreement in order.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Network Density              1     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Mean Distance                0.024<span style="text-decoration: underline;">0</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Mean Out-Strength            1.13  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> SD Out-Strength              0.886 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> SD Out-Strength              0.878 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Mean In-Strength             1.13  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> SD In-Strength               0.878 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> SD In-Strength               0.886 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Mean Out-Degree              8.67  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> SD Out-Degree                0.707 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Centralization (Out-Degree)  0.015<span style="text-decoration: underline;">6</span></span></span>
@@ -418,9 +458,9 @@ Spearman correlation measures that agreement in order.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Network Density              0.542</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Mean Distance                0.188</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Mean Out-Strength            0.900</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> SD Out-Strength              0.700</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> SD Out-Strength              0.673</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Mean In-Strength             0.900</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> SD In-Strength               0.673</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> SD In-Strength               0.700</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Mean Out-Degree              4.33 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> SD Out-Degree                1.22 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Centralization (Out-Degree)  0.234</span></span>

@@ -76,7 +76,7 @@ print(comp)
 #>  7 Correlations      Pearson              0.889 
 #>  8 Correlations      Spearman             0.812 
 #>  9 Correlations      Kendall              0.653 
-#> 10 Correlations      Distance             0.763 
+#> 10 Correlations      Distance             0.873 
 #> # ℹ 12 more rows
 #> 
 #> Network metrics
@@ -88,9 +88,9 @@ print(comp)
 #>  3 Network Density             1   e+ 0 1   e+ 0
 #>  4 Mean Distance               4.86e- 2 5.89e- 2
 #>  5 Mean Out-Strength           1   e+ 0 1   e+ 0
-#>  6 SD Out-Strength             9.68e- 1 7.34e- 1
+#>  6 SD Out-Strength             5.55e-17 3.93e-17
 #>  7 Mean In-Strength            1   e+ 0 1   e+ 0
-#>  8 SD In-Strength              5.55e-17 3.93e-17
+#>  8 SD In-Strength              9.68e- 1 7.34e- 1
 #>  9 Mean Out-Degree             8   e+ 0 8.22e+ 0
 #> 10 SD Out-Degree               1.80e+ 0 8.33e- 1
 #> 11 Centralization (Out-Degree) 1.09e- 1 7.81e- 2

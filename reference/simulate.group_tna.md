@@ -60,9 +60,10 @@ simulate(
 - zero_row:
 
   A `character` string describing how to process zero rows in the weight
-  matrix. The option `"self"` (the default) assigns probability 1 to the
-  corresponding state (self loop) and option `"uniform"` assigns a
-  uniform distribution.
+  matrix, i.e., states that are never left, such as states that only end
+  sequences. The option `"self"` (the default) assigns probability 1 to
+  the corresponding state (self loop) and option `"uniform"` assigns a
+  uniform distribution. Applies to both model types.
 
 - format:
 

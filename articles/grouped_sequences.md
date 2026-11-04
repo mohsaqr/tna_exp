@@ -182,9 +182,9 @@ summary(tna_model_clus) |>
 | Network Density             | 1.00    | 1.00    | 1.00    |
 | Mean Distance               | 0.04    | 0.05    | 0.05    |
 | Mean Out-Strength           | 1.00    | 1.00    | 1.00    |
-| SD Out-Strength             | 0.76    | 0.84    | 0.81    |
+| SD Out-Strength             | 0.00    | 0.00    | 0.00    |
 | Mean In-Strength            | 1.00    | 1.00    | 1.00    |
-| SD In-Strength              | 0.00    | 0.00    | 0.00    |
+| SD In-Strength              | 0.76    | 0.84    | 0.81    |
 | Mean Out-Degree             | 8.67    | 8.56    | 8.56    |
 | SD Out-Degree               | 0.71    | 0.73    | 0.73    |
 | Centralization (Out-Degree) | 0.02    | 0.03    | 0.03    |

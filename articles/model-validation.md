@@ -206,12 +206,12 @@ subset(reliability_metrics, category == "Correlations")
 #> 7  Correlations  Pearson 0.9930611 0.002265542 0.9934427 0.9767406 0.9974879
 #> 8  Correlations Spearman 0.9873025 0.003141525 0.9876120 0.9749864 0.9940601
 #> 9  Correlations  Kendall 0.9206808 0.009581896 0.9209245 0.8859703 0.9477751
-#> 10 Correlations Distance 0.9821694 0.004596817 0.9826722 0.9415625 0.9919474
+#> 10 Correlations Distance 0.9910419 0.002322931 0.9912982 0.9703414 0.9959655
 #>          q25       q75
 #> 7  0.9919226 0.9946064
 #> 8  0.9853884 0.9895726
 #> 9  0.9144867 0.9275005
-#> 10 0.9796547 0.9853675
+#> 10 0.9897751 0.9926568
 ```
 
 The two halves are in close agreement. The median Pearson correlation

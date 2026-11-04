@@ -13,7 +13,7 @@ centralities and those computed using sampled subsets."><meta property="og:image
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -222,7 +222,10 @@ calculating the CS-coefficient. The default is 0.7.</p></dd>
 
 <dt id="arg-certainty">certainty<a class="anchor" aria-label="anchor" href="#arg-certainty"></a></dt>
 <dd><p>A <code>numeric</code> value specifying the desired level of certainty
-for the CS-coefficient. Default is 0.95.</p></dd>
+for the CS-coefficient. Default is 0.95. The certainty is the share of
+all subsamples whose correlation reaches <code>threshold</code>; a subsample in
+which the correlation is undefined (the measure is constant in it)
+counts as one that does not reach it.</p></dd>
 
 
 <dt id="arg-progressbar">progressbar<a class="anchor" aria-label="anchor" href="#arg-progressbar"></a></dt>

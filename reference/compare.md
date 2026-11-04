@@ -32,6 +32,9 @@ compare(x, y, scaling = "none", measures = character(0), network = TRUE, ...)
 - y:
 
   A `tna` object or a `matrix` of weights, with the same states as `x`.
+  The states are matched by name, so their order may differ; an error of
+  class `tna_error_states` is raised when the states differ or a matrix
+  has no state names.
 
 - scaling:
 
@@ -160,7 +163,7 @@ print(comp2)
 #>  7 Correlations      Pearson              0.894
 #>  8 Correlations      Spearman             0.949
 #>  9 Correlations      Kendall              0.913
-#> 10 Correlations      Distance             0.747
+#> 10 Correlations      Distance             0.865
 #> # ℹ 12 more rows
 #> 
 #> Network metrics
@@ -172,9 +175,9 @@ print(comp2)
 #>  3 Network Density             1     1    
 #>  4 Mean Distance               0.35  0.35 
 #>  5 Mean Out-Strength           1     1    
-#>  6 SD Out-Strength             0.141 0.424
+#>  6 SD Out-Strength             0     0    
 #>  7 Mean In-Strength            1     1    
-#>  8 SD In-Strength              0     0    
+#>  8 SD In-Strength              0.141 0.424
 #>  9 Mean Out-Degree             2     2    
 #> 10 SD Out-Degree               0     0    
 #> 11 Centralization (Out-Degree) 0     0    

@@ -113,9 +113,9 @@ summary(model)
     #>  3 Network Density             1   e+ 0
     #>  4 Mean Distance               4.72e- 2
     #>  5 Mean Out-Strength           1   e+ 0
-    #>  6 SD Out-Strength             8.07e- 1
+    #>  6 SD Out-Strength             6.80e-17
     #>  7 Mean In-Strength            1   e+ 0
-    #>  8 SD In-Strength              6.80e-17
+    #>  8 SD In-Strength              8.07e- 1
     #>  9 Mean Out-Degree             8.67e+ 0
     #> 10 SD Out-Degree               7.07e- 1
     #> 11 Centralization (Out-Degree) 1.56e- 2
@@ -215,9 +215,9 @@ summary(mmm_model)
     #>  3 Network Density                   1        1   e+ 0      1     
     #>  4 Mean Distance                     0.128    6.44e- 2      0.0991
     #>  5 Mean Out-Strength                 1        1   e+ 0      1     
-    #>  6 SD Out-Strength                   0.212    2.93e- 1      0.104 
+    #>  6 SD Out-Strength                   0        7.85e-17      0     
     #>  7 Mean In-Strength                  1        1   e+ 0      1     
-    #>  8 SD In-Strength                    0        7.85e-17      0     
+    #>  8 SD In-Strength                    0.212    2.93e- 1      0.104 
     #>  9 Mean Out-Degree                   3        3   e+ 0      3     
     #> 10 SD Out-Degree                     0        0             0     
     #> 11 Centralization (Out-Degree)       0        0             0     
@@ -889,7 +889,7 @@ print(comp)
     #>  7 Correlations      Pearson              0.921 
     #>  8 Correlations      Spearman             0.915 
     #>  9 Correlations      Kendall              0.767 
-    #> 10 Correlations      Distance             0.838 
+    #> 10 Correlations      Distance             0.916 
     #> # ℹ 12 more rows
     #> 
     #> Network metrics
@@ -901,9 +901,9 @@ print(comp)
     #>  3 Network Density             1   e+ 0 1   e+ 0
     #>  4 Mean Distance               4.23e- 2 5.60e- 2
     #>  5 Mean Out-Strength           1   e+ 0 1   e+ 0
-    #>  6 SD Out-Strength             9.14e- 1 7.19e- 1
+    #>  6 SD Out-Strength             7.85e-17 3.93e-17
     #>  7 Mean In-Strength            1   e+ 0 1   e+ 0
-    #>  8 SD In-Strength              7.85e-17 3.93e-17
+    #>  8 SD In-Strength              9.14e- 1 7.19e- 1
     #>  9 Mean Out-Degree             8.44e+ 0 8.33e+ 0
     #> 10 SD Out-Degree               1.13e+ 0 8.66e- 1
     #> 11 Centralization (Out-Degree) 4.69e- 2 6.25e- 2
@@ -1155,9 +1155,9 @@ summary(model)
     #>  3 Network Density             1   e+ 0
     #>  4 Mean Distance               4.72e- 2
     #>  5 Mean Out-Strength           1   e+ 0
-    #>  6 SD Out-Strength             8.07e- 1
+    #>  6 SD Out-Strength             6.80e-17
     #>  7 Mean In-Strength            1   e+ 0
-    #>  8 SD In-Strength              6.80e-17
+    #>  8 SD In-Strength              8.07e- 1
     #>  9 Mean Out-Degree             8.67e+ 0
     #> 10 SD Out-Degree               7.07e- 1
     #> 11 Centralization (Out-Degree) 1.56e- 2
@@ -1177,9 +1177,9 @@ summary(gmodel)
     #>  3 Network Density             1   e+ 0 1   e+ 0
     #>  4 Mean Distance               4.23e- 2 5.60e- 2
     #>  5 Mean Out-Strength           1   e+ 0 1   e+ 0
-    #>  6 SD Out-Strength             9.14e- 1 7.19e- 1
+    #>  6 SD Out-Strength             7.85e-17 3.93e-17
     #>  7 Mean In-Strength            1   e+ 0 1   e+ 0
-    #>  8 SD In-Strength              7.85e-17 3.93e-17
+    #>  8 SD In-Strength              9.14e- 1 7.19e- 1
     #>  9 Mean Out-Degree             8.44e+ 0 8.33e+ 0
     #> 10 SD Out-Degree               1.13e+ 0 8.66e- 1
     #> 11 Centralization (Out-Degree) 4.69e- 2 6.25e- 2
@@ -1194,9 +1194,9 @@ g <- as.igraph(model)
 print(g)
 ```
 
-    #> IGRAPH 14a4caa DNW- 9 78 -- 
+    #> IGRAPH d2d4b46 DNW- 9 78 -- 
     #> + attr: name (v/c), weight (e/n)
-    #> + edges from 14a4caa (vertex names):
+    #> + edges from d2d4b46 (vertex names):
     #>  [1] adapt     ->cohesion   adapt     ->consensus  adapt     ->coregulate
     #>  [4] adapt     ->discuss    adapt     ->emotion    adapt     ->monitor   
     #>  [7] adapt     ->plan       cohesion  ->adapt      cohesion  ->cohesion  

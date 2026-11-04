@@ -11,7 +11,7 @@ reliability(x, ...)
 # S3 method for class 'tna'
 reliability(
   x,
-  types = "relative",
+  types = NULL,
   split = 0.5,
   iter = 1000,
   scaling = "none",
@@ -33,9 +33,12 @@ reliability(
 
 - types:
 
-  A `character` vector giving the model types to fit. See
+  A `character` vector giving the model types to fit. The default `NULL`
+  uses the type of `x`. For every type, the transitions are counted from
+  the sequence data of `x` as that type defines them, with the
+  parameters (`params`) and scaling of `x`. See
   [`build_model()`](https://sonsoles.me/tna/reference/build_model.md)
-  for available options.
+  for the available types.
 
 - split:
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,9 +106,10 @@ zero (the default), no missing values are generated.</p></dd>
 
 <dt id="arg-zero-row">zero_row<a class="anchor" aria-label="anchor" href="#arg-zero-row"></a></dt>
 <dd><p>A <code>character</code> string describing how to process zero rows
-in the weight matrix. The option <code>"self"</code> (the default) assigns
+in the weight matrix, i.e., states that are never left, such as states
+that only end sequences. The option <code>"self"</code> (the default) assigns
 probability 1 to the corresponding state (self loop) and option
-<code>"uniform"</code> assigns a uniform distribution.</p></dd>
+<code>"uniform"</code> assigns a uniform distribution. Applies to both model types.</p></dd>
 
 
 <dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>

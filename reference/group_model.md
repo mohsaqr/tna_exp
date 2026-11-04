@@ -86,8 +86,9 @@ group_atna(x, ...)
   rows/sequences of `x`. Alternatively, a single `character` string
   giving the column name of the data that defines the group when `x` is
   a wide format `data.frame` or a `tna_data` object. Required for
-  sequence data (an error is raised when it is missing). Not used when
-  `x` is a mixture Markov model or a clustering result.
+  sequence data (an error is raised when it is missing). Factor levels
+  that no sequence belongs to are dropped. Not used when `x` is a
+  mixture Markov model or a clustering result.
 
 - type:
 

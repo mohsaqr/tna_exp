@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,47 @@
       <small>Source: <a href="https://github.com/sonsoleslp/tna/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.4" id="tna-154">tna 1.5.4<a class="anchor" aria-label="anchor" href="#tna-154"></a></h2>
+<p>Corrections to numerical results. Results from the functions below can differ from earlier versions.</p>
+<ul><li>
+<code><a href="../reference/bootstrap_cliques.html">bootstrap_cliques()</a></code> resampled from the first sequences only, as many as there were cliques (for example, 22 of 2,000 sequences), so its p-values and confidence intervals were invalid. Each bootstrap sample now draws as many sequences as the data has.</li>
+<li>
+<code><a href="../reference/reliability.html">reliability()</a></code> counted the transitions of the model it was given for every requested type, so <code>types</code> only switched the row normalization on or off: <code>"co-occurrence"</code>, <code>"gap"</code>, <code>"attention"</code>, and the other types all gave the frequency result. Each type is now estimated as <code><a href="../reference/build_model.html">build_model()</a></code> defines it. The default <code>types</code> is the type of the model (it was <code>"relative"</code> for every model).</li>
+<li>
+<code><a href="../reference/compare.html">compare()</a></code>: the Canberra distance omitted the edges present in only one network (each contributes 1), and the distance correlation was reported squared. The states of the two networks are matched by name, so two networks listing the same states in a different order are compared correctly; networks with different states, or a matrix without state names, are an error of class <code>tna_error_states</code> (they were compared by position).</li>
+<li>
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> of a model reported the standard deviation of the in-strength as that of the out-strength and vice versa (the means are equal by construction).</li>
+<li>
+<code><a href="../reference/estimate_centrality_stability.html">estimate_cs()</a></code>: a subsample in which the correlation is undefined (the measure is constant in it) was dropped from the share of draws above <code>threshold</code>, which could raise the CS-coefficient. It now counts as a draw below the threshold.</li>
+<li>
+<code>BetweennessRSP</code> counted the correction for walks absorbed at a target once for every state, also for states that cannot reach it. In a network that is not strongly connected (for example, with a state that is never entered) the values were wrong. Only sources that reach the target are counted; strongly connected networks are unchanged.</li>
+<li>
+<code><a href="../reference/simulate.html">simulate()</a></code>: <code>zero_row</code> was replaced by the value of <code>format</code>, so <code>zero_row = "uniform"</code> had no effect for frequency models, and states that are never left (such as a state that only ends sequences) moved arbitrarily in relative models. <code>zero_row</code> now applies to both model types. <code>max_len = 1</code> and <code>na_range</code> values with equal ends or a zero lower end no longer fail.</li>
+<li>
+<code>prune(method = "disparity")</code> set the absent edges of a state with no outgoing or no incoming edges to <code>NA</code>. They stay 0.</li>
+<li>
+<code><a href="../reference/build_model.html">build_model()</a></code> of a wide <code>data.frame</code> discarded <code>window_size</code>, <code>window_span</code>, and <code>windowed</code> given in <code>params</code>. They are now used.</li>
+<li>Backward (and bidirectional) attention paired every time point with itself, adding a self-loop of full weight at every observation. Only earlier time points are attended to, as forward attention uses only later ones.</li>
+<li>
+<code><a href="../reference/group_model.html">group_model()</a></code> kept the unused factor levels of <code>group</code>, so a level with no sequences became an empty network with <code>NaN</code> initial probabilities. Unused levels are dropped.</li>
+<li>
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> of a model without initial probabilities (for example, <code><a href="../reference/build_model.html">build_model()</a></code> of a matrix) failed. <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> of a model failed when <code>node_size</code> or <code>vsize</code> was given, and <code>plot_sequences(show_n = FALSE)</code> failed.</li>
+<li>
+<code><a href="../reference/permutation_test.html">permutation_test()</a></code> and <code><a href="../reference/estimate_centrality_stability.html">estimate_cs()</a></code> took the observed network from the weights of the model but rebuilt the resamples from the sequence data, so a pruned model was compared with unpruned resamples (a model tested against its own pruned version showed significant differences). The observed network is now rebuilt from the sequence data too, as in <code><a href="../reference/bootstrap.html">bootstrap()</a></code>. Results for unpruned models are unchanged.</li>
+<li>
+<code>end_state</code> was not added when no sequence filled the last column of the data (for example, in a subset of the rows, or with an empty trailing column). It is now always added after the last observation.</li>
+<li>
+<code><a href="../reference/build_model.html">build_model()</a></code> of a <code>tsn</code> object ordered the time points by first appearance in the data, not by time, which could reverse transitions. They are now ordered by time.</li>
+<li>
+<code>cliques(sum_weights = TRUE)</code> applied <code>threshold</code> to each direction before summing them, so a pair whose summed weight exceeded the threshold could be missed. The threshold now applies to the sum, as documented. This also affects <code><a href="../reference/bootstrap_cliques.html">bootstrap_cliques()</a></code> with a positive <code>threshold</code>.</li>
+<li>
+<code>import_onehot(window_type = "sliding")</code> widened the windows of width 3 or more (each lag was applied to the already widened rows), and treated width 1 as width 2. Each window now covers exactly <code>window_size</code> rows, and the incomplete windows at the start are dropped. Width 2 is unchanged.</li>
+<li>
+<code><a href="../reference/plot_associations.html">plot_associations()</a></code> drew every residual in the reverse direction (from target to source).</li>
+<li>
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> of grouped communities colored every state of a group with the same color. Each community now has its own color, as for a single group.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.3" id="tna-153">tna 1.5.3<a class="anchor" aria-label="anchor" href="#tna-153"></a></h2>
 <ul><li>Documentation revision. The help pages describe what the functions return as they do now: <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> of a model (a table of 13 metrics, not a list), <code><a href="../reference/communities.html">communities()</a></code>, <code><a href="../reference/cliques.html">cliques()</a></code>, <code><a href="../reference/compare.html">compare()</a></code>, <code><a href="../reference/compare_sequences.html">compare_sequences()</a></code> (the default <code>sub</code> is <code>1:5</code>), <code><a href="../reference/permutation_test.html">permutation_test()</a></code>, <code><a href="../reference/bootstrap.html">bootstrap()</a></code> (with its <code>model</code> element), <code><a href="../reference/reliability.html">reliability()</a></code>, <code><a href="../reference/prepare_data.html">prepare_data()</a></code>, <code><a href="../reference/import_data.html">import_data()</a></code>, <code><a href="../reference/import_onehot.html">import_onehot()</a></code>, <code><a href="../reference/simulate.html">simulate()</a></code>, <code><a href="../reference/plot_compare.html">plot_compare()</a></code>, and <code><a href="../reference/pruning_details.html">pruning_details()</a></code>. The default of <code>na.rm</code> in <code><a href="../reference/group_model.html">group_model()</a></code> is <code>TRUE</code>, as in the code, and a missing <code>group</code> is an error. <code><a href="../reference/prune.html">prune()</a></code> documents its four methods, including that only <code>"threshold"</code> and <code>"lowest"</code> keep the network weakly connected, and <code><a href="../reference/reprune.html">reprune()</a></code> has its own help page.</li>

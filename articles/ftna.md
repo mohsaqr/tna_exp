@@ -329,8 +329,8 @@ cliques_of_five <- cliques(
 
 # Print and visualize the identified 5-cliques (quintuples)
 print(cliques_of_five)  # Display details of 5-cliques
-#> Number of 5-cliques = 1 (weight threshold = 0.1)
-#> Showing 1 cliques starting from clique number 1
+#> Number of 5-cliques = 7 (weight threshold = 0.1)
+#> Showing 6 cliques starting from clique number 1
 #> 
 #> Clique 1
 #>            consensus coregulate discuss emotion  plan
@@ -339,10 +339,50 @@ print(cliques_of_five)  # Display details of 5-cliques
 #> discuss         0.51      0.133    0.31   0.167 0.018
 #> emotion         0.36      0.039    0.12   0.087 0.113
 #> plan            0.71      0.042    0.17   0.361 0.920
+#> 
+#> Clique 2
+#>            consensus coregulate discuss monitor  plan
+#> consensus      0.207      0.474    0.48   0.118 1.000
+#> coregulate     0.106      0.018    0.22   0.068 0.188
+#> discuss        0.507      0.133    0.31   0.035 0.018
+#> monitor        0.091      0.033    0.21   0.010 0.123
+#> plan           0.714      0.042    0.17   0.186 0.920
+#> 
+#> Clique 3
+#>            cohesion consensus coregulate emotion  plan
+#> cohesion      0.018      0.34      0.081   0.078 0.095
+#> consensus     0.038      0.21      0.474   0.184 1.000
+#> coregulate    0.028      0.11      0.018   0.135 0.188
+#> emotion       0.368      0.36      0.039   0.087 0.113
+#> plan          0.062      0.71      0.042   0.361 0.920
+#> 
+#> Clique 4
+#>            cohesion coregulate discuss emotion  plan
+#> cohesion      0.018      0.081    0.04   0.078 0.095
+#> coregulate    0.028      0.018    0.22   0.135 0.188
+#> discuss       0.075      0.133    0.31   0.167 0.018
+#> emotion       0.368      0.039    0.12   0.087 0.113
+#> plan          0.062      0.042    0.17   0.361 0.920
+#> 
+#> Clique 5
+#>            cohesion consensus coregulate discuss emotion
+#> cohesion      0.018      0.34      0.081    0.04   0.078
+#> consensus     0.038      0.21      0.474    0.48   0.184
+#> coregulate    0.028      0.11      0.018    0.22   0.135
+#> discuss       0.075      0.51      0.133    0.31   0.167
+#> emotion       0.368      0.36      0.039    0.12   0.087
+#> 
+#> Clique 6
+#>           cohesion consensus discuss emotion  plan
+#> cohesion     0.018      0.34    0.04   0.078 0.095
+#> consensus    0.038      0.21    0.48   0.184 1.000
+#> discuss      0.075      0.51    0.31   0.167 0.018
+#> emotion      0.368      0.36    0.12   0.087 0.113
+#> plan         0.062      0.71    0.17   0.361 0.920
 plot(cliques_of_five, ask = FALSE)   # Visualize 5-cliques in the network
 ```
 
-![](ftna_files/figure-html/unnamed-chunk-11-1.png)
+![](ftna_files/figure-html/unnamed-chunk-11-1.png)![](ftna_files/figure-html/unnamed-chunk-11-2.png)![](ftna_files/figure-html/unnamed-chunk-11-3.png)![](ftna_files/figure-html/unnamed-chunk-11-4.png)![](ftna_files/figure-html/unnamed-chunk-11-5.png)![](ftna_files/figure-html/unnamed-chunk-11-6.png)
 
 ### Graph level measures
 
@@ -357,9 +397,9 @@ summary(model_scaled)
 #>  3 Network Density              1     
 #>  4 Mean Distance                0.0240
 #>  5 Mean Out-Strength            1.13  
-#>  6 SD Out-Strength              0.886 
+#>  6 SD Out-Strength              0.878 
 #>  7 Mean In-Strength             1.13  
-#>  8 SD In-Strength               0.878 
+#>  8 SD In-Strength               0.886 
 #>  9 Mean Out-Degree              8.67  
 #> 10 SD Out-Degree                0.707 
 #> 11 Centralization (Out-Degree)  0.0156
@@ -378,9 +418,9 @@ summary(pruned_disparity)
 #>  3 Network Density              0.542
 #>  4 Mean Distance                0.188
 #>  5 Mean Out-Strength            0.900
-#>  6 SD Out-Strength              0.700
+#>  6 SD Out-Strength              0.673
 #>  7 Mean In-Strength             0.900
-#>  8 SD In-Strength               0.673
+#>  8 SD In-Strength               0.700
 #>  9 Mean Out-Degree              4.33 
 #> 10 SD Out-Degree                1.22 
 #> 11 Centralization (Out-Degree)  0.234

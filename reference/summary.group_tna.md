@@ -97,9 +97,9 @@ summary(model)
 #>  3 Network Density             1   e+ 0 1   e+ 0
 #>  4 Mean Distance               4.23e- 2 5.60e- 2
 #>  5 Mean Out-Strength           1   e+ 0 1   e+ 0
-#>  6 SD Out-Strength             9.14e- 1 7.19e- 1
+#>  6 SD Out-Strength             7.85e-17 3.93e-17
 #>  7 Mean In-Strength            1   e+ 0 1   e+ 0
-#>  8 SD In-Strength              7.85e-17 3.93e-17
+#>  8 SD In-Strength              9.14e- 1 7.19e- 1
 #>  9 Mean Out-Degree             8.44e+ 0 8.33e+ 0
 #> 10 SD Out-Degree               1.13e+ 0 8.66e- 1
 #> 11 Centralization (Out-Degree) 4.69e- 2 6.25e- 2

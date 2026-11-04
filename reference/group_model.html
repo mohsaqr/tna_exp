@@ -11,7 +11,7 @@ or a mixture Markov model."><meta property="og:image" content="https://sonsoles.
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,8 +136,9 @@ row of the data/sequence. Must have the same length as the number of
 rows/sequences of <code>x</code>. Alternatively, a single <code>character</code> string giving
 the column name of the data that defines the group when <code>x</code> is a wide
 format <code>data.frame</code> or a <code>tna_data</code> object. Required for sequence data
-(an error is raised when it is missing). Not used when <code>x</code> is a mixture
-Markov model or a clustering result.</p></dd>
+(an error is raised when it is missing). Factor levels that no sequence
+belongs to are dropped. Not used when <code>x</code> is a mixture Markov model or a
+clustering result.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>

@@ -171,7 +171,10 @@ estimate_centrality_stability(
 - certainty:
 
   A `numeric` value specifying the desired level of certainty for the
-  CS-coefficient. Default is 0.95.
+  CS-coefficient. Default is 0.95. The certainty is the share of all
+  subsamples whose correlation reaches `threshold`; a subsample in which
+  the correlation is undefined (the measure is constant in it) counts as
+  one that does not reach it.
 
 - progressbar:
 
