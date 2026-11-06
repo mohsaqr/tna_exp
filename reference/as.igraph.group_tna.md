@@ -40,9 +40,9 @@ Helper functions
 ``` r
 model <- group_model(engagement_mmm)
 as.igraph(model, which = 1)
-#> IGRAPH e904f3f DNW- 3 9 -- 
+#> IGRAPH dffc41a DNW- 3 9 -- 
 #> + attr: name (v/c), weight (e/n)
-#> + edges from e904f3f (vertex names):
+#> + edges from dffc41a (vertex names):
 #> [1] Disengaged->Disengaged Disengaged->Engaged    Disengaged->Moderate  
 #> [4] Engaged   ->Disengaged Engaged   ->Engaged    Engaged   ->Moderate  
 #> [7] Moderate  ->Disengaged Moderate  ->Engaged    Moderate  ->Moderate  

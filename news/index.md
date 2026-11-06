@@ -1,5 +1,18 @@
 # Changelog
 
+## tna 1.5.6
+
+- [`group_model()`](https://sonsoles.me/tna/reference/group_model.md),
+  [`group_tna()`](https://sonsoles.me/tna/reference/group_model.md),
+  [`group_ftna()`](https://sonsoles.me/tna/reference/group_model.md) and
+  [`group_ctna()`](https://sonsoles.me/tna/reference/group_model.md):
+  window parameters in `params` and windows recorded by
+  [`import_onehot()`](https://sonsoles.me/tna/reference/import_onehot.md)
+  had no effect, so a grouped model of the same call as
+  [`tna()`](https://sonsoles.me/tna/reference/build_model.md) gave
+  different weights. They are now used, as in
+  [`build_model()`](https://sonsoles.me/tna/reference/build_model.md).
+
 ## tna 1.5.5
 
 - NEWS.md wording.

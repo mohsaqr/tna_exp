@@ -41,9 +41,9 @@ Helper functions
 
 ``` r
 as.igraph(tna(group_regulation))
-#> IGRAPH a39e090 DNW- 9 78 -- 
+#> IGRAPH 034fa5b DNW- 9 78 -- 
 #> + attr: name (v/c), weight (e/n)
-#> + edges from a39e090 (vertex names):
+#> + edges from 034fa5b (vertex names):
 #>  [1] adapt     ->cohesion   adapt     ->consensus  adapt     ->coregulate
 #>  [4] adapt     ->discuss    adapt     ->emotion    adapt     ->monitor   
 #>  [7] adapt     ->plan       cohesion  ->adapt      cohesion  ->cohesion  
