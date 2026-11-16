@@ -638,6 +638,9 @@ plot_compare(Hi, Lo, minimum = 0.0001)
 # differences between "Hi" and "Lo"
 # The 'iter' argument is set to 1000, meaning 1000 permutations are performed
 Permutation <- permutation_test(Hi, Lo, iter = 1000)
+#> `x` or `y` has scaled edge weights.
+#> ℹ Each network is scaled on its own, so comparing scaled weights is not warranted.
+#>   Build the models without `scaling` to compare the transition weights.
 
 # Plot the significant differences identified in the permutation test
 plot(Permutation)

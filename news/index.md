@@ -1,5 +1,12 @@
 # Changelog
 
+## tna 1.5.8
+
+- [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md):
+  comparing two models with scaled edge weights gives a message (class
+  `tna_message_scaling`). Each network is scaled on its own, so
+  comparing scaled weights is not warranted; the test still runs.
+
 ## tna 1.5.7
 
 - [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md):

@@ -15,7 +15,7 @@ probabilities, effect sizes, estimated p-values, and confidence intervals."><met
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,9 @@ probabilities, effect sizes, estimated p-values, and confidence intervals.</p>
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A <code>tna</code> object containing sequence data for the first <code>tna</code> model.
 Grouped models with scaled edge weights, and their networks, are not
-resampled (an error of class <code>tna_error_scaling</code>).</p></dd>
+resampled (an error of class <code>tna_error_scaling</code>). Two models with scaled
+edge weights are compared with a message (class <code>tna_message_scaling</code>):
+each is scaled on its own, so comparing them is not warranted.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
