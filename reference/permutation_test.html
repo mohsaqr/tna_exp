@@ -15,7 +15,7 @@ probabilities, effect sizes, estimated p-values, and confidence intervals."><met
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,7 +100,9 @@ resampled (an error of class <code>tna_error_scaling</code>).</p></dd>
 <dd><p>A <code>character</code> string for the method to adjust p-values with
 for multiple comparisons. The default is <code>"none"</code> for no adjustment.
 See the <code>method</code> argument of <code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">stats::p.adjust()</a></code> for details and available
-adjustment methods.</p></dd>
+adjustment methods. The edge p-values are corrected over the edges tested:
+the transitions present in either network, each pair of a co-occurrence
+network counted once. A transition absent from both keeps its p-value of 1.</p></dd>
 
 
 <dt id="arg-iter">iter<a class="anchor" aria-label="anchor" href="#arg-iter"></a></dt>

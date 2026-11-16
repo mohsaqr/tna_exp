@@ -481,46 +481,46 @@ permutation <- permutation_test(
 edge_differences <- summary(permutation)
 subset(edge_differences, p_value < 0.05)
 #>            pair       from         to diff_true effect_size     p_value
-#> 5  High vs. Low    discuss      adapt     -0.10      -11.11 0.003371628
-#> 9  High vs. Low  synthesis      adapt     -0.16       -4.66 0.003371628
-#> 11 High vs. Low   cohesion   cohesion      0.04        4.53 0.003371628
-#> 12 High vs. Low  consensus   cohesion      0.01        3.48 0.003371628
-#> 14 High vs. Low    discuss   cohesion      0.03        4.37 0.003371628
-#> 17 High vs. Low       plan   cohesion      0.01        2.96 0.010441172
-#> 20 High vs. Low   cohesion  consensus      0.09        3.58 0.005779934
-#> 22 High vs. Low coregulate  consensus     -0.05       -3.00 0.010441172
-#> 23 High vs. Low    discuss  consensus      0.21       14.21 0.003371628
-#> 27 High vs. Low  synthesis  consensus      0.19        4.83 0.003371628
-#> 28 High vs. Low      adapt coregulate     -0.03       -2.39 0.034071192
-#> 29 High vs. Low   cohesion coregulate     -0.09       -5.26 0.003371628
-#> 30 High vs. Low  consensus coregulate     -0.04       -3.68 0.003371628
-#> 31 High vs. Low coregulate coregulate     -0.02       -2.57 0.041496965
-#> 32 High vs. Low    discuss coregulate     -0.02       -2.66 0.017164654
-#> 33 High vs. Low    emotion coregulate     -0.02       -3.41 0.003371628
-#> 35 High vs. Low       plan coregulate      0.01        3.69 0.003371628
-#> 36 High vs. Low  synthesis coregulate     -0.05       -3.20 0.005779934
-#> 38 High vs. Low   cohesion    discuss     -0.04       -3.83 0.003371628
-#> 39 High vs. Low  consensus    discuss      0.10        9.08 0.003371628
-#> 40 High vs. Low coregulate    discuss     -0.07       -3.49 0.003371628
-#> 41 High vs. Low    discuss    discuss     -0.05       -4.13 0.003371628
-#> 42 High vs. Low    emotion    discuss      0.04        3.68 0.003371628
-#> 44 High vs. Low       plan    discuss     -0.01       -2.23 0.046528472
-#> 45 High vs. Low  synthesis    discuss     -0.06       -3.03 0.005779934
-#> 48 High vs. Low  consensus    emotion      0.02        2.79 0.020229770
-#> 49 High vs. Low coregulate    emotion      0.06        3.18 0.005779934
-#> 51 High vs. Low    emotion    emotion     -0.03       -2.91 0.015172328
-#> 53 High vs. Low       plan    emotion      0.07        7.22 0.003371628
-#> 56 High vs. Low   cohesion    monitor     -0.04       -4.18 0.003371628
-#> 57 High vs. Low  consensus    monitor     -0.02       -4.60 0.003371628
-#> 59 High vs. Low    discuss    monitor     -0.01       -2.51 0.020229770
-#> 63 High vs. Low  synthesis    monitor     -0.02       -2.55 0.010441172
-#> 66 High vs. Low  consensus       plan     -0.07       -5.59 0.003371628
-#> 67 High vs. Low coregulate       plan      0.05        2.52 0.032805033
-#> 71 High vs. Low       plan       plan     -0.09       -6.72 0.003371628
-#> 72 High vs. Low  synthesis       plan      0.12        5.84 0.003371628
-#> 77 High vs. Low    discuss  synthesis     -0.07       -6.31 0.003371628
-#> 78 High vs. Low    emotion  synthesis      0.01        2.66 0.019039784
-#> 80 High vs. Low       plan  synthesis      0.00        2.92 0.003371628
+#> 5  High vs. Low    discuss      adapt     -0.10      -11.11 0.003246753
+#> 9  High vs. Low  synthesis      adapt     -0.16       -4.66 0.003246753
+#> 11 High vs. Low   cohesion   cohesion      0.04        4.53 0.003246753
+#> 12 High vs. Low  consensus   cohesion      0.01        3.48 0.003246753
+#> 14 High vs. Low    discuss   cohesion      0.03        4.37 0.003246753
+#> 17 High vs. Low       plan   cohesion      0.01        2.96 0.010054462
+#> 20 High vs. Low   cohesion  consensus      0.09        3.58 0.005565863
+#> 22 High vs. Low coregulate  consensus     -0.05       -3.00 0.010054462
+#> 23 High vs. Low    discuss  consensus      0.21       14.21 0.003246753
+#> 27 High vs. Low  synthesis  consensus      0.19        4.83 0.003246753
+#> 28 High vs. Low      adapt coregulate     -0.03       -2.39 0.032809296
+#> 29 High vs. Low   cohesion coregulate     -0.09       -5.26 0.003246753
+#> 30 High vs. Low  consensus coregulate     -0.04       -3.68 0.003246753
+#> 31 High vs. Low coregulate coregulate     -0.02       -2.57 0.039960040
+#> 32 High vs. Low    discuss coregulate     -0.02       -2.66 0.016528926
+#> 33 High vs. Low    emotion coregulate     -0.02       -3.41 0.003246753
+#> 35 High vs. Low       plan coregulate      0.01        3.69 0.003246753
+#> 36 High vs. Low  synthesis coregulate     -0.05       -3.20 0.005565863
+#> 38 High vs. Low   cohesion    discuss     -0.04       -3.83 0.003246753
+#> 39 High vs. Low  consensus    discuss      0.10        9.08 0.003246753
+#> 40 High vs. Low coregulate    discuss     -0.07       -3.49 0.003246753
+#> 41 High vs. Low    discuss    discuss     -0.05       -4.13 0.003246753
+#> 42 High vs. Low    emotion    discuss      0.04        3.68 0.003246753
+#> 44 High vs. Low       plan    discuss     -0.01       -2.23 0.044805195
+#> 45 High vs. Low  synthesis    discuss     -0.06       -3.03 0.005565863
+#> 48 High vs. Low  consensus    emotion      0.02        2.79 0.019480519
+#> 49 High vs. Low coregulate    emotion      0.06        3.18 0.005565863
+#> 51 High vs. Low    emotion    emotion     -0.03       -2.91 0.014610390
+#> 53 High vs. Low       plan    emotion      0.07        7.22 0.003246753
+#> 56 High vs. Low   cohesion    monitor     -0.04       -4.18 0.003246753
+#> 57 High vs. Low  consensus    monitor     -0.02       -4.60 0.003246753
+#> 59 High vs. Low    discuss    monitor     -0.01       -2.51 0.019480519
+#> 63 High vs. Low  synthesis    monitor     -0.02       -2.55 0.010054462
+#> 66 High vs. Low  consensus       plan     -0.07       -5.59 0.003246753
+#> 67 High vs. Low coregulate       plan      0.05        2.52 0.031590032
+#> 71 High vs. Low       plan       plan     -0.09       -6.72 0.003246753
+#> 72 High vs. Low  synthesis       plan      0.12        5.84 0.003246753
+#> 77 High vs. Low    discuss  synthesis     -0.07       -6.31 0.003246753
+#> 78 High vs. Low    emotion  synthesis      0.01        2.66 0.018334607
+#> 80 High vs. Low       plan  synthesis      0.00        2.92 0.003246753
 ```
 
 After adjustment, 40 of the 81 transitions differ between high and low
@@ -583,18 +583,20 @@ betweenness <- permutation_test(
 )
 bridge_differences <- summary(betweenness)
 subset(bridge_differences, p_value < 0.05)
-#>            pair       from         to diff_true effect_size    p_value
-#> 5  High vs. Low    discuss      adapt        -9      -23.47 0.01348651
-#> 9  High vs. Low  synthesis      adapt         6        9.82 0.04045954
-#> 10 High vs. Low      adapt   cohesion        -2      -25.81 0.01348651
-#> 15 High vs. Low    emotion   cohesion         2       14.91 0.01348651
-#> 20 High vs. Low   cohesion  consensus         4       13.96 0.01348651
-#> 29 High vs. Low   cohesion coregulate        -4      -13.96 0.01348651
-#> 40 High vs. Low coregulate    discuss        -2       -5.21 0.01348651
-#> 77 High vs. Low    discuss  synthesis         7       18.19 0.04045954
+#>            pair       from         to diff_true effect_size     p_value
+#> 5  High vs. Low    discuss      adapt        -9      -23.47 0.004828505
+#> 9  High vs. Low  synthesis      adapt         6        9.82 0.014485514
+#> 10 High vs. Low      adapt   cohesion        -2      -25.81 0.004828505
+#> 15 High vs. Low    emotion   cohesion         2       14.91 0.004828505
+#> 20 High vs. Low   cohesion  consensus         4       13.96 0.004828505
+#> 23 High vs. Low    discuss  consensus         3        3.08 0.046353646
+#> 29 High vs. Low   cohesion coregulate        -4      -13.96 0.004828505
+#> 39 High vs. Low  consensus    discuss         3       10.55 0.032190032
+#> 40 High vs. Low coregulate    discuss        -2       -5.21 0.004828505
+#> 77 High vs. Low    discuss  synthesis         7       18.19 0.014485514
 ```
 
-After adjustment, 8 transitions carry a different number of shortest
+After adjustment, 10 transitions carry a different number of shortest
 paths in the two groups: the groups route their regulation through
 partly different bridges.
 

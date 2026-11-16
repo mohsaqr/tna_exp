@@ -49,7 +49,10 @@ permutation_test(
   multiple comparisons. The default is `"none"` for no adjustment. See
   the `method` argument of
   [`stats::p.adjust()`](https://rdrr.io/r/stats/p.adjust.html) for
-  details and available adjustment methods.
+  details and available adjustment methods. The edge p-values are
+  corrected over the edges tested: the transitions present in either
+  network, each pair of a co-occurrence network counted once. A
+  transition absent from both keeps its p-value of 1.
 
 - iter:
 

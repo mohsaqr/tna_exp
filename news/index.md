@@ -1,5 +1,14 @@
 # Changelog
 
+## tna 1.5.7
+
+- [`estimate_cs()`](https://sonsoles.me/tna/reference/estimate_centrality_stability.md):
+  the CS-coefficient is the largest passing proportion, whatever the
+  order of `drop_prop`.
+- [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md):
+  `adjust` corrects over the edges tested (present in either network),
+  not every cell.
+
 ## tna 1.5.6
 
 - [`group_model()`](https://sonsoles.me/tna/reference/group_model.md),
