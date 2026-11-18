@@ -1,0 +1,53 @@
+
+> library(TraMineR)
+
+TraMineR stable version 2.2-14 (Built: 2026-09-16)
+Website: https://traminer.unige.ch
+Please type 'citation("TraMineR")' for citation information.
+
+
+> sequences <- as.matrix(read.csv("../data/group_regulation.csv", na.strings = ""))
+
+> state_sequences <- seqdef(as.data.frame(sequences))
+ [>] found missing values ('NA') in sequence data
+ [>] preparing 2000 sequences
+ [>] coding void elements with '%' and missing values with '*'
+ [>] 9 distinct states appear in the data: 
+     1 = adapt
+     2 = cohesion
+     3 = consensus
+     4 = coregulate
+     5 = discuss
+     6 = emotion
+     7 = monitor
+     8 = plan
+     9 = synthesis
+ [>] state coding:
+       [alphabet]  [label]    [long label] 
+     1  adapt       adapt      adapt
+     2  cohesion    cohesion   cohesion
+     3  consensus   consensus  consensus
+     4  coregulate  coregulate coregulate
+     5  discuss     discuss    discuss
+     6  emotion     emotion    emotion
+     7  monitor     monitor    monitor
+     8  plan        plan       plan
+     9  synthesis   synthesis  synthesis
+ [>] 2000 sequences in the data set
+ [>] min/max sequence length: 2/26
+
+> distribution <- seqstatd(state_sequences)$Frequencies
+
+> result <- data.frame(state = rownames(distribution), initial = distribution[, 1])
+
+> result
+                state initial
+adapt           adapt  0.0115
+cohesion     cohesion  0.0605
+consensus   consensus  0.2140
+coregulate coregulate  0.0190
+discuss       discuss  0.1755
+emotion       emotion  0.1515
+monitor       monitor  0.1440
+plan             plan  0.2045
+synthesis   synthesis  0.0195

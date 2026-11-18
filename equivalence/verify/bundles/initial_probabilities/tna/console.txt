@@ -1,0 +1,29 @@
+Registered S3 method overwritten by 'tna':
+  method             from   
+  plot.tna_bootstrap cograph
+'tna' package version 1.5.8
+------------------------------------------------------
+  Tikka, S., López-Pernas, S., and Saqr, M. (2025). 
+  tna: An R Package for Transition Network Analysis.
+  Applied Psychological Measurement.
+  https://doi.org/10.1177/01466216251348840
+------------------------------------------------------
+Please type 'citation("tna")' for more citation information.
+See the package website at https://sonsoles.me/tna/
+
+
+> model <- tna(group_regulation)
+
+> result <- data.frame(state = model$labels, initial = model$inits)
+
+> result
+                state initial
+adapt           adapt  0.0115
+cohesion     cohesion  0.0605
+consensus   consensus  0.2140
+coregulate coregulate  0.0190
+discuss       discuss  0.1755
+emotion       emotion  0.1515
+monitor       monitor  0.1440
+plan             plan  0.2045
+synthesis   synthesis  0.0195

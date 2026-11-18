@@ -1,0 +1,68 @@
+
+> library(TraMineR)
+
+TraMineR stable version 2.2-14 (Built: 2026-09-16)
+Website: https://traminer.unige.ch
+Please type 'citation("TraMineR")' for citation information.
+
+
+> sequences <- as.matrix(read.csv("../data/group_regulation.csv", na.strings = ""))
+
+> state_sequences <- seqdef(as.data.frame(sequences))
+ [>] found missing values ('NA') in sequence data
+ [>] preparing 2000 sequences
+ [>] coding void elements with '%' and missing values with '*'
+ [>] 9 distinct states appear in the data: 
+     1 = adapt
+     2 = cohesion
+     3 = consensus
+     4 = coregulate
+     5 = discuss
+     6 = emotion
+     7 = monitor
+     8 = plan
+     9 = synthesis
+ [>] state coding:
+       [alphabet]  [label]    [long label] 
+     1  adapt       adapt      adapt
+     2  cohesion    cohesion   cohesion
+     3  consensus   consensus  consensus
+     4  coregulate  coregulate coregulate
+     5  discuss     discuss    discuss
+     6  emotion     emotion    emotion
+     7  monitor     monitor    monitor
+     8  plan        plan       plan
+     9  synthesis   synthesis  synthesis
+ [>] 2000 sequences in the data set
+ [>] min/max sequence length: 2/26
+
+> weights <- seqtrate(state_sequences)
+ [>] computing transition probabilities for states adapt/cohesion/consensus/coregulate/discuss/emotion/monitor/plan/synthesis ...
+
+> dimnames(weights) <- list(alphabet(state_sequences), alphabet(state_sequences))
+
+> round(weights, 4)
+            adapt cohesion consensus coregulate discuss emotion monitor   plan
+adapt      0.0000   0.2731    0.4774     0.0216  0.0589  0.1198  0.0334 0.0157
+cohesion   0.0029   0.0271    0.4979     0.1192  0.0596  0.1156  0.0330 0.1410
+consensus  0.0047   0.0149    0.0820     0.1877  0.1880  0.0727  0.0466 0.3958
+coregulate 0.0162   0.0360    0.1345     0.0234  0.2736  0.1721  0.0863 0.2391
+discuss    0.0714   0.0476    0.3212     0.0843  0.1949  0.1058  0.0223 0.0116
+emotion    0.0025   0.3253    0.3204     0.0342  0.1019  0.0768  0.0363 0.0998
+monitor    0.0112   0.0558    0.1591     0.0579  0.3754  0.0907  0.0181 0.2156
+plan       0.0010   0.0252    0.2904     0.0172  0.0679  0.1468  0.0755 0.3742
+synthesis  0.2347   0.0337    0.4663     0.0445  0.0629  0.0706  0.0123 0.0752
+           synthesis
+adapt         0.0000
+cohesion      0.0035
+consensus     0.0076
+coregulate    0.0188
+discuss       0.1410
+emotion       0.0028
+monitor       0.0161
+plan          0.0018
+synthesis     0.0000
+
+> edges <- as.data.frame(as.table(weights), responseName = "value")
+
+> result <- data.frame(quantity = paste(edges[[1]], "->", edges[[2]]), value = edges$value)

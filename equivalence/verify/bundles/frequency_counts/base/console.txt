@@ -1,0 +1,40 @@
+
+> sequences <- as.matrix(read.csv("../data/group_regulation.csv", na.strings = ""))
+
+> states <- sort(unique(na.omit(c(sequences))))
+
+> from <- factor(sequences[, -ncol(sequences)], levels = states)
+
+> to <- factor(sequences[, -1], levels = states)
+
+> counts <- table(from, to)
+
+> weights <- counts
+
+> weights
+            to
+from         adapt cohesion consensus coregulate discuss emotion monitor plan
+  adapt          0      139       243         11      30      61      17    8
+  cohesion       5       46       844        202     101     196      56  239
+  consensus     30       94       519       1188    1190     460     295 2505
+  coregulate    32       71       265         46     539     339     170  471
+  discuss      282      188      1269        333     770     418      88   46
+  emotion        7      923       909         97     289     218     103  283
+  monitor       16       80       228         83     538     130      26  309
+  plan           6      155      1788        106     418     904     465 2304
+  synthesis    153       22       304         29      41      46       8   49
+            to
+from         synthesis
+  adapt              0
+  cohesion           6
+  consensus         48
+  coregulate        37
+  discuss          557
+  emotion            8
+  monitor           23
+  plan              11
+  synthesis          0
+
+> edges <- as.data.frame(as.table(weights), responseName = "value")
+
+> result <- data.frame(quantity = paste(edges[[1]], "->", edges[[2]]), value = edges$value)

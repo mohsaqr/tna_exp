@@ -1,0 +1,576 @@
+{
+  "schema": "prova.verification-case/1",
+  "title": "Communities of the transition network",
+  "description": "The community of each state under the four deterministic algorithms tna offers. tna finds communities with igraph, so this case checks which graph and weights tna hands over: the directed network with its loops for walktrap and edge betweenness, and the undirected network with summed weights for fast greedy and leading eigenvector. The igraph side builds those graphs from a base R transition matrix. The algorithms with a random start (label propagation, infomap, spinglass) are left out.",
+  "covers": [
+    "communities()"
+  ],
+  "generator": "tna equivalence/verify/export-bundles.R",
+  "created_at": "2026-11-18",
+  "sides": [
+    {
+      "id": "tna",
+      "name": "tna",
+      "version": "1.5.8",
+      "primary": true,
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    },
+    {
+      "id": "igraph",
+      "name": "igraph",
+      "version": "2.3.4",
+      "authority": "open-source",
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    }
+  ],
+  "sections": [
+    {
+      "id": "code",
+      "title": "Code",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/script.R",
+          "bytes": 183,
+          "sha256": "d233945d168b75790bb11aec59c4649089053668a1d32dba558af196a0ab79c8",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "key": "state",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        },
+        {
+          "side": "igraph",
+          "path": "igraph/script.R",
+          "bytes": 948,
+          "sha256": "735b48ce7bfd36f41ae6b11b1cbe504ec54523a92c9e3834719d642449f3a261",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "key": "state",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "output",
+      "title": "Raw output",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/console.txt",
+          "bytes": 1582,
+          "sha256": "8f0bb2bab9f1934dbe6b2a66b5bf3b1bf14594e606f6a010816eca941af077b3",
+          "label": "R console",
+          "type": "text"
+        },
+        {
+          "side": "igraph",
+          "path": "igraph/console.txt",
+          "bytes": 2034,
+          "sha256": "a7ad078a4debe6e05e067864961ffd6c2480d92363e1a190f50758fd428136fc",
+          "label": "R console",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "Data",
+      "items": [
+        {
+          "path": "data/group_regulation.csv",
+          "bytes": 302257,
+          "sha256": "305c69faf735a85cac78b3196b7f3401be5791ab9c9af1e5beec700ec764b203",
+          "label": "group_regulation sequences"
+        }
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "quantity": "walktrap: adapt",
+      "kind": "walktrap",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "walktrap: cohesion",
+      "kind": "walktrap",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "walktrap: consensus",
+      "kind": "walktrap",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "walktrap: coregulate",
+      "kind": "walktrap",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "walktrap: discuss",
+      "kind": "walktrap",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "walktrap: emotion",
+      "kind": "walktrap",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "walktrap: monitor",
+      "kind": "walktrap",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "walktrap: plan",
+      "kind": "walktrap",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "walktrap: synthesis",
+      "kind": "walktrap",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "fast_greedy: adapt",
+      "kind": "fast_greedy",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "fast_greedy: cohesion",
+      "kind": "fast_greedy",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "fast_greedy: consensus",
+      "kind": "fast_greedy",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "fast_greedy: coregulate",
+      "kind": "fast_greedy",
+      "values": {
+        "tna": 2,
+        "igraph": 2
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "fast_greedy: discuss",
+      "kind": "fast_greedy",
+      "values": {
+        "tna": 2,
+        "igraph": 2
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "fast_greedy: emotion",
+      "kind": "fast_greedy",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "fast_greedy: monitor",
+      "kind": "fast_greedy",
+      "values": {
+        "tna": 2,
+        "igraph": 2
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "fast_greedy: plan",
+      "kind": "fast_greedy",
+      "values": {
+        "tna": 3,
+        "igraph": 3
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "fast_greedy: synthesis",
+      "kind": "fast_greedy",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "edge_betweenness: adapt",
+      "kind": "edge_betweenness",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "edge_betweenness: cohesion",
+      "kind": "edge_betweenness",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "edge_betweenness: consensus",
+      "kind": "edge_betweenness",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "edge_betweenness: coregulate",
+      "kind": "edge_betweenness",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "edge_betweenness: discuss",
+      "kind": "edge_betweenness",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "edge_betweenness: emotion",
+      "kind": "edge_betweenness",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "edge_betweenness: monitor",
+      "kind": "edge_betweenness",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "edge_betweenness: plan",
+      "kind": "edge_betweenness",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "edge_betweenness: synthesis",
+      "kind": "edge_betweenness",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "leading_eigen: adapt",
+      "kind": "leading_eigen",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "leading_eigen: cohesion",
+      "kind": "leading_eigen",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "leading_eigen: consensus",
+      "kind": "leading_eigen",
+      "values": {
+        "tna": 2,
+        "igraph": 2
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "leading_eigen: coregulate",
+      "kind": "leading_eigen",
+      "values": {
+        "tna": 3,
+        "igraph": 3
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "leading_eigen: discuss",
+      "kind": "leading_eigen",
+      "values": {
+        "tna": 3,
+        "igraph": 3
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "leading_eigen: emotion",
+      "kind": "leading_eigen",
+      "values": {
+        "tna": 1,
+        "igraph": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "leading_eigen: monitor",
+      "kind": "leading_eigen",
+      "values": {
+        "tna": 2,
+        "igraph": 2
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "leading_eigen: plan",
+      "kind": "leading_eigen",
+      "values": {
+        "tna": 2,
+        "igraph": 2
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "leading_eigen: synthesis",
+      "kind": "leading_eigen",
+      "values": {
+        "tna": 3,
+        "igraph": 3
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    }
+  ]
+}

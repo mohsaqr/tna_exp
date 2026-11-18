@@ -1,0 +1,40 @@
+Registered S3 method overwritten by 'tna':
+  method             from   
+  plot.tna_bootstrap cograph
+'tna' package version 1.5.8
+------------------------------------------------------
+  Tikka, S., López-Pernas, S., and Saqr, M. (2025). 
+  tna: An R Package for Transition Network Analysis.
+  Applied Psychological Measurement.
+  https://doi.org/10.1177/01466216251348840
+------------------------------------------------------
+Please type 'citation("tna")' for more citation information.
+See the package website at https://sonsoles.me/tna/
+
+
+> model <- tna(group_regulation)
+
+> result <- centralities(model, measures = c("OutStrength", "InStrength", "ClosenessIn", "ClosenessOut",
++                                            "Closeness", "Betweenness", "PageRank"))
+
+> as.data.frame(result)
+       state OutStrength InStrength ClosenessIn ClosenessOut  Closeness
+1      adapt   1.0000000  0.3445778 0.008339570   0.01516858 0.02479256
+2   cohesion   0.9728614  0.8116478 0.013800359   0.01238681 0.02654312
+3  consensus   0.9179965  2.6672185 0.035123316   0.01253550 0.03829481
+4 coregulate   0.9766497  0.5665811 0.015546719   0.01500415 0.02104171
+5    discuss   0.8051126  1.1882315 0.019591857   0.01307165 0.02710425
+6    emotion   0.9231583  0.8941312 0.014102579   0.01205607 0.02311208
+7    monitor   0.9818562  0.3457150 0.007580598   0.01368405 0.01927766
+8       plan   0.6257918  1.1937843 0.027426129   0.01150949 0.02742613
+9  synthesis   1.0000000  0.1915394 0.009967581   0.01579020 0.02431531
+  Betweenness   PageRank
+1           1 0.03937291
+2           0 0.08419791
+3          30 0.25333610
+4           0 0.09489162
+5          16 0.13883765
+6           5 0.11676831
+7           0 0.06302458
+8           9 0.16706523
+9           7 0.04250567

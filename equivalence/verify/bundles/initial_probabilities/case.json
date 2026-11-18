@@ -1,0 +1,269 @@
+{
+  "schema": "prova.verification-case/1",
+  "title": "Initial state probabilities",
+  "description": "The share of sequences that start in each state: the initial probabilities of tna() against TraMineR's state distribution at the first time point (seqstatd()) and against a tabulation of the first column.",
+  "covers": [
+    "tna()",
+    "build_model()"
+  ],
+  "generator": "tna equivalence/verify/export-bundles.R",
+  "created_at": "2026-11-18",
+  "sides": [
+    {
+      "id": "tna",
+      "name": "tna",
+      "version": "1.5.8",
+      "primary": true,
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    },
+    {
+      "id": "traminer",
+      "name": "TraMineR",
+      "version": "2.2.14",
+      "authority": "open-source",
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    },
+    {
+      "id": "base",
+      "name": "Base R, from the definition",
+      "version": "4.6.2",
+      "authority": "independent",
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    }
+  ],
+  "sections": [
+    {
+      "id": "code",
+      "title": "Code",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/script.R",
+          "bytes": 117,
+          "sha256": "b8808546170454e4b096e73da6b080eccd4c4d2c28b41d892ff3121dbb16a0a7",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "key": "state",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        },
+        {
+          "side": "traminer",
+          "path": "traminer/script.R",
+          "bytes": 295,
+          "sha256": "5b1f582198f36e18b89fe73b0221e2b296e6782cad88e2339cf74bfce2d9cf28",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "key": "state",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        },
+        {
+          "side": "base",
+          "path": "base/script.R",
+          "bytes": 203,
+          "sha256": "01563a9811c96df2e96518fe22542c3f3c603b98b9c41971e3cf10177fb008e5",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "key": "state",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "output",
+      "title": "Raw output",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/console.txt",
+          "bytes": 954,
+          "sha256": "38d9ec029f375efdc6e727bfad051fb21415fb3d88ba247fb1c0d58fd61a7c07",
+          "label": "R console",
+          "type": "text"
+        },
+        {
+          "side": "traminer",
+          "path": "traminer/console.txt",
+          "bytes": 1593,
+          "sha256": "d18bfe0927f908e8d1deb29cf1266b57762fd11420fd69bcae5c3b8ee5e6e710",
+          "label": "R console",
+          "type": "text"
+        },
+        {
+          "side": "base",
+          "path": "base/console.txt",
+          "bytes": 425,
+          "sha256": "eaaeccc931239d3ff5dfc04ce002a7f56654fd571378829df546e9a6f807c1fc",
+          "label": "R console",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "Data",
+      "items": [
+        {
+          "path": "data/group_regulation.csv",
+          "bytes": 302257,
+          "sha256": "305c69faf735a85cac78b3196b7f3401be5791ab9c9af1e5beec700ec764b203",
+          "label": "group_regulation sequences"
+        }
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "quantity": "initial: adapt",
+      "kind": "initial",
+      "values": {
+        "tna": 0.0115,
+        "traminer": 0.0115,
+        "base": 0.0115
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-12,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "initial: cohesion",
+      "kind": "initial",
+      "values": {
+        "tna": 0.0605,
+        "traminer": 0.0605,
+        "base": 0.0605
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-12,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "initial: consensus",
+      "kind": "initial",
+      "values": {
+        "tna": 0.214,
+        "traminer": 0.214,
+        "base": 0.214
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-12,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "initial: coregulate",
+      "kind": "initial",
+      "values": {
+        "tna": 0.019,
+        "traminer": 0.019,
+        "base": 0.019
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-12,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "initial: discuss",
+      "kind": "initial",
+      "values": {
+        "tna": 0.1755,
+        "traminer": 0.1755,
+        "base": 0.1755
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-12,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "initial: emotion",
+      "kind": "initial",
+      "values": {
+        "tna": 0.1515,
+        "traminer": 0.1515,
+        "base": 0.1515
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-12,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "initial: monitor",
+      "kind": "initial",
+      "values": {
+        "tna": 0.144,
+        "traminer": 0.144,
+        "base": 0.144
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-12,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "initial: plan",
+      "kind": "initial",
+      "values": {
+        "tna": 0.2045,
+        "traminer": 0.2045,
+        "base": 0.2045
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-12,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "initial: synthesis",
+      "kind": "initial",
+      "values": {
+        "tna": 0.0195,
+        "traminer": 0.0195,
+        "base": 0.0195
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-12,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    }
+  ]
+}

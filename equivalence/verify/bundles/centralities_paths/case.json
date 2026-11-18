@@ -1,0 +1,1024 @@
+{
+  "schema": "prova.verification-case/1",
+  "title": "Strength, closeness, betweenness and PageRank",
+  "description": "Seven centralities of the relative transition network without loops, a weight read as the strength of an edge (a path's length is the sum of inverse weights). tna computes these with igraph, so the igraph side checks how tna builds the graph and passes the weights; the base R side is independent of both: Floyd-Warshall distances, shortest-path counts and a linear solve for PageRank (damping 0.85).",
+  "covers": [
+    "centralities()"
+  ],
+  "generator": "tna equivalence/verify/export-bundles.R",
+  "created_at": "2026-11-18",
+  "sides": [
+    {
+      "id": "tna",
+      "name": "tna",
+      "version": "1.5.8",
+      "primary": true,
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    },
+    {
+      "id": "igraph",
+      "name": "igraph",
+      "version": "2.3.4",
+      "authority": "open-source",
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    },
+    {
+      "id": "base",
+      "name": "Base R, from the definition",
+      "version": "4.6.2",
+      "authority": "independent",
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    }
+  ],
+  "sections": [
+    {
+      "id": "code",
+      "title": "Code",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/script.R",
+          "bytes": 253,
+          "sha256": "b33f6419af4204e53d948bf33730007ac7eab823fb8836221cf6835df8ac6c96",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "key": "state",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        },
+        {
+          "side": "igraph",
+          "path": "igraph/script.R",
+          "bytes": 891,
+          "sha256": "516e673ba83afecd586fd4c6d510df4e060d8e6910436315909372748f50a12c",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "key": "state",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        },
+        {
+          "side": "base",
+          "path": "base/script.R",
+          "bytes": 1972,
+          "sha256": "eb9a81249de78230c05c4602f6fa46c6b61c5efde1b68749c7a07c2005fef184",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "key": "state",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "output",
+      "title": "Raw output",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/console.txt",
+          "bytes": 1762,
+          "sha256": "34d59ec4d9e44e222b7da3e6bd3225c7314e94097d477bfb9ed1972203e63be5",
+          "label": "R console",
+          "type": "text"
+        },
+        {
+          "side": "igraph",
+          "path": "igraph/console.txt",
+          "bytes": 2280,
+          "sha256": "eb60a7bc419df9cf9b5aecb1434e5f383c2a6f3010d7ad653e9338e6dcf76645",
+          "label": "R console",
+          "type": "text"
+        },
+        {
+          "side": "base",
+          "path": "base/console.txt",
+          "bytes": 3219,
+          "sha256": "69bd88e9d9da070035b23f7b977bdc765fa34012c156438353cefe056670c4a7",
+          "label": "R console",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "Data",
+      "items": [
+        {
+          "path": "data/group_regulation.csv",
+          "bytes": 302257,
+          "sha256": "305c69faf735a85cac78b3196b7f3401be5791ab9c9af1e5beec700ec764b203",
+          "label": "group_regulation sequences"
+        }
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "quantity": "OutStrength: adapt",
+      "kind": "OutStrength",
+      "values": {
+        "tna": 1,
+        "igraph": 1,
+        "base": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "OutStrength: cohesion",
+      "kind": "OutStrength",
+      "values": {
+        "tna": 0.972861356932153,
+        "igraph": 0.972861356932153,
+        "base": 0.972861356932153
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "OutStrength: consensus",
+      "kind": "OutStrength",
+      "values": {
+        "tna": 0.917996523937431,
+        "igraph": 0.917996523937431,
+        "base": 0.917996523937431
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "OutStrength: coregulate",
+      "kind": "OutStrength",
+      "values": {
+        "tna": 0.976649746192893,
+        "igraph": 0.976649746192893,
+        "base": 0.976649746192893
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "OutStrength: discuss",
+      "kind": "OutStrength",
+      "values": {
+        "tna": 0.805112629713996,
+        "igraph": 0.805112629713996,
+        "base": 0.805112629713996
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "OutStrength: emotion",
+      "kind": "OutStrength",
+      "values": {
+        "tna": 0.923158265773705,
+        "igraph": 0.923158265773705,
+        "base": 0.923158265773705
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "OutStrength: monitor",
+      "kind": "OutStrength",
+      "values": {
+        "tna": 0.981856245638521,
+        "igraph": 0.981856245638521,
+        "base": 0.981856245638521
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "OutStrength: plan",
+      "kind": "OutStrength",
+      "values": {
+        "tna": 0.625791781711873,
+        "igraph": 0.625791781711873,
+        "base": 0.625791781711873
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "OutStrength: synthesis",
+      "kind": "OutStrength",
+      "values": {
+        "tna": 1,
+        "igraph": 1,
+        "base": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "InStrength: adapt",
+      "kind": "InStrength",
+      "values": {
+        "tna": 0.344577787953137,
+        "igraph": 0.344577787953137,
+        "base": 0.344577787953137
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "InStrength: cohesion",
+      "kind": "InStrength",
+      "values": {
+        "tna": 0.811647784954297,
+        "igraph": 0.811647784954297,
+        "base": 0.811647784954297
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "InStrength: consensus",
+      "kind": "InStrength",
+      "values": {
+        "tna": 2.66721854950799,
+        "igraph": 2.66721854950799,
+        "base": 2.66721854950799
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "InStrength: coregulate",
+      "kind": "InStrength",
+      "values": {
+        "tna": 0.566581079944861,
+        "igraph": 0.566581079944861,
+        "base": 0.566581079944861
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "InStrength: discuss",
+      "kind": "InStrength",
+      "values": {
+        "tna": 1.18823152264702,
+        "igraph": 1.18823152264702,
+        "base": 1.18823152264702
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "InStrength: emotion",
+      "kind": "InStrength",
+      "values": {
+        "tna": 0.894131246276868,
+        "igraph": 0.894131246276868,
+        "base": 0.894131246276868
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "InStrength: monitor",
+      "kind": "InStrength",
+      "values": {
+        "tna": 0.345714956560509,
+        "igraph": 0.345714956560509,
+        "base": 0.345714956560509
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "InStrength: plan",
+      "kind": "InStrength",
+      "values": {
+        "tna": 1.19378426001457,
+        "igraph": 1.19378426001457,
+        "base": 1.19378426001457
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "InStrength: synthesis",
+      "kind": "InStrength",
+      "values": {
+        "tna": 0.191539362041319,
+        "igraph": 0.191539362041319,
+        "base": 0.191539362041319
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessIn: adapt",
+      "kind": "ClosenessIn",
+      "values": {
+        "tna": 0.00833957013123472,
+        "igraph": 0.00833957013123472,
+        "base": 0.00833957013123472
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessIn: cohesion",
+      "kind": "ClosenessIn",
+      "values": {
+        "tna": 0.0138003589066694,
+        "igraph": 0.0138003589066694,
+        "base": 0.0138003589066694
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessIn: consensus",
+      "kind": "ClosenessIn",
+      "values": {
+        "tna": 0.0351233157196075,
+        "igraph": 0.0351233157196075,
+        "base": 0.0351233157196075
+      },
+      "difference": 6.93889390390723e-18,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessIn: coregulate",
+      "kind": "ClosenessIn",
+      "values": {
+        "tna": 0.0155467191017848,
+        "igraph": 0.0155467191017848,
+        "base": 0.0155467191017848
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessIn: discuss",
+      "kind": "ClosenessIn",
+      "values": {
+        "tna": 0.0195918565867055,
+        "igraph": 0.0195918565867055,
+        "base": 0.0195918565867055
+      },
+      "difference": 3.46944695195361e-18,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessIn: emotion",
+      "kind": "ClosenessIn",
+      "values": {
+        "tna": 0.0141025794521803,
+        "igraph": 0.0141025794521803,
+        "base": 0.0141025794521803
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessIn: monitor",
+      "kind": "ClosenessIn",
+      "values": {
+        "tna": 0.00758059845393717,
+        "igraph": 0.00758059845393717,
+        "base": 0.00758059845393717
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessIn: plan",
+      "kind": "ClosenessIn",
+      "values": {
+        "tna": 0.0274261288752194,
+        "igraph": 0.0274261288752194,
+        "base": 0.0274261288752194
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessIn: synthesis",
+      "kind": "ClosenessIn",
+      "values": {
+        "tna": 0.00996758055598529,
+        "igraph": 0.00996758055598529,
+        "base": 0.00996758055598529
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessOut: adapt",
+      "kind": "ClosenessOut",
+      "values": {
+        "tna": 0.0151685772270343,
+        "igraph": 0.0151685772270343,
+        "base": 0.0151685772270343
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessOut: cohesion",
+      "kind": "ClosenessOut",
+      "values": {
+        "tna": 0.0123868115156265,
+        "igraph": 0.0123868115156265,
+        "base": 0.0123868115156265
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessOut: consensus",
+      "kind": "ClosenessOut",
+      "values": {
+        "tna": 0.0125354977444122,
+        "igraph": 0.0125354977444122,
+        "base": 0.0125354977444122
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessOut: coregulate",
+      "kind": "ClosenessOut",
+      "values": {
+        "tna": 0.0150041536998678,
+        "igraph": 0.0150041536998678,
+        "base": 0.0150041536998678
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessOut: discuss",
+      "kind": "ClosenessOut",
+      "values": {
+        "tna": 0.0130716515418325,
+        "igraph": 0.0130716515418325,
+        "base": 0.0130716515418325
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessOut: emotion",
+      "kind": "ClosenessOut",
+      "values": {
+        "tna": 0.0120560702865774,
+        "igraph": 0.0120560702865774,
+        "base": 0.0120560702865774
+      },
+      "difference": 1.73472347597681e-18,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessOut: monitor",
+      "kind": "ClosenessOut",
+      "values": {
+        "tna": 0.0136840547714564,
+        "igraph": 0.0136840547714564,
+        "base": 0.0136840547714564
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessOut: plan",
+      "kind": "ClosenessOut",
+      "values": {
+        "tna": 0.0115094888344045,
+        "igraph": 0.0115094888344045,
+        "base": 0.0115094888344045
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ClosenessOut: synthesis",
+      "kind": "ClosenessOut",
+      "values": {
+        "tna": 0.0157901956733218,
+        "igraph": 0.0157901956733218,
+        "base": 0.0157901956733218
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Closeness: adapt",
+      "kind": "Closeness",
+      "values": {
+        "tna": 0.0247925618752149,
+        "igraph": 0.0247925618752149,
+        "base": 0.0247925618752149
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Closeness: cohesion",
+      "kind": "Closeness",
+      "values": {
+        "tna": 0.0265431170944882,
+        "igraph": 0.0265431170944882,
+        "base": 0.0265431170944882
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Closeness: consensus",
+      "kind": "Closeness",
+      "values": {
+        "tna": 0.038294808609938,
+        "igraph": 0.038294808609938,
+        "base": 0.038294808609938
+      },
+      "difference": 6.93889390390723e-18,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Closeness: coregulate",
+      "kind": "Closeness",
+      "values": {
+        "tna": 0.0210417135135916,
+        "igraph": 0.0210417135135916,
+        "base": 0.0210417135135916
+      },
+      "difference": 3.46944695195361e-18,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Closeness: discuss",
+      "kind": "Closeness",
+      "values": {
+        "tna": 0.0271042549291496,
+        "igraph": 0.0271042549291496,
+        "base": 0.0271042549291496
+      },
+      "difference": 3.46944695195361e-18,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Closeness: emotion",
+      "kind": "Closeness",
+      "values": {
+        "tna": 0.0231120847707809,
+        "igraph": 0.0231120847707809,
+        "base": 0.0231120847707809
+      },
+      "difference": 3.46944695195361e-18,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Closeness: monitor",
+      "kind": "Closeness",
+      "values": {
+        "tna": 0.0192776631650807,
+        "igraph": 0.0192776631650807,
+        "base": 0.0192776631650807
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Closeness: plan",
+      "kind": "Closeness",
+      "values": {
+        "tna": 0.0274261288752194,
+        "igraph": 0.0274261288752194,
+        "base": 0.0274261288752194
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Closeness: synthesis",
+      "kind": "Closeness",
+      "values": {
+        "tna": 0.0243153065034903,
+        "igraph": 0.0243153065034903,
+        "base": 0.0243153065034903
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Betweenness: adapt",
+      "kind": "Betweenness",
+      "values": {
+        "tna": 1,
+        "igraph": 1,
+        "base": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Betweenness: cohesion",
+      "kind": "Betweenness",
+      "values": {
+        "tna": 0,
+        "igraph": 0,
+        "base": 0
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Betweenness: consensus",
+      "kind": "Betweenness",
+      "values": {
+        "tna": 30,
+        "igraph": 30,
+        "base": 30
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Betweenness: coregulate",
+      "kind": "Betweenness",
+      "values": {
+        "tna": 0,
+        "igraph": 0,
+        "base": 0
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Betweenness: discuss",
+      "kind": "Betweenness",
+      "values": {
+        "tna": 16,
+        "igraph": 16,
+        "base": 16
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Betweenness: emotion",
+      "kind": "Betweenness",
+      "values": {
+        "tna": 5,
+        "igraph": 5,
+        "base": 5
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Betweenness: monitor",
+      "kind": "Betweenness",
+      "values": {
+        "tna": 0,
+        "igraph": 0,
+        "base": 0
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Betweenness: plan",
+      "kind": "Betweenness",
+      "values": {
+        "tna": 9,
+        "igraph": 9,
+        "base": 9
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Betweenness: synthesis",
+      "kind": "Betweenness",
+      "values": {
+        "tna": 7,
+        "igraph": 7,
+        "base": 7
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "PageRank: adapt",
+      "kind": "PageRank",
+      "values": {
+        "tna": 0.0393729143542503,
+        "igraph": 0.0393729143542503,
+        "base": 0.0393729143542503
+      },
+      "difference": 6.93889390390723e-18,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "PageRank: cohesion",
+      "kind": "PageRank",
+      "values": {
+        "tna": 0.0841979134354583,
+        "igraph": 0.0841979134354583,
+        "base": 0.0841979134354583
+      },
+      "difference": 1.38777878078145e-17,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "PageRank: consensus",
+      "kind": "PageRank",
+      "values": {
+        "tna": 0.253336102061843,
+        "igraph": 0.253336102061843,
+        "base": 0.253336102061843
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "PageRank: coregulate",
+      "kind": "PageRank",
+      "values": {
+        "tna": 0.0948916154483257,
+        "igraph": 0.0948916154483257,
+        "base": 0.0948916154483257
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "PageRank: discuss",
+      "kind": "PageRank",
+      "values": {
+        "tna": 0.138837652584471,
+        "igraph": 0.138837652584471,
+        "base": 0.138837652584471
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "PageRank: emotion",
+      "kind": "PageRank",
+      "values": {
+        "tna": 0.116768314813811,
+        "igraph": 0.116768314813811,
+        "base": 0.116768314813811
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "PageRank: monitor",
+      "kind": "PageRank",
+      "values": {
+        "tna": 0.0630245836836845,
+        "igraph": 0.0630245836836845,
+        "base": 0.0630245836836845
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "PageRank: plan",
+      "kind": "PageRank",
+      "values": {
+        "tna": 0.16706523173858,
+        "igraph": 0.16706523173858,
+        "base": 0.16706523173858
+      },
+      "difference": 5.55111512312578e-17,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "PageRank: synthesis",
+      "kind": "PageRank",
+      "values": {
+        "tna": 0.0425056718795755,
+        "igraph": 0.0425056718795755,
+        "base": 0.0425056718795755
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-08,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    }
+  ]
+}

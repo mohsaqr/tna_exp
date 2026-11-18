@@ -1,0 +1,54 @@
+Registered S3 method overwritten by 'tna':
+  method             from   
+  plot.tna_bootstrap cograph
+'tna' package version 1.5.8
+------------------------------------------------------
+  Tikka, S., López-Pernas, S., and Saqr, M. (2025). 
+  tna: An R Package for Transition Network Analysis.
+  Applied Psychological Measurement.
+  https://doi.org/10.1177/01466216251348840
+------------------------------------------------------
+Please type 'citation("tna")' for more citation information.
+See the package website at https://sonsoles.me/tna/
+
+
+> model <- ftna(group_regulation)
+
+> model
+State Labels : 
+
+   adapt, cohesion, consensus, coregulate, discuss, emotion, monitor, plan, synthesis 
+
+Transition Frequency Matrix :
+
+           adapt cohesion consensus coregulate discuss emotion monitor plan
+adapt          0      139       243         11      30      61      17    8
+cohesion       5       46       844        202     101     196      56  239
+consensus     30       94       519       1188    1190     460     295 2505
+coregulate    32       71       265         46     539     339     170  471
+discuss      282      188      1269        333     770     418      88   46
+emotion        7      923       909         97     289     218     103  283
+monitor       16       80       228         83     538     130      26  309
+plan           6      155      1788        106     418     904     465 2304
+synthesis    153       22       304         29      41      46       8   49
+           synthesis
+adapt              0
+cohesion           6
+consensus         48
+coregulate        37
+discuss          557
+emotion            8
+monitor           23
+plan              11
+synthesis          0
+
+Initial Probabilities : 
+
+     adapt   cohesion  consensus coregulate    discuss    emotion    monitor 
+    0.0115     0.0605     0.2140     0.0190     0.1755     0.1515     0.1440 
+      plan  synthesis 
+    0.2045     0.0195 
+
+> edges <- as.data.frame(as.table(model$weights), responseName = "value")
+
+> result <- data.frame(quantity = paste(edges[[1]], "->", edges[[2]]), value = edges$value)

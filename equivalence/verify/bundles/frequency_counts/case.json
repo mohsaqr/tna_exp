@@ -1,0 +1,1274 @@
+{
+  "schema": "prova.verification-case/1",
+  "title": "Transition counts of a frequency model",
+  "description": "The 9 x 9 matrix of first-order transition counts: ftna() against TraMineR's seqtrate(count = TRUE) and against a cross-tabulation of every time point with the next one.",
+  "covers": [
+    "ftna()",
+    "build_model()"
+  ],
+  "generator": "tna equivalence/verify/export-bundles.R",
+  "created_at": "2026-11-18",
+  "sides": [
+    {
+      "id": "tna",
+      "name": "tna",
+      "version": "1.5.8",
+      "primary": true,
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    },
+    {
+      "id": "traminer",
+      "name": "TraMineR",
+      "version": "2.2.14",
+      "authority": "open-source",
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    },
+    {
+      "id": "base",
+      "name": "Base R, from the definition",
+      "version": "4.6.2",
+      "authority": "independent",
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    }
+  ],
+  "sections": [
+    {
+      "id": "code",
+      "title": "Code",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/script.R",
+          "bytes": 213,
+          "sha256": "3a975309125b0b95af573adb04d8b59a84e78a2b1d0a79c06143ff3a96475c29",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        },
+        {
+          "side": "traminer",
+          "path": "traminer/script.R",
+          "bytes": 447,
+          "sha256": "da6d5192949e67dc2e09f2503262fa9ca045bcbe43c5185c04fdea000de0d5cc",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        },
+        {
+          "side": "base",
+          "path": "base/script.R",
+          "bytes": 446,
+          "sha256": "a514974e025c426712a11c945277292cad55b4a71c6ab6cb9f72bd3aa697b830",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "output",
+      "title": "Raw output",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/console.txt",
+          "bytes": 2088,
+          "sha256": "2bd8d6f877d9820b1bc8fe14d540c53bac7b2e65d2538afd57d747494bb68122",
+          "label": "R console",
+          "type": "text"
+        },
+        {
+          "side": "traminer",
+          "path": "traminer/console.txt",
+          "bytes": 2544,
+          "sha256": "2adda2658199e4883f35649beb48c4975670df31c7a34c62c36a86733a625d2a",
+          "label": "R console",
+          "type": "text"
+        },
+        {
+          "side": "base",
+          "path": "base/console.txt",
+          "bytes": 1513,
+          "sha256": "18a1543efa497efffbfd6f8f06fef8fbb0905fe0e58e85422b3eb91f73783e5f",
+          "label": "R console",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "Data",
+      "items": [
+        {
+          "path": "data/group_regulation.csv",
+          "bytes": 302257,
+          "sha256": "305c69faf735a85cac78b3196b7f3401be5791ab9c9af1e5beec700ec764b203",
+          "label": "group_regulation sequences"
+        }
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "quantity": "adapt -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 0,
+        "traminer": 0,
+        "base": 0
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "cohesion -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 5,
+        "traminer": 5,
+        "base": 5
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "consensus -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 30,
+        "traminer": 30,
+        "base": 30
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "coregulate -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 32,
+        "traminer": 32,
+        "base": 32
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "discuss -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 282,
+        "traminer": 282,
+        "base": 282
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "emotion -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 7,
+        "traminer": 7,
+        "base": 7
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "monitor -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 16,
+        "traminer": 16,
+        "base": 16
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "plan -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 6,
+        "traminer": 6,
+        "base": 6
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "synthesis -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 153,
+        "traminer": 153,
+        "base": 153
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "adapt -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 139,
+        "traminer": 139,
+        "base": 139
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "cohesion -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 46,
+        "traminer": 46,
+        "base": 46
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "consensus -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 94,
+        "traminer": 94,
+        "base": 94
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "coregulate -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 71,
+        "traminer": 71,
+        "base": 71
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "discuss -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 188,
+        "traminer": 188,
+        "base": 188
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "emotion -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 923,
+        "traminer": 923,
+        "base": 923
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "monitor -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 80,
+        "traminer": 80,
+        "base": 80
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "plan -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 155,
+        "traminer": 155,
+        "base": 155
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "synthesis -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 22,
+        "traminer": 22,
+        "base": 22
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "adapt -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 243,
+        "traminer": 243,
+        "base": 243
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "cohesion -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 844,
+        "traminer": 844,
+        "base": 844
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "consensus -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 519,
+        "traminer": 519,
+        "base": 519
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "coregulate -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 265,
+        "traminer": 265,
+        "base": 265
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "discuss -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 1269,
+        "traminer": 1269,
+        "base": 1269
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "emotion -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 909,
+        "traminer": 909,
+        "base": 909
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "monitor -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 228,
+        "traminer": 228,
+        "base": 228
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "plan -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 1788,
+        "traminer": 1788,
+        "base": 1788
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "synthesis -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 304,
+        "traminer": 304,
+        "base": 304
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "adapt -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 11,
+        "traminer": 11,
+        "base": 11
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "cohesion -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 202,
+        "traminer": 202,
+        "base": 202
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "consensus -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 1188,
+        "traminer": 1188,
+        "base": 1188
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "coregulate -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 46,
+        "traminer": 46,
+        "base": 46
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "discuss -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 333,
+        "traminer": 333,
+        "base": 333
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "emotion -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 97,
+        "traminer": 97,
+        "base": 97
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "monitor -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 83,
+        "traminer": 83,
+        "base": 83
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "plan -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 106,
+        "traminer": 106,
+        "base": 106
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "synthesis -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 29,
+        "traminer": 29,
+        "base": 29
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "adapt -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 30,
+        "traminer": 30,
+        "base": 30
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "cohesion -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 101,
+        "traminer": 101,
+        "base": 101
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "consensus -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 1190,
+        "traminer": 1190,
+        "base": 1190
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "coregulate -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 539,
+        "traminer": 539,
+        "base": 539
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "discuss -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 770,
+        "traminer": 770,
+        "base": 770
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "emotion -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 289,
+        "traminer": 289,
+        "base": 289
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "monitor -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 538,
+        "traminer": 538,
+        "base": 538
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "plan -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 418,
+        "traminer": 418,
+        "base": 418
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "synthesis -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 41,
+        "traminer": 41,
+        "base": 41
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "adapt -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 61,
+        "traminer": 61,
+        "base": 61
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "cohesion -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 196,
+        "traminer": 196,
+        "base": 196
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "consensus -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 460,
+        "traminer": 460,
+        "base": 460
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "coregulate -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 339,
+        "traminer": 339,
+        "base": 339
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "discuss -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 418,
+        "traminer": 418,
+        "base": 418
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "emotion -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 218,
+        "traminer": 218,
+        "base": 218
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "monitor -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 130,
+        "traminer": 130,
+        "base": 130
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "plan -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 904,
+        "traminer": 904,
+        "base": 904
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "synthesis -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 46,
+        "traminer": 46,
+        "base": 46
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "adapt -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 17,
+        "traminer": 17,
+        "base": 17
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "cohesion -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 56,
+        "traminer": 56,
+        "base": 56
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "consensus -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 295,
+        "traminer": 295,
+        "base": 295
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "coregulate -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 170,
+        "traminer": 170,
+        "base": 170
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "discuss -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 88,
+        "traminer": 88,
+        "base": 88
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "emotion -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 103,
+        "traminer": 103,
+        "base": 103
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "monitor -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 26,
+        "traminer": 26,
+        "base": 26
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "plan -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 465,
+        "traminer": 465,
+        "base": 465
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "synthesis -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 8,
+        "traminer": 8,
+        "base": 8
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "adapt -> plan",
+      "kind": "",
+      "values": {
+        "tna": 8,
+        "traminer": 8,
+        "base": 8
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "cohesion -> plan",
+      "kind": "",
+      "values": {
+        "tna": 239,
+        "traminer": 239,
+        "base": 239
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "consensus -> plan",
+      "kind": "",
+      "values": {
+        "tna": 2505,
+        "traminer": 2505,
+        "base": 2505
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "coregulate -> plan",
+      "kind": "",
+      "values": {
+        "tna": 471,
+        "traminer": 471,
+        "base": 471
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "discuss -> plan",
+      "kind": "",
+      "values": {
+        "tna": 46,
+        "traminer": 46,
+        "base": 46
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "emotion -> plan",
+      "kind": "",
+      "values": {
+        "tna": 283,
+        "traminer": 283,
+        "base": 283
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "monitor -> plan",
+      "kind": "",
+      "values": {
+        "tna": 309,
+        "traminer": 309,
+        "base": 309
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "plan -> plan",
+      "kind": "",
+      "values": {
+        "tna": 2304,
+        "traminer": 2304,
+        "base": 2304
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "synthesis -> plan",
+      "kind": "",
+      "values": {
+        "tna": 49,
+        "traminer": 49,
+        "base": 49
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "adapt -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 0,
+        "traminer": 0,
+        "base": 0
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "cohesion -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 6,
+        "traminer": 6,
+        "base": 6
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "consensus -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 48,
+        "traminer": 48,
+        "base": 48
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "coregulate -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 37,
+        "traminer": 37,
+        "base": 37
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "discuss -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 557,
+        "traminer": 557,
+        "base": 557
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "emotion -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 8,
+        "traminer": 8,
+        "base": 8
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "monitor -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 23,
+        "traminer": 23,
+        "base": 23
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "plan -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 11,
+        "traminer": 11,
+        "base": 11
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "synthesis -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 0,
+        "traminer": 0,
+        "base": 0
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 0,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    }
+  ]
+}

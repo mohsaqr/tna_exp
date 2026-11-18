@@ -33,3 +33,4 @@ Rplots.pdf
 ^\.mini-ci$
 ^\.ci$
 ^vignettes/articles$
+^equivalence$

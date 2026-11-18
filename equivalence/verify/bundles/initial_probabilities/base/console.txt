@@ -1,0 +1,18 @@
+
+> sequences <- as.matrix(read.csv("../data/group_regulation.csv", na.strings = ""))
+
+> first <- prop.table(table(sequences[, 1]))
+
+> result <- data.frame(state = names(first), initial = as.vector(first))
+
+> result
+       state initial
+1      adapt  0.0115
+2   cohesion  0.0605
+3  consensus  0.2140
+4 coregulate  0.0190
+5    discuss  0.1755
+6    emotion  0.1515
+7    monitor  0.1440
+8       plan  0.2045
+9  synthesis  0.0195

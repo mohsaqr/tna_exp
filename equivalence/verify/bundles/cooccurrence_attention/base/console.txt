@@ -1,0 +1,74 @@
+
+> sequences <- as.matrix(read.csv("../data/group_regulation.csv", na.strings = ""))
+
+> states <- sort(unique(na.omit(c(sequences))))
+
+> # Co-occurrence: a sequence with n[a] visits of state a has n[a] * n[b] pairs of time
+> # points in states a and b, and n[a] * (n[a] - 1) ordered pairs within state a.
+> visits <- t(apply(sequences, 1, function(row) table(factor(row, levels = states))))
+
+> cooccurrence <- crossprod(visits) - diag(colSums(visits))
+
+> cooccurrence
+           adapt cohesion consensus coregulate discuss emotion monitor  plan
+adapt        184      590      2274        807    1744     868     522  1957
+cohesion     590     1894      7681       2413    4642    4034    1574  6973
+consensus   2274     7681     26772       9426   18402   12964    6052 28606
+coregulate   807     2413      9426       2740    5914    4127    1985  8191
+discuss     1744     4642     18402       5914   11498    7726    4043 15232
+emotion      868     4034     12964       4127    7726    5366    2699 12095
+monitor      522     1574      6052       1985    4043    2699    1222  6055
+plan        1957     6973     28606       8191   15232   12095    6055 29376
+synthesis    382      771      3130        990    2267    1228     642  2667
+           synthesis
+adapt            382
+cohesion         771
+consensus       3130
+coregulate       990
+discuss         2267
+emotion         1228
+monitor          642
+plan            2667
+synthesis        298
+
+> # Attention: the transitions at every lag, weighted by exp(-lag) and added up.
+> time_points <- ncol(sequences)
+
+> at_lag <- function(lag) {
++   from <- factor(sequences[, seq_len(time_points - lag)], levels = states)
++   to <- factor(sequences[, lag + seq_len(time_points - lag)], levels = states)
++   exp(-lag) * table(from, to)
++ }
+
+> attention <- Reduce(`+`, lapply(seq_len(time_points - 1), at_lag))
+
+> attention
+            to
+from               adapt    cohesion   consensus  coregulate     discuss
+  adapt         1.731504   55.974397  113.157211   17.344513   24.716223
+  cohesion      5.959898   36.747727  376.437992  103.906915   94.522943
+  consensus    33.671566  104.317176  496.290936  509.411685  623.798448
+  coregulate   21.919774   55.354605  193.919577   45.307492  253.322075
+  discuss     134.273318  124.630024  660.469258  188.100851  404.056887
+  emotion       9.306329  369.675869  477.778717   91.159374  185.453010
+  monitor      12.809321   47.227719  155.550922   52.620616  240.283126
+  plan         15.097680  132.699304  931.132295  135.492244  314.547518
+  synthesis    57.625675   19.019747  141.094460   21.736581   32.859202
+            to
+from             emotion     monitor        plan   synthesis
+  adapt        30.592944   11.005772   28.129241    1.823195
+  cohesion    107.539471   34.468560  177.325170    8.704922
+  consensus   317.724637  173.478419 1215.436892   52.591845
+  coregulate  164.920198   79.364482  253.034412   28.796214
+  discuss     223.760725   61.882556  169.823321  226.272927
+  emotion     136.443804   62.892856  227.400360   15.105766
+  monitor      76.829254   21.964337  169.734819   21.680793
+  plan        458.753795  232.535787 1174.781709   25.328311
+  synthesis    29.192046    8.941811   48.552464    3.018964
+
+> edges <- function(model, weights) data.frame(
++   quantity = sprintf("%s: %s -> %s", model, states[row(weights)], states[col(weights)]),
++   value = c(weights)
++ )
+
+> result <- rbind(edges("ctna", cooccurrence), edges("atna", attention))

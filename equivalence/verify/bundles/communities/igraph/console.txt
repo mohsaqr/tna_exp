@@ -1,0 +1,53 @@
+
+> library(igraph)
+
+Attaching package: ‘igraph’
+
+The following objects are masked from ‘package:stats’:
+
+    decompose, spectrum
+
+The following object is masked from ‘package:base’:
+
+    union
+
+
+> sequences <- as.matrix(read.csv("../data/group_regulation.csv", na.strings = ""))
+
+> states <- sort(unique(na.omit(c(sequences))))
+
+> from <- factor(sequences[, -ncol(sequences)], levels = states)
+
+> to <- factor(sequences[, -1], levels = states)
+
+> counts <- table(from, to)
+
+> weights <- unclass(prop.table(counts, 1))
+
+> directed <- graph_from_adjacency_matrix(weights, mode = "directed", weighted = TRUE)
+
+> summed <- graph_from_adjacency_matrix(weights, mode = "plus", weighted = TRUE)
+
+> result <- data.frame(
++   state = V(directed)$name,
++   walktrap = as.numeric(membership(cluster_walktrap(directed, weights = E(directed)$weight))),
++   fast_greedy = as.numeric(membership(cluster_fast_greedy(summed, weights = E(summed)$weight))),
++   edge_betweenness = as.numeric(membership(cluster_edge_betweenness(directed, weights = E(directed)$weight))),
++   leading_eigen = as.numeric(membership(cluster_leading_eigen(summed, weights = E(summed)$weight)))
++ )
+
+> result
+       state walktrap fast_greedy edge_betweenness leading_eigen
+1      adapt        1           1                1             1
+2   cohesion        1           1                1             1
+3  consensus        1           1                1             2
+4 coregulate        1           2                1             3
+5    discuss        1           2                1             3
+6    emotion        1           1                1             1
+7    monitor        1           2                1             2
+8       plan        1           3                1             2
+9  synthesis        1           1                1             3
+Warning message:
+In cluster_edge_betweenness(directed, weights = E(directed)$weight) :
+  Membership vector will be selected based on the highest modularity score.
+Source: community/edge_betweenness.c:504

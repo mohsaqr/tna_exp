@@ -1,0 +1,94 @@
+Registered S3 method overwritten by 'tna':
+  method             from   
+  plot.tna_bootstrap cograph
+'tna' package version 1.5.8
+------------------------------------------------------
+  Tikka, S., López-Pernas, S., and Saqr, M. (2025). 
+  tna: An R Package for Transition Network Analysis.
+  Applied Psychological Measurement.
+  https://doi.org/10.1177/01466216251348840
+------------------------------------------------------
+Please type 'citation("tna")' for more citation information.
+See the package website at https://sonsoles.me/tna/
+
+
+> cooccurrence <- ctna(group_regulation)
+
+> attention <- atna(group_regulation)
+
+> cooccurrence
+State Labels : 
+
+   adapt, cohesion, consensus, coregulate, discuss, emotion, monitor, plan, synthesis 
+
+Co-occurrence Matrix :
+
+           adapt cohesion consensus coregulate discuss emotion monitor  plan
+adapt         92      590      2274        807    1744     868     522  1957
+cohesion     590      947      7681       2413    4642    4034    1574  6973
+consensus   2274     7681     13386       9426   18402   12964    6052 28606
+coregulate   807     2413      9426       1370    5914    4127    1985  8191
+discuss     1744     4642     18402       5914    5749    7726    4043 15232
+emotion      868     4034     12964       4127    7726    2683    2699 12095
+monitor      522     1574      6052       1985    4043    2699     611  6055
+plan        1957     6973     28606       8191   15232   12095    6055 14688
+synthesis    382      771      3130        990    2267    1228     642  2667
+           synthesis
+adapt            382
+cohesion         771
+consensus       3130
+coregulate       990
+discuss         2267
+emotion         1228
+monitor          642
+plan            2667
+synthesis        149
+
+Initial Probabilities : 
+
+     adapt   cohesion  consensus coregulate    discuss    emotion    monitor 
+    0.0115     0.0605     0.2140     0.0190     0.1755     0.1515     0.1440 
+      plan  synthesis 
+    0.2045     0.0195 
+
+> attention
+State Labels : 
+
+   adapt, cohesion, consensus, coregulate, discuss, emotion, monitor, plan, synthesis 
+
+Edge Weight Matrix :
+
+                adapt  cohesion consensus coregulate   discuss   emotion
+adapt        1.731504  55.97440  113.1572   17.34451  24.71622  30.59294
+cohesion     5.959898  36.74773  376.4380  103.90692  94.52294 107.53947
+consensus   33.671566 104.31718  496.2909  509.41169 623.79845 317.72464
+coregulate  21.919774  55.35461  193.9196   45.30749 253.32208 164.92020
+discuss    134.273318 124.63002  660.4693  188.10085 404.05689 223.76072
+emotion      9.306329 369.67587  477.7787   91.15937 185.45301 136.44380
+monitor     12.809321  47.22772  155.5509   52.62062 240.28313  76.82925
+plan        15.097680 132.69930  931.1323  135.49224 314.54752 458.75379
+synthesis   57.625675  19.01975  141.0945   21.73658  32.85920  29.19205
+              monitor       plan  synthesis
+adapt       11.005772   28.12924   1.823195
+cohesion    34.468560  177.32517   8.704922
+consensus  173.478419 1215.43689  52.591845
+coregulate  79.364482  253.03441  28.796214
+discuss     61.882556  169.82332 226.272927
+emotion     62.892856  227.40036  15.105766
+monitor     21.964337  169.73482  21.680793
+plan       232.535787 1174.78171  25.328311
+synthesis    8.941811   48.55246   3.018964
+
+Initial Probabilities : 
+
+     adapt   cohesion  consensus coregulate    discuss    emotion    monitor 
+    0.0115     0.0605     0.2140     0.0190     0.1755     0.1515     0.1440 
+      plan  synthesis 
+    0.2045     0.0195 
+
+> edges <- rbind(
++   data.frame(model = "ctna", as.data.frame(as.table(cooccurrence$weights), responseName = "value")),
++   data.frame(model = "atna", as.data.frame(as.table(attention$weights), responseName = "value"))
++ )
+
+> result <- data.frame(quantity = sprintf("%s: %s -> %s", edges$model, edges[[2]], edges[[3]]), value = edges$value)

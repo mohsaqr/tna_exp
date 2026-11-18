@@ -1,0 +1,342 @@
+{
+  "schema": "prova.verification-case/1",
+  "title": "Diffusion centrality and the weighted clustering coefficient",
+  "description": "Two centralities tna implements itself, on the relative transition network without loops, against base R computations written from the published definitions: diffusion centrality (Banerjee et al., 2014) as the row sums of W + W^2 + ... + W^n, min-max scaled as tna always reports it; and the weighted clustering coefficient of Zhang and Horvath (2005) on the symmetrised network W + W'.",
+  "covers": [
+    "centralities()"
+  ],
+  "generator": "tna equivalence/verify/export-bundles.R",
+  "created_at": "2026-11-18",
+  "sides": [
+    {
+      "id": "tna",
+      "name": "tna",
+      "version": "1.5.8",
+      "primary": true,
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    },
+    {
+      "id": "base",
+      "name": "Base R, from the definition",
+      "version": "4.6.2",
+      "authority": "independent",
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    }
+  ],
+  "sections": [
+    {
+      "id": "code",
+      "title": "Code",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/script.R",
+          "bytes": 137,
+          "sha256": "deb1981933a9d324871a3031efddd57e18407b6ca6e62bff93233619e130a29e",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "key": "state",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        },
+        {
+          "side": "base",
+          "path": "base/script.R",
+          "bytes": 973,
+          "sha256": "8affb31f44b5c4d18d505207f667f6940b19c096c7ef23ec5480ada2c3429465",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "key": "state",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "output",
+      "title": "Raw output",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/console.txt",
+          "bytes": 1014,
+          "sha256": "d4203dc1d9cbecc819d43933bd04dfbaeff808ce31221db06eccca4f8d75a1df",
+          "label": "R console",
+          "type": "text"
+        },
+        {
+          "side": "base",
+          "path": "base/console.txt",
+          "bytes": 1459,
+          "sha256": "a2c53a688715aedbbeaad608f18cd0ae88c9cebd92a3a2566d6396ac49e88924",
+          "label": "R console",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "Data",
+      "items": [
+        {
+          "path": "data/group_regulation.csv",
+          "bytes": 302257,
+          "sha256": "305c69faf735a85cac78b3196b7f3401be5791ab9c9af1e5beec700ec764b203",
+          "label": "group_regulation sequences"
+        }
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "quantity": "Diffusion: adapt",
+      "kind": "Diffusion",
+      "values": {
+        "tna": 1,
+        "base": 1
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Diffusion: cohesion",
+      "kind": "Diffusion",
+      "values": {
+        "tna": 0.820056322106784,
+        "base": 0.820056322106784
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Diffusion: consensus",
+      "kind": "Diffusion",
+      "values": {
+        "tna": 0.558518993564461,
+        "base": 0.558518993564461
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Diffusion: coregulate",
+      "kind": "Diffusion",
+      "values": {
+        "tna": 0.791137077055015,
+        "base": 0.791137077055015
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Diffusion: discuss",
+      "kind": "Diffusion",
+      "values": {
+        "tna": 0.543199908251333,
+        "base": 0.543199908251333
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Diffusion: emotion",
+      "kind": "Diffusion",
+      "values": {
+        "tna": 0.753948464245934,
+        "base": 0.753948464245934
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Diffusion: monitor",
+      "kind": "Diffusion",
+      "values": {
+        "tna": 0.795376911763991,
+        "base": 0.795376911763991
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Diffusion: plan",
+      "kind": "Diffusion",
+      "values": {
+        "tna": 0,
+        "base": 0
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Diffusion: synthesis",
+      "kind": "Diffusion",
+      "values": {
+        "tna": 0.998194362542585,
+        "base": 0.998194362542585
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Clustering: adapt",
+      "kind": "Clustering",
+      "values": {
+        "tna": 0.336983862677757,
+        "base": 0.336983862677757
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Clustering: cohesion",
+      "kind": "Clustering",
+      "values": {
+        "tna": 0.299648677165664,
+        "base": 0.299648677165664
+      },
+      "difference": 1.11022302462516e-16,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Clustering: consensus",
+      "kind": "Clustering",
+      "values": {
+        "tna": 0.160777291853848,
+        "base": 0.160777291853848
+      },
+      "difference": 2.77555756156289e-17,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Clustering: coregulate",
+      "kind": "Clustering",
+      "values": {
+        "tna": 0.305784186111251,
+        "base": 0.305784186111251
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Clustering: discuss",
+      "kind": "Clustering",
+      "values": {
+        "tna": 0.239710760651376,
+        "base": 0.239710760651376
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Clustering: emotion",
+      "kind": "Clustering",
+      "values": {
+        "tna": 0.290479309565872,
+        "base": 0.290479309565872
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Clustering: monitor",
+      "kind": "Clustering",
+      "values": {
+        "tna": 0.288881938704651,
+        "base": 0.288881938704651
+      },
+      "difference": 1.11022302462516e-16,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Clustering: plan",
+      "kind": "Clustering",
+      "values": {
+        "tna": 0.287490437349879,
+        "base": 0.287490437349879
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "Clustering: synthesis",
+      "kind": "Clustering",
+      "values": {
+        "tna": 0.358613621392574,
+        "base": 0.358613621392574
+      },
+      "difference": 0,
+      "measure": "absolute",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    }
+  ]
+}

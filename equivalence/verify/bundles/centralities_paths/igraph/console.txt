@@ -1,0 +1,63 @@
+
+> library(igraph)
+
+Attaching package: ‘igraph’
+
+The following objects are masked from ‘package:stats’:
+
+    decompose, spectrum
+
+The following object is masked from ‘package:base’:
+
+    union
+
+
+> sequences <- as.matrix(read.csv("../data/group_regulation.csv", na.strings = ""))
+
+> states <- sort(unique(na.omit(c(sequences))))
+
+> from <- factor(sequences[, -ncol(sequences)], levels = states)
+
+> to <- factor(sequences[, -1], levels = states)
+
+> counts <- table(from, to)
+
+> weights <- unclass(prop.table(counts, 1))
+
+> diag(weights) <- 0
+
+> graph <- graph_from_adjacency_matrix(weights, mode = "directed", weighted = TRUE)
+
+> lengths <- 1 / E(graph)$weight
+
+> result <- data.frame(
++   state = V(graph)$name,
++   OutStrength = strength(graph, mode = "out"), InStrength = strength(graph, mode = "in"),
++   ClosenessIn = closeness(graph, mode = "in", weights = lengths),
++   ClosenessOut = closeness(graph, mode = "out", weights = lengths),
++   Closeness = closeness(graph, mode = "all", weights = lengths),
++   Betweenness = betweenness(graph, weights = lengths),
++   PageRank = page_rank(graph)$vector
++ )
+
+> result
+                state OutStrength InStrength ClosenessIn ClosenessOut
+adapt           adapt   1.0000000  0.3445778 0.008339570   0.01516858
+cohesion     cohesion   0.9728614  0.8116478 0.013800359   0.01238681
+consensus   consensus   0.9179965  2.6672185 0.035123316   0.01253550
+coregulate coregulate   0.9766497  0.5665811 0.015546719   0.01500415
+discuss       discuss   0.8051126  1.1882315 0.019591857   0.01307165
+emotion       emotion   0.9231583  0.8941312 0.014102579   0.01205607
+monitor       monitor   0.9818562  0.3457150 0.007580598   0.01368405
+plan             plan   0.6257918  1.1937843 0.027426129   0.01150949
+synthesis   synthesis   1.0000000  0.1915394 0.009967581   0.01579020
+            Closeness Betweenness   PageRank
+adapt      0.02479256           1 0.03937291
+cohesion   0.02654312           0 0.08419791
+consensus  0.03829481          30 0.25333610
+coregulate 0.02104171           0 0.09489162
+discuss    0.02710425          16 0.13883765
+emotion    0.02311208           5 0.11676831
+monitor    0.01927766           0 0.06302458
+plan       0.02742613           9 0.16706523
+synthesis  0.02431531           7 0.04250567

@@ -1,0 +1,2214 @@
+{
+  "schema": "prova.verification-case/1",
+  "title": "Co-occurrence and attention models",
+  "description": "ctna() counts, for every pair of time points of a sequence, the two states in both directions; atna() counts every earlier-to-later pair of time points weighted by exp(-lag). Both against base R computations written from those definitions: per-sequence state counts n give the co-occurrences as the sum of n n' - diag(n), and lagged cross-tabulations weighted by exp(-lag) give the attention weights. Known result: the nine diagonal cells of the co-occurrence matrix disagree by a factor of two. tna counts a pair of time points in the same state once, n (n - 1) / 2, where counting both directions as for two different states gives n (n - 1); every off-diagonal cell agrees.",
+  "covers": [
+    "ctna()",
+    "atna()",
+    "build_model()"
+  ],
+  "generator": "tna equivalence/verify/export-bundles.R",
+  "created_at": "2026-11-18",
+  "sides": [
+    {
+      "id": "tna",
+      "name": "tna",
+      "version": "1.5.8",
+      "primary": true,
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    },
+    {
+      "id": "base",
+      "name": "Base R, from the definition",
+      "version": "4.6.2",
+      "authority": "independent",
+      "source": "live",
+      "run_at": "2026-11-18",
+      "platform": "R version 4.6.2 (2026-10-29), aarch64-apple-darwin23"
+    }
+  ],
+  "sections": [
+    {
+      "id": "code",
+      "title": "Code",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/script.R",
+          "bytes": 442,
+          "sha256": "e2ec289d95bee32cd2cb9d805631bdb345add032ab239ae01725918b5a67503c",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        },
+        {
+          "side": "base",
+          "path": "base/script.R",
+          "bytes": 1077,
+          "sha256": "c9f633cab465e5ba5a5839a758c0ec69ec233056687bc667288ab55eed6e0b15",
+          "label": "Script",
+          "type": "code",
+          "language": "r",
+          "run": {
+            "engine": "r",
+            "result": "result",
+            "reads": [
+              "data/group_regulation.csv"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "output",
+      "title": "Raw output",
+      "items": [
+        {
+          "side": "tna",
+          "path": "tna/console.txt",
+          "bytes": 3858,
+          "sha256": "02122d6722b20bd8a4be249f9106399e518862d751b67b74f52b47184f47d6c2",
+          "label": "R console",
+          "type": "text"
+        },
+        {
+          "side": "base",
+          "path": "base/console.txt",
+          "bytes": 3480,
+          "sha256": "9a2488370c3ce65663ee2cdfb0e8bb9ef34056ea2d22711db5e95a6214bad672",
+          "label": "R console",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "Data",
+      "items": [
+        {
+          "path": "data/group_regulation.csv",
+          "bytes": 302257,
+          "sha256": "305c69faf735a85cac78b3196b7f3401be5791ab9c9af1e5beec700ec764b203",
+          "label": "group_regulation sequences"
+        }
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "quantity": "ctna: adapt -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 92,
+        "base": 184
+      },
+      "difference": 0.5,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "disagree"
+    },
+    {
+      "quantity": "ctna: cohesion -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 590,
+        "base": 590
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: consensus -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 2274,
+        "base": 2274
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: coregulate -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 807,
+        "base": 807
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: discuss -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 1744,
+        "base": 1744
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: emotion -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 868,
+        "base": 868
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: monitor -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 522,
+        "base": 522
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: plan -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 1957,
+        "base": 1957
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: synthesis -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 382,
+        "base": 382
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: adapt -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 590,
+        "base": 590
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: cohesion -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 947,
+        "base": 1894
+      },
+      "difference": 0.5,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "disagree"
+    },
+    {
+      "quantity": "ctna: consensus -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 7681,
+        "base": 7681
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: coregulate -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 2413,
+        "base": 2413
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: discuss -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 4642,
+        "base": 4642
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: emotion -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 4034,
+        "base": 4034
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: monitor -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 1574,
+        "base": 1574
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: plan -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 6973,
+        "base": 6973
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: synthesis -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 771,
+        "base": 771
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: adapt -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 2274,
+        "base": 2274
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: cohesion -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 7681,
+        "base": 7681
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: consensus -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 13386,
+        "base": 26772
+      },
+      "difference": 0.5,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "disagree"
+    },
+    {
+      "quantity": "ctna: coregulate -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 9426,
+        "base": 9426
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: discuss -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 18402,
+        "base": 18402
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: emotion -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 12964,
+        "base": 12964
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: monitor -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 6052,
+        "base": 6052
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: plan -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 28606,
+        "base": 28606
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: synthesis -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 3130,
+        "base": 3130
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: adapt -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 807,
+        "base": 807
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: cohesion -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 2413,
+        "base": 2413
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: consensus -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 9426,
+        "base": 9426
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: coregulate -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 1370,
+        "base": 2740
+      },
+      "difference": 0.5,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "disagree"
+    },
+    {
+      "quantity": "ctna: discuss -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 5914,
+        "base": 5914
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: emotion -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 4127,
+        "base": 4127
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: monitor -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 1985,
+        "base": 1985
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: plan -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 8191,
+        "base": 8191
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: synthesis -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 990,
+        "base": 990
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: adapt -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 1744,
+        "base": 1744
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: cohesion -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 4642,
+        "base": 4642
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: consensus -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 18402,
+        "base": 18402
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: coregulate -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 5914,
+        "base": 5914
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: discuss -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 5749,
+        "base": 11498
+      },
+      "difference": 0.5,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "disagree"
+    },
+    {
+      "quantity": "ctna: emotion -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 7726,
+        "base": 7726
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: monitor -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 4043,
+        "base": 4043
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: plan -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 15232,
+        "base": 15232
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: synthesis -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 2267,
+        "base": 2267
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: adapt -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 868,
+        "base": 868
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: cohesion -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 4034,
+        "base": 4034
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: consensus -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 12964,
+        "base": 12964
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: coregulate -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 4127,
+        "base": 4127
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: discuss -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 7726,
+        "base": 7726
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: emotion -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 2683,
+        "base": 5366
+      },
+      "difference": 0.5,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "disagree"
+    },
+    {
+      "quantity": "ctna: monitor -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 2699,
+        "base": 2699
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: plan -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 12095,
+        "base": 12095
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: synthesis -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 1228,
+        "base": 1228
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: adapt -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 522,
+        "base": 522
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: cohesion -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 1574,
+        "base": 1574
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: consensus -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 6052,
+        "base": 6052
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: coregulate -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 1985,
+        "base": 1985
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: discuss -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 4043,
+        "base": 4043
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: emotion -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 2699,
+        "base": 2699
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: monitor -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 611,
+        "base": 1222
+      },
+      "difference": 0.5,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "disagree"
+    },
+    {
+      "quantity": "ctna: plan -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 6055,
+        "base": 6055
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: synthesis -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 642,
+        "base": 642
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: adapt -> plan",
+      "kind": "",
+      "values": {
+        "tna": 1957,
+        "base": 1957
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: cohesion -> plan",
+      "kind": "",
+      "values": {
+        "tna": 6973,
+        "base": 6973
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: consensus -> plan",
+      "kind": "",
+      "values": {
+        "tna": 28606,
+        "base": 28606
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: coregulate -> plan",
+      "kind": "",
+      "values": {
+        "tna": 8191,
+        "base": 8191
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: discuss -> plan",
+      "kind": "",
+      "values": {
+        "tna": 15232,
+        "base": 15232
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: emotion -> plan",
+      "kind": "",
+      "values": {
+        "tna": 12095,
+        "base": 12095
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: monitor -> plan",
+      "kind": "",
+      "values": {
+        "tna": 6055,
+        "base": 6055
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: plan -> plan",
+      "kind": "",
+      "values": {
+        "tna": 14688,
+        "base": 29376
+      },
+      "difference": 0.5,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "disagree"
+    },
+    {
+      "quantity": "ctna: synthesis -> plan",
+      "kind": "",
+      "values": {
+        "tna": 2667,
+        "base": 2667
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: adapt -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 382,
+        "base": 382
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: cohesion -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 771,
+        "base": 771
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: consensus -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 3130,
+        "base": 3130
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: coregulate -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 990,
+        "base": 990
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: discuss -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 2267,
+        "base": 2267
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: emotion -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 1228,
+        "base": 1228
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: monitor -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 642,
+        "base": 642
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: plan -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 2667,
+        "base": 2667
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "ctna: synthesis -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 149,
+        "base": 298
+      },
+      "difference": 0.5,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "disagree"
+    },
+    {
+      "quantity": "atna: adapt -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 1.73150367685138,
+        "base": 1.73150367685138
+      },
+      "difference": 1.28238021029677e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: cohesion -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 5.95989836677998,
+        "base": 5.95989836677998
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: consensus -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 33.6715663611731,
+        "base": 33.6715663611731
+      },
+      "difference": 6.33064759867629e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: coregulate -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 21.9197735235704,
+        "base": 21.9197735235704
+      },
+      "difference": 4.8623408562779e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: discuss -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 134.273317731538,
+        "base": 134.273317731538
+      },
+      "difference": 1.90503511192794e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: emotion -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 9.30632949072795,
+        "base": 9.30632949072796
+      },
+      "difference": 1.33613342276248e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: monitor -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 12.809320731059,
+        "base": 12.809320731059
+      },
+      "difference": 9.70738272299763e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: plan -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 15.0976795145254,
+        "base": 15.0976795145254
+      },
+      "difference": 8.23603247362524e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: synthesis -> adapt",
+      "kind": "",
+      "values": {
+        "tna": 57.6256747405761,
+        "base": 57.6256747405762
+      },
+      "difference": 1.84954728675771e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: adapt -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 55.9743965256988,
+        "base": 55.9743965256989
+      },
+      "difference": 1.26940669281513e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: cohesion -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 36.7477266392216,
+        "base": 36.7477266392216
+      },
+      "difference": 3.86713846402528e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: consensus -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 104.317176305172,
+        "base": 104.317176305172
+      },
+      "difference": 1.22604634219261e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: coregulate -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 55.354605121126,
+        "base": 55.354605121126
+      },
+      "difference": 2.56723983200784e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: discuss -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 124.630024107035,
+        "base": 124.630024107035
+      },
+      "difference": 3.42072983224268e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: emotion -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 369.675868548676,
+        "base": 369.675868548675
+      },
+      "difference": 4.61296695540109e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: monitor -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 47.227719074037,
+        "base": 47.227719074037
+      },
+      "difference": 7.52251802216206e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: plan -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 132.69930371483,
+        "base": 132.69930371483
+      },
+      "difference": 2.14181300389353e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: synthesis -> cohesion",
+      "kind": "",
+      "values": {
+        "tna": 19.0197470698121,
+        "base": 19.0197470698121
+      },
+      "difference": 7.47163180616492e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: adapt -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 113.157210873691,
+        "base": 113.157210873691
+      },
+      "difference": 1.25585056449161e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: cohesion -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 376.437992485756,
+        "base": 376.437992485755
+      },
+      "difference": 1.96304427273893e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: consensus -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 496.29093642894,
+        "base": 496.29093642894
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: coregulate -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 193.919576816859,
+        "base": 193.919576816859
+      },
+      "difference": 2.93128831002411e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: discuss -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 660.469257597522,
+        "base": 660.469257597521
+      },
+      "difference": 1.377043202709e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: emotion -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 477.77871734024,
+        "base": 477.778717340239
+      },
+      "difference": 1.54666672744292e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: monitor -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 155.550922005694,
+        "base": 155.550922005694
+      },
+      "difference": 3.65432863578444e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: plan -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 931.132294618959,
+        "base": 931.132294618958
+      },
+      "difference": 1.22095257976354e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: synthesis -> consensus",
+      "kind": "",
+      "values": {
+        "tna": 141.094460444912,
+        "base": 141.094460444912
+      },
+      "difference": 2.0143745786179e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: adapt -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 17.3445126941661,
+        "base": 17.3445126941661
+      },
+      "difference": 2.04832141521939e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: cohesion -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 103.906915206185,
+        "base": 103.906915206185
+      },
+      "difference": 1.50441769498242e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: consensus -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 509.411685237242,
+        "base": 509.411685237242
+      },
+      "difference": 1.67379608207265e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: coregulate -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 45.3074922461389,
+        "base": 45.3074922461389
+      },
+      "difference": 1.09778734238918e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: discuss -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 188.100850816123,
+        "base": 188.100850816123
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: emotion -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 91.1593737076902,
+        "base": 91.1593737076903
+      },
+      "difference": 4.67670656473691e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: monitor -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 52.6206162019845,
+        "base": 52.6206162019845
+      },
+      "difference": 1.35031245744572e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: plan -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 135.492244016358,
+        "base": 135.492244016358
+      },
+      "difference": 8.39065280429561e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: synthesis -> coregulate",
+      "kind": "",
+      "values": {
+        "tna": 21.7365813507774,
+        "base": 21.7365813507775
+      },
+      "difference": 9.80663965911115e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: adapt -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 24.716223195323,
+        "base": 24.716223195323
+      },
+      "difference": 1.4374015199348e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: cohesion -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 94.5229434641814,
+        "base": 94.5229434641814
+      },
+      "difference": 4.51028740569862e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: consensus -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 623.79844835907,
+        "base": 623.79844835907
+      },
+      "difference": 7.28997245957724e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: coregulate -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 253.322075312205,
+        "base": 253.322075312205
+      },
+      "difference": 2.01952699588761e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: discuss -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 404.056887480247,
+        "base": 404.056887480246
+      },
+      "difference": 3.65772478127417e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: emotion -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 185.453010034607,
+        "base": 185.453010034607
+      },
+      "difference": 2.91185610347821e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: monitor -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 240.283126007123,
+        "base": 240.283126007123
+      },
+      "difference": 8.27989752417863e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: plan -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 314.54751801387,
+        "base": 314.54751801387
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: synthesis -> discuss",
+      "kind": "",
+      "values": {
+        "tna": 32.859202145514,
+        "base": 32.859202145514
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: adapt -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 30.5929443655738,
+        "base": 30.5929443655738
+      },
+      "difference": 2.32257061389512e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: cohesion -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 107.539471150743,
+        "base": 107.539471150743
+      },
+      "difference": 5.28581908136113e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: consensus -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 317.72463714905,
+        "base": 317.72463714905
+      },
+      "difference": 1.073446857081e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: coregulate -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 164.920198038721,
+        "base": 164.920198038721
+      },
+      "difference": 3.44672268993164e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: discuss -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 223.760724882795,
+        "base": 223.760724882795
+      },
+      "difference": 1.52421973670086e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: emotion -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 136.443803667699,
+        "base": 136.443803667699
+      },
+      "difference": 1.45812386246109e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: monitor -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 76.8292544682521,
+        "base": 76.8292544682523
+      },
+      "difference": 2.03463385072697e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: plan -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 458.753794786765,
+        "base": 458.753794786764
+      },
+      "difference": 2.84989170368886e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: synthesis -> emotion",
+      "kind": "",
+      "values": {
+        "tna": 29.1920460273403,
+        "base": 29.1920460273402
+      },
+      "difference": 4.86805710771099e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: adapt -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 11.0057720423651,
+        "base": 11.0057720423651
+      },
+      "difference": 6.4560917037439e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: cohesion -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 34.4685599684023,
+        "base": 34.4685599684023
+      },
+      "difference": 4.12284549404711e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: consensus -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 173.47841917172,
+        "base": 173.47841917172
+      },
+      "difference": 8.19171328805757e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: coregulate -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 79.3644815229948,
+        "base": 79.3644815229948
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: discuss -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 61.8825556675156,
+        "base": 61.8825556675156
+      },
+      "difference": 4.59284674393685e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: emotion -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 62.892856047074,
+        "base": 62.892856047074
+      },
+      "difference": 1.12976700442459e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: monitor -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 21.96433665502,
+        "base": 21.96433665502
+      },
+      "difference": 1.94099028872161e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: plan -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 232.535787103997,
+        "base": 232.535787103997
+      },
+      "difference": 1.22225098271402e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: synthesis -> monitor",
+      "kind": "",
+      "values": {
+        "tna": 8.9418107106884,
+        "base": 8.9418107106884
+      },
+      "difference": 3.97314793809473e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: adapt -> plan",
+      "kind": "",
+      "values": {
+        "tna": 28.1292408562157,
+        "base": 28.1292408562157
+      },
+      "difference": 1.13669697922684e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: cohesion -> plan",
+      "kind": "",
+      "values": {
+        "tna": 177.325170024557,
+        "base": 177.325170024557
+      },
+      "difference": 4.80840527486334e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: consensus -> plan",
+      "kind": "",
+      "values": {
+        "tna": 1215.43689186834,
+        "base": 1215.43689186834
+      },
+      "difference": 1.49657247999915e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: coregulate -> plan",
+      "kind": "",
+      "values": {
+        "tna": 253.034412341579,
+        "base": 253.034412341579
+      },
+      "difference": 8.9858795623535e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: discuss -> plan",
+      "kind": "",
+      "values": {
+        "tna": 169.82332084389,
+        "base": 169.823320843891
+      },
+      "difference": 1.50624415776662e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: emotion -> plan",
+      "kind": "",
+      "values": {
+        "tna": 227.400360301964,
+        "base": 227.400360301965
+      },
+      "difference": 1.62480931034857e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: monitor -> plan",
+      "kind": "",
+      "values": {
+        "tna": 169.73481887185,
+        "base": 169.73481887185
+      },
+      "difference": 1.84192498517636e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: plan -> plan",
+      "kind": "",
+      "values": {
+        "tna": 1174.78170871867,
+        "base": 1174.78170871867
+      },
+      "difference": 2.5160910821347e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: synthesis -> plan",
+      "kind": "",
+      "values": {
+        "tna": 48.5524642298209,
+        "base": 48.5524642298209
+      },
+      "difference": 1.17076279777978e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: adapt -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 1.82319549143927,
+        "base": 1.82319549143927
+      },
+      "difference": 7.30732187418075e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: cohesion -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 8.704922224362,
+        "base": 8.704922224362
+      },
+      "difference": 6.12190480379775e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: consensus -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 52.5918447085934,
+        "base": 52.5918447085934
+      },
+      "difference": 1.35105117475371e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: coregulate -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 28.7962143305522,
+        "base": 28.7962143305522
+      },
+      "difference": 3.70122993045423e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: discuss -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 226.272926899689,
+        "base": 226.272926899688
+      },
+      "difference": 3.3914183421559e-15,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: emotion -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 15.1057663137529,
+        "base": 15.105766313753
+      },
+      "difference": 9.40756954664644e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: monitor -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 21.6807926389369,
+        "base": 21.6807926389369
+      },
+      "difference": 0,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: plan -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 25.328311016899,
+        "base": 25.328311016899
+      },
+      "difference": 7.0133252794277e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    },
+    {
+      "quantity": "atna: synthesis -> synthesis",
+      "kind": "",
+      "values": {
+        "tna": 3.01896351880231,
+        "base": 3.01896351880231
+      },
+      "difference": 2.94199785511978e-16,
+      "measure": "relative",
+      "tolerance": 1e-10,
+      "rule": "largest difference between any two sides",
+      "status": "agree"
+    }
+  ]
+}

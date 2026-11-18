@@ -1,0 +1,11 @@
+library(tna)
+sequences <- head(group_regulation, 15)
+measures <- c("lv", "osa", "dl", "lcs", "qgram", "cosine", "jaccard", "jw")
+distances <- lapply(measures, function(measure) {
+  clustering <- cluster_sequences(sequences, k = 2, dissimilarity = measure)
+  pairs <- as.data.frame(as.table(as.matrix(clustering$distance)), responseName = "value")
+  pairs <- subset(pairs, as.integer(Var1) < as.integer(Var2))
+  data.frame(quantity = sprintf("%s: %s-%s", measure, pairs$Var1, pairs$Var2), value = pairs$value)
+})
+result <- do.call(rbind, distances)
+head(result)
