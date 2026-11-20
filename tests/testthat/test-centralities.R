@@ -41,40 +41,23 @@ test_that("centralities can be computed for a matrix", {
   )
 })
 
-test_that("PageRank matches igraph on directed weighted networks", {
+# The comparison of PageRank with igraph moved to tests/equivalence/test-centralities.R; the invariant stays.
+test_that("PageRank of a weighted network sums to one", {
   set.seed(265)
-  for (n in 2:10) {
-    for (iteration in 1:5) {
+  sums <- vapply(
+    2:10,
+    function(n) {
       weights <- matrix(stats::runif(n * n), n, n)
       weights[stats::runif(n * n) < 0.45] <- 0
       dimnames(weights) <- list(paste0("s", seq_len(n)), paste0("s", seq_len(n)))
-
-      for (loops in c(FALSE, TRUE)) {
-        graph_weights <- weights
-        if (!loops) {
-          diag(graph_weights) <- 0
-        }
-        graph <- igraph::graph_from_adjacency_matrix(
-          graph_weights,
-          mode = "directed",
-          weighted = TRUE
-        )
-        expected <- igraph::page_rank(
-          graph,
-          directed = TRUE,
-          weights = igraph::E(graph)$weight
-        )$vector
-        observed <- centralities(
-          weights,
-          loops = loops,
-          measures = "PageRank"
-        )$PageRank
-
-        expect_equal(unname(observed), unname(expected), tolerance = 1e-12)
-        expect_equal(sum(observed), 1, tolerance = 1e-12)
-      }
-    }
-  }
+      c(
+        sum(centralities(weights, loops = FALSE, measures = "PageRank")$PageRank),
+        sum(centralities(weights, loops = TRUE, measures = "PageRank")$PageRank)
+      )
+    },
+    numeric(2L)
+  )
+  expect_equal(c(sums), rep(1, length(sums)), tolerance = 1e-12)
 })
 
 test_that("centrality stability can be estimated", {

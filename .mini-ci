@@ -1,0 +1,33 @@
+# How tna is tested on the Mac mini (ci VM). Run in the repo: mini-ci [job]
+#   job NAME COMMAND (first = default) · env KEY=VALUE · sibling ../DIR · include PATH
+#   fetch PATH · node mac|X.Y.Z|system
+node system
+
+# R package: dependencies (incl. Suggests) come from DESCRIPTION; cograph is the
+# released CRAN version (no sibling), as CRAN will check it.
+job test   Rscript -e 'testthat::test_local(stop_on_failure = TRUE)'
+# --as-cran on the built archive; the check folder comes back for the log and the
+# example timings (tna-Ex.timings)
+job check  Rscript -e 'r <- rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), check_dir = ".ci/check", error_on = "never"); print(r); if (r$status != 0 || length(r$errors) || length(r$warnings)) quit(status = 1)'
+# PDF manual with TinyTeX (~/.TinyTeX, has inconsolata) in UTF-8 and C locales.
+# mini-ci writes the command into run.sh unquoted: no `sh -c '...'` wrappers.
+job manual mkdir -p .ci; for loc in C.UTF-8 C; do echo "== LC_ALL=$loc"; PATH="$HOME/.TinyTeX/bin/aarch64-linux:$PATH" LC_ALL=$loc R CMD Rd2pdf --batch --no-preview --force --output=.ci/tna-manual-$loc.pdf . > .ci/rd2pdf-$loc.log 2>&1 || { tail -30 .ci/rd2pdf-$loc.log; exit 1; }; echo "ok: .ci/tna-manual-$loc.pdf"; done
+fetch .ci/check/tna.Rcheck/00check.log
+fetch .ci/check/tna.Rcheck/tna-Ex.timings
+fetch .ci/check/tna.Rcheck/tests/testthat.Rout
+
+# Prova Verify: capture of the equivalence tests, run as
+#   mini-ci -- Rscript ../equivalence/tna/import-tests.R capture [file-regex]
+# (the standing material git ignores is the copy kept in ../equivalence/tna/local; the driver copies it in)
+include ../equivalence/tna/local
+include ../equivalence/tna/import-tests.R
+include ../equivalence/import-tests-common.R
+include ../prova/.claude/worktrees/verify/reporters/verify-capture.R
+fetch .ci/verify-capture
+# the equivalence scripts load the Nestimate source from ../Nestimate
+sibling ../Nestimate
+
+# The declared equivalence tests (tests/equivalence, the standard: ../equivalence/STANDARD.md): every
+# comparison with a reference, recorded in .ci/verify-capture/capture.json. Then, on the Mac:
+#   sh ../equivalence/push.sh tna
+job verify Rscript -e 'source("tests/equivalence/helper-verify.R"); verify_tests(lib = "~/equiv-lib")'

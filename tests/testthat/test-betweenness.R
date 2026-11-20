@@ -5,29 +5,8 @@ test_that("betweenness network can be constructed", {
   )
 })
 
-# Edge betweenness computed directly with igraph, edge by edge
-igraph_edge_betweenness <- function(w, directed = TRUE, invert = TRUE) {
-  g <- igraph::graph_from_adjacency_matrix(w, mode = "directed",
-                                           weighted = TRUE)
-  weight <- igraph::E(g)$weight
-  igraph::E(g)$weight <- if (invert) 1 / weight else weight
-  ends <- igraph::as_edgelist(g, names = FALSE)
-  out <- matrix(0, nrow(w), ncol(w), dimnames = dimnames(w))
-  out[ends] <- igraph::edge_betweenness(g, directed = directed)
-  out
-}
-
-test_that("edge betweenness matches igraph edge by edge", {
-  model <- tna(group_regulation)
-  expect_equal(
-    betweenness_network(model)$weights,
-    igraph_edge_betweenness(model$weights)
-  )
-  expect_equal(
-    betweenness_network(model, directed = FALSE, invert = FALSE)$weights,
-    igraph_edge_betweenness(model$weights, FALSE, FALSE)
-  )
-})
+# The comparison of the edge betweenness with igraph's edge_betweenness() moved to
+# tests/equivalence/test-betweenness_network.R.
 
 test_that("edge betweenness networks record the model they were built from", {
   model <- ftna(group_regulation, scaling = "minmax")
