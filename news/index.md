@@ -2,6 +2,8 @@
 
 ## tna 1.5.8
 
+CRAN release: 2026-11-16
+
 - [`permutation_test()`](https://sonsoles.me/tna/reference/permutation_test.md):
   comparing two models with scaled edge weights gives a message (class
   `tna_message_scaling`). Each network is scaled on its own, so
