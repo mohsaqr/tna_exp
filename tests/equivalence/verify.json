@@ -28,7 +28,8 @@
       "authority": "open-source"
     },
     "Nestimate": {
-      "authority": "open-source"
+      "authority": "internal",
+      "note": "owner's package: internal (owner's decision 2026-11-21); a function resting on it counts as Indirect only through exports.via, when that package's own suite verifies the function"
     }
   },
   "exports": {
@@ -160,6 +161,20 @@
       "rename_groups()": "renames the groups of a group model; no number changes",
       "list_random_state_pools()": "lists the names of the built-in state vocabularies and their sizes"
     },
-    "not_yet": {}
+    "not_yet": {},
+    "via": {
+      "markov_order()": [
+        {
+          "product": "r-nestimate",
+          "function": "markov_order_test()"
+        }
+      ],
+      "markov_order.tna()": [
+        {
+          "product": "r-nestimate",
+          "function": "markov_order_test()"
+        }
+      ]
+    }
   }
 }
