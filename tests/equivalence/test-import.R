@@ -128,3 +128,21 @@ test_that("import_onehot() places each active column in its window", {
                      tolerance = 0, key = c("row", "cell"))
   })
 })
+
+test_that("import_data() with one-row windows gives stats::reshape()'s long table of the observed values", {
+  # stats::reshape() turns every value of `cols` into one row (action = the column); the zeros are dropped and the
+  # rows ordered by the id column, the original row and the column, and `order` numbers the events of a row.
+  cols <- c("alpha", "beta", "gamma")
+  numbered <- data.frame(events, .row = seq_len(nrow(events)))
+  long <- stats::reshape(numbered, direction = "long", varying = cols, v.names = "value", timevar = "action",
+                         times = cols, idvar = ".row")
+  long <- long[!is.na(long$value) & long$value != 0, ]
+  long <- long[order(long$ID, long$.row, match(long$action, cols)), ]
+  long$order <- stats::ave(long$.row, long$.row, FUN = seq_along)
+  expected <- data.frame(Time = long$Time, note = long$note, ID = long$ID, action = long$action, value = long$value,
+                         order = long$order, row = seq_len(nrow(long)))
+  out <- as.data.frame(import_data(events, cols = c(alpha, beta, gamma), id_cols = "ID", window_size = 1))
+  out$row <- seq_len(nrow(out))
+  expect_reference(out, expected, reference = "stats", covers = "import_data()",
+                   quantity = "event table, window of 1 row, reshaped by stats::reshape()", tolerance = 0, key = "row")
+})

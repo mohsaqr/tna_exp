@@ -108,3 +108,75 @@ test_that("random_tna_mmm() draws each cluster's sequences from the chain it rep
                      tolerance = 5 * sqrt(0.25 / nrow(part)))
   })
 })
+
+# The same recoveries with the estimate made by markovchain's maximum likelihood fit (markovchainFit) of the
+# simulated sequences, the established estimator of a chain; tolerances as above, fixed before the run.
+
+#' markovchain's maximum likelihood transition matrix of a wide table of sequences
+#'
+#' @param wide A character matrix, one sequence per row.
+#' @param states The states, in the order wanted.
+#' @return A square matrix.
+markovchain_fit <- function(wide, states) {
+  chains <- lapply(seq_len(nrow(wide)), \(row) as.vector(stats::na.omit(wide[row, ])))
+  markovchain::markovchainFit(data = chains, method = "mle")$estimate@transitionMatrix[states, states]
+}
+
+test_that("markovchain's fit of simulated and generated sequences recovers the chain they were drawn from", {
+  skip_without_reference("markovchain")
+  states <- rownames(model$weights)
+  lapply(1:3, \(seed) {
+    simulated <- ref_wide(simulate(model, nsim = 20000, seed = seed + 10L, max_len = 25))
+    expect_reference(model$weights, markovchain_fit(simulated, states), reference = "markovchain",
+                     covers = c("simulate()", "simulate.tna()"),
+                     quantity = sprintf("Monte Carlo summary: transition probability of the simulated chain, seed %d", seed),
+                     tolerance = 0.025)
+  })
+  generated <- random_tna(n_states = 9, states = states, trans_matrix = model$weights, init_probs = model$inits,
+                          n_sequences = 20000, seq_length = 25, seed = 12, return_params = TRUE)
+  expect_reference(model$weights, markovchain_fit(ref_wide(generated$sequences), states), reference = "markovchain",
+                   covers = "random_tna()", quantity = "Monte Carlo summary: transition probability of the generated chain",
+                   tolerance = 0.025)
+})
+
+test_that("markovchain's fit of each group's or cluster's sequences recovers the chain it was drawn from", {
+  skip_without_reference("markovchain")
+  grouped <- group_model(group_regulation, group = rep(c("High", "Low"), each = 1000))
+  n_seq <- 8000L
+  len <- 25L
+  simulated <- simulate(grouped, nsim = n_seq, max_len = len, seed = 13)
+  lapply(c("High", "Low"), \(g) {
+    chain <- grouped[[g]]
+    states <- rownames(chain$weights)
+    part <- ref_wide(subset(simulated, group == g, select = -group))
+    expect_reference(chain$weights, markovchain_fit(part, states), reference = "markovchain",
+                     covers = "simulate.group_tna()",
+                     quantity = sprintf("Monte Carlo summary: transition probability of the simulated chain, group %s", g),
+                     tolerance = 5 * sqrt(0.25 / min(rs_departures(chain$weights, chain$inits, n_seq, len))))
+  })
+  states <- c("Engaged", "Moderate", "Disengaged")
+  given <- matrix(c(0.7, 0.2, 0.1, 0.3, 0.5, 0.2, 0.1, 0.3, 0.6), 3, byrow = TRUE, dimnames = list(states, states))
+  inits <- c(Engaged = 0.5, Moderate = 0.3, Disengaged = 0.2)
+  generated <- random_group_tna(n_groups = 2, n_states = 3, states = states, n_sequences = 6000L, seq_length = 20L,
+                                per_group = list(list(trans_matrix = given, init_probs = inits),
+                                                 list(trans_matrix = given, init_probs = inits)),
+                                seed = 14)
+  # the generated sequences are the model's data: state codes with the states as the "alphabet" attribute
+  sequences <- generated[[1L]]$data
+  decoded <- matrix(attr(sequences, "alphabet")[as.matrix(sequences)], nrow(sequences))
+  expect_reference(given, markovchain_fit(decoded, states), reference = "markovchain",
+                   covers = "random_group_tna()",
+                   quantity = "Monte Carlo summary: transition probability of a generated group",
+                   tolerance = 5 * sqrt(0.25 / min(rs_departures(given, inits, 6000L, 20L))))
+  mixture <- random_tna_mmm(n_clusters = 2, n_states = 3, n_sequences = 12000L, seq_length = 20L, seed = 15)
+  observations <- ref_wide(mixture$observations)
+  lapply(mixture$cluster_names, \(cluster) {
+    part <- observations[mixture$most_probable_cluster == cluster, , drop = FALSE]
+    trans <- mixture$transition_probs[[cluster]]
+    cluster_states <- rownames(trans)
+    expect_reference(trans, markovchain_fit(part, cluster_states), reference = "markovchain", covers = "random_tna_mmm()",
+                     quantity = sprintf("Monte Carlo summary: transition probability, %s", cluster),
+                     tolerance = 5 * sqrt(0.25 / min(rs_departures(trans, mixture$initial_probs[[cluster]][cluster_states],
+                                                                   nrow(part), len = 20L))))
+  })
+})

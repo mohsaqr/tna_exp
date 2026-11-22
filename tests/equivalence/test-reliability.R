@@ -27,3 +27,35 @@ test_that("the mean of each comparison metric over splits agrees with base-R spl
     })
   })
 })
+
+# The comparison metrics of each split computed by established software: Pearson and Spearman by stats::cor(),
+# Euclidean and Manhattan by stats::dist(), Bray-Curtis and weighted Jaccard by vegan::vegdist() (Jaccard as
+# 1 - the Ruzicka dissimilarity), cosine by proxy::simil(). The random halves are drawn in base R (the procedure has
+# no implementation elsewhere); tolerances as above, fixed before the run.
+
+test_that("the mean of each comparison metric over splits agrees with stats, vegan and proxy on random halves", {
+  skip_without_reference(c("vegan", "proxy"))
+  counts <- rs_counts(wide, states)
+  n <- nrow(wide)
+  by_software <- rs_with_seed(32L, t(vapply(seq_len(draws), \(i) {
+    half <- tabulate(sample.int(n, round(n * 0.5)), n)
+    pair <- rbind(as.vector(rs_network(counts, half, states)), as.vector(rs_network(counts, 1 - half, states)))
+    c(Pearson = stats::cor(pair[1L, ], pair[2L, ]), Spearman = stats::cor(pair[1L, ], pair[2L, ], method = "spearman"),
+      Euclidean = as.vector(stats::dist(pair)), Manhattan = as.vector(stats::dist(pair, method = "manhattan")),
+      "Bray-Curtis" = as.vector(vegan::vegdist(pair, method = "bray")),
+      Jaccard = 1 - as.vector(vegan::vegdist(pair, method = "jaccard")),
+      Cosine = as.vector(proxy::simil(pair, method = "cosine")))
+  }, numeric(7))))
+  package_of <- c(Pearson = "stats", Spearman = "stats", Euclidean = "stats", Manhattan = "stats",
+                  "Bray-Curtis" = "vegan", Jaccard = "vegan", Cosine = "proxy")
+  lapply(1:3, \(seed) {
+    table <- rs_with_seed(seed + 10L, summary(reliability(model, iter = iter)))
+    lapply(colnames(by_software), \(metric) {
+      expect_reference(table$mean[table$metric == metric], mean(by_software[, metric]),
+                       reference = package_of[[metric]],
+                       covers = c("reliability()", "reliability.tna()", "summary.tna_reliability()"),
+                       quantity = sprintf("Monte Carlo summary: mean %s over splits, seed %d", metric, seed),
+                       tolerance = 4 * stats::sd(by_software[, metric]) * sqrt(1 / iter + 1 / draws))
+    })
+  })
+})

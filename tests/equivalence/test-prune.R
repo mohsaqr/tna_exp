@@ -71,3 +71,70 @@ test_that("group models are pruned, depruned and repruned group by group", {
                    reference = by_definition, covers = c("reprune()", "reprune.group_tna()"),
                    quantity = "weight per group after reprune()", tolerance = 0)
 })
+
+#' The weight matrix of TraMineR's transition rates of a set of sequences
+#'
+#' @param data A wide sequence table.
+#' @return A square matrix with the states as dimnames.
+traminer_rates <- function(data) {
+  sequences <- suppressMessages(TraMineR::seqdef(as.data.frame(data)))
+  alphabet <- TraMineR::alphabet(sequences)
+  `dimnames<-`(suppressMessages(TraMineR::seqtrate(sequences)), list(alphabet, alphabet))
+}
+
+#' igraph's graph of a weight matrix with the edges at or below a cut-off deleted, read back as a matrix
+#'
+#' @param weights A square weight matrix.
+#' @param cut_off Edges with a weight at most this are deleted.
+#' @return A square matrix.
+igraph_cut <- function(weights, cut_off) {
+  graph <- igraph::graph_from_adjacency_matrix(weights, mode = "directed", weighted = TRUE, diag = TRUE)
+  kept <- igraph::delete_edges(graph, igraph::E(graph)[igraph::E(graph)$weight <= cut_off])
+  states <- rownames(weights)
+  as.matrix(igraph::as_adjacency_matrix(kept, attr = "weight", sparse = FALSE))[states, states]
+}
+
+test_that("pruning, depruning and repruning equal igraph's cut of TraMineR's rates", {
+  skip_without_reference(c("TraMineR", "igraph"))
+  rates <- traminer_rates(group_regulation)
+  pruned <- prune(model, threshold = 0.05)
+  expect_reference(pruned$weights, igraph_cut(rates, 0.05), reference = "igraph", covers = c("prune()", "prune.tna()"),
+                   quantity = "weight after a threshold of 0.05", tolerance = 1e-12)
+  cut_off <- stats::quantile(rates[rates > 0], probs = 0.2)
+  expect_reference(prune(model, method = "lowest", lowest = 0.2)$weights, igraph_cut(rates, cut_off), reference = "igraph",
+                   covers = c("prune()", "prune.tna()"), quantity = "weight after removing the lowest 20%",
+                   tolerance = 1e-12)
+  expect_reference(deprune(pruned)$weights, rates, reference = "TraMineR", covers = c("deprune()", "deprune.tna()"),
+                   quantity = "weight after deprune()", tolerance = 1e-12)
+  removed <- ref_long(rates, "weight")
+  removed <- removed[removed$weight > 0 & removed$weight <= 0.05, ]
+  expect_reference(pruning_details(pruned), removed, reference = "TraMineR",
+                   covers = c("pruning_details()", "pruning_details.tna()"),
+                   quantity = "removed edge and its weight, threshold 0.05", tolerance = 1e-12, key = c("from", "to"))
+})
+
+test_that("group models are pruned and restored as igraph and TraMineR give each group", {
+  skip_without_reference(c("TraMineR", "igraph"))
+  halves <- rep(c("first", "second"), each = 1000)
+  groups <- group_tna(group_regulation, group = halves)
+  rates <- list(first = traminer_rates(group_regulation[1:1000, ]), second = traminer_rates(group_regulation[1001:2000, ]))
+  pruned <- prune(groups, threshold = 0.05)
+  expect_reference(unlist(lapply(pruned, \(group) group$weights)), unlist(lapply(rates, igraph_cut, 0.05)),
+                   reference = "igraph", covers = c("prune()", "prune.group_tna()"),
+                   quantity = "weight per group after a threshold of 0.05", tolerance = 1e-12)
+  expect_reference(unlist(lapply(deprune(pruned), \(group) group$weights)), unlist(rates), reference = "TraMineR",
+                   covers = c("deprune()", "deprune.group_tna()"), quantity = "weight per group after deprune()",
+                   tolerance = 1e-12)
+  expect_reference(unlist(lapply(reprune(deprune(pruned)), \(group) group$weights)), unlist(lapply(rates, igraph_cut, 0.05)),
+                   reference = "igraph", covers = c("reprune()", "reprune.group_tna()"),
+                   quantity = "weight per group after reprune()", tolerance = 1e-12)
+  # pruning_details() of a group model returns one table of removed edges per group
+  details <- do.call(rbind, Map(\(table, group) data.frame(group = group, table), pruning_details(pruned), names(rates)))
+  removed <- do.call(rbind, Map(\(cells, group) {
+    long <- ref_long(cells, "weight")
+    data.frame(group = group, long[long$weight > 0 & long$weight <= 0.05, ])
+  }, rates, names(rates)))
+  expect_reference(details, removed, reference = "TraMineR", covers = c("pruning_details()", "pruning_details.group_tna()"),
+                   quantity = "removed edge and its weight per group, threshold 0.05", tolerance = 1e-12,
+                   key = c("group", "from", "to"))
+})

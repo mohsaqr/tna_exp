@@ -162,3 +162,72 @@ test_that("the order statistics equal Nestimate's markov_order_test()", {
                    reference = "Nestimate", covers = c("markov_order()", "markov_order.tna()"),
                    quantity = "order statistics of engagement", tolerance = 1e-8, measure = "relative", key = "order")
 })
+
+#' The G-squared of order k against order k - 1 from stats::loglin(): the likelihood-ratio statistic of the
+#' log-linear model of conditional independence [wx][ws] of the next state s and the state x k steps back given the
+#' k - 1 states w between them (independence [x][s] for k = 1)
+#'
+#' @param chains A list of character vectors.
+#' @param k The order.
+#' @return A number.
+loglin_g2 <- function(chains, k) {
+  at <- ref_positions(chains, k)
+  x <- at[[paste0("lag_", k)]]
+  if (k == 1L) return(stats::loglin(table(x = x, s = at$state), margin = list(1L, 2L), print = FALSE)$lrt)
+  w <- do.call(paste, at[paste0("lag_", seq_len(k - 1L))])
+  stats::loglin(table(w = w, x = x, s = at$state), margin = list(c(1L, 2L), c(1L, 3L)), print = FALSE)$lrt
+}
+
+test_that("the G-squared statistics equal stats::loglin()'s likelihood-ratio tests", {
+  set.seed(1)
+  found <- markov_order(tna(group_regulation), max_order = 3L, iter = 99L)
+  g2 <- vapply(1:3, \(k) loglin_g2(all_chains, k), numeric(1))
+  expect_reference(subset(found$stats, order > 0, select = c(order, g2)), data.frame(order = 1:3, g2 = g2),
+                   reference = "stats", covers = c("markov_order()", "markov_order.tna()"),
+                   quantity = "G-squared of order k against k - 1", tolerance = 1e-8, measure = "relative", key = "order")
+  expect_reference(subset(summary(found, digits = 10L), order > 0, select = c(order, g2)), data.frame(order = 1:3, g2 = g2),
+                   reference = "stats", covers = "summary.tna_markov_order()",
+                   quantity = "G-squared of order k against k - 1, summary()", tolerance = 1e-8, measure = "relative",
+                   key = "order")
+  engagement_chains <- lapply(seq_len(nrow(engagement)), \(row) as.vector(stats::na.omit(ref_wide(engagement)[row, ])))
+  set.seed(1)
+  engaged <- markov_order(tna(engagement), max_order = 2L, iter = 99L)
+  expect_reference(subset(engaged$stats, order > 0, select = c(order, g2)),
+                   data.frame(order = 1:2, g2 = vapply(1:2, \(k) loglin_g2(engagement_chains, k), numeric(1))),
+                   reference = "stats", covers = c("markov_order()", "markov_order.tna()"),
+                   quantity = "G-squared of order k against k - 1, engagement", tolerance = 1e-8, measure = "relative",
+                   key = "order")
+})
+
+test_that("the G-squared statistics of group models equal stats::loglin() on each group", {
+  halves <- rep(c("first", "second"), each = 1000)
+  set.seed(1)
+  found <- markov_order(group_tna(group_regulation, group = halves), max_order = 2L, iter = 99L)
+  per_group <- lapply(split(seq_len(2000L), halves),
+                      \(rows) data.frame(order = 1:2, g2 = vapply(1:2, \(k) loglin_g2(all_chains[rows], k), numeric(1))))
+  with_group <- \(tables) do.call(rbind, Map(\(table, group) data.frame(group = group, table), tables, names(tables)))
+  expect_reference(subset(with_group(lapply(found, \(group) group$stats)), order > 0, select = c(group, order, g2)),
+                   with_group(per_group), reference = "stats", covers = c("markov_order()", "markov_order.group_tna()"),
+                   quantity = "G-squared per group", tolerance = 1e-8, measure = "relative", key = c("group", "order"))
+  expect_reference(subset(summary(found, digits = 10L), order > 0, select = c(group, order, g2)), with_group(per_group),
+                   reference = "stats", covers = "summary.group_tna_markov_order()",
+                   quantity = "G-squared per group, summary()", tolerance = 1e-8, measure = "relative",
+                   key = c("group", "order"))
+})
+
+test_that("the order statistics of group models equal Nestimate's markov_order_test() on each group", {
+  skip_without_reference("Nestimate")
+  halves <- rep(c("first", "second"), each = 1000)
+  set.seed(1)
+  found <- markov_order(group_tna(group_regulation, group = halves), max_order = 2L, iter = 99L)
+  per_group <- lapply(split(seq_len(2000L), halves), \(rows) {
+    theirs <- Nestimate::markov_order_test(group_regulation[rows, ], max_order = 2L, n_perm = 99L, seed = 1)$test_table
+    data.frame(order = theirs$order, loglik = theirs$loglik, aic = theirs$AIC, bic = theirs$BIC, g2 = theirs$g2,
+               df = as.numeric(theirs$df), p_asymptotic = theirs$p_asymptotic)
+  })
+  with_group <- \(tables) do.call(rbind, Map(\(table, group) data.frame(group = group, table), tables, names(tables)))
+  expect_reference(with_group(lapply(found, \(group) group$stats)), with_group(per_group), reference = "Nestimate",
+                   covers = c("markov_order()", "markov_order.group_tna()"),
+                   quantity = "order statistics per group, path degrees of freedom", tolerance = 1e-8,
+                   measure = "relative", key = c("group", "order"))
+})

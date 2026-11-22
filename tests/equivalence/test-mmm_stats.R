@@ -52,3 +52,37 @@ test_that("the coefficients of tna's mixture model follow the Wald formulas", {
                    covers = c("mmm_stats()", "mmm_stats.tna_mmm()"), quantity = "Wald statistics",
                    tolerance = 1e-10, key = c("cluster", "variable"))
 })
+
+#' The Wald test of each coefficient alone by aod::wald.test(): chi-squared with one degree of freedom (z squared)
+#' and its p-value
+#'
+#' @param estimate,vcov The coefficients (in the order of `vcov`) and their covariance matrix.
+#' @return A data frame: position, chi2, p_value.
+aod_wald <- function(estimate, vcov) {
+  tests <- lapply(seq_along(estimate), \(term) aod::wald.test(Sigma = vcov, b = estimate, Terms = term)$result$chi2)
+  data.frame(position = seq_along(estimate), chi2 = vapply(tests, `[[`, numeric(1), "chi2"),
+             p_value = vapply(tests, `[[`, numeric(1), "P"))
+}
+
+#' mmm_stats() as z squared and p-value by position
+#'
+#' @param table The result of mmm_stats().
+#' @return A data frame: position, chi2, p_value.
+wald_of <- \(table) data.frame(position = seq_len(nrow(table)), chi2 = table$z_value^2, p_value = table$p_value)
+
+test_that("Wald z-values and p-values equal aod's Wald tests", {
+  skip_without_reference(c("aod", "seqHMM"))
+  set.seed(3)
+  covariates <- data.frame(x = stats::rnorm(300))
+  initial <- seqHMM::build_mmm(engagement[seq_len(300L), ], n_clusters = 3, formula = ~ x, data = covariates)
+  fit <- seqHMM::fit_model(initial)$model
+  fitted <- summary(fit)
+  estimate <- as.vector(fitted$coefficients[, -1L, drop = FALSE])
+  expect_reference(wald_of(mmm_stats(fit)), aod_wald(estimate, fitted$vcov), reference = "aod",
+                   covers = c("mmm_stats()", "mmm_stats.mhmm()"), quantity = "Wald chi-squared and p-value",
+                   tolerance = 1e-10, key = "position")
+  tna_estimate <- as.vector(engagement_mmm$coefficients[, -1L, drop = FALSE])
+  expect_reference(wald_of(mmm_stats(engagement_mmm)), aod_wald(tna_estimate, engagement_mmm$vcov), reference = "aod",
+                   covers = c("mmm_stats()", "mmm_stats.tna_mmm()"),
+                   quantity = "Wald chi-squared and p-value of tna's mixture model", tolerance = 1e-10, key = "position")
+})

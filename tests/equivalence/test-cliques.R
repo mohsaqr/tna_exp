@@ -97,3 +97,26 @@ test_that("cliques of group models equal the enumeration for each group", {
                    covers = c("cliques()", "cliques.group_tna()"), quantity = "triad per group, threshold 0.05",
                    tolerance = 1e-12, key = c("group", "clique"))
 })
+
+test_that("cliques of group models equal igraph's cliques for each group", {
+  skip_without_reference("igraph")
+  halves <- rep(c("first", "second"), each = 1000)
+  wide <- ref_wide(group_regulation)
+  found <- cliques(group_tna(group_regulation, group = halves), size = 3, threshold = 0.05)
+  per_group <- lapply(split(seq_len(2000L), halves), \(rows) {
+    group_weights <- ref_rows(ref_pairs(wide[rows, ]))
+    qualifies <- group_weights >= 0.05 & t(group_weights) >= 0.05
+    sets <- igraph_cliques(qualifies, 3L)
+    data.frame(clique = vapply(sets, \(set) paste(states[sort(set)], collapse = ", "), character(1)),
+               total_weight = vapply(sets, \(set) sum(group_weights[set, set]), numeric(1)))
+  })
+  ours <- Map(\(group, name) {
+    data.frame(clique = vapply(group$indices, \(set) paste(states[sort(set)], collapse = ", "), character(1)),
+               total_weight = vapply(group$weights, sum, numeric(1)))
+  }, found, names(found))
+  with_group <- \(tables) do.call(rbind, Map(\(table, group) data.frame(group = rep(group, nrow(table)), table),
+                                             tables, names(tables)))
+  expect_reference(with_group(ours), with_group(per_group), reference = "igraph",
+                   covers = c("cliques()", "cliques.group_tna()"), quantity = "triad per group, threshold 0.05",
+                   tolerance = 1e-12, key = c("group", "clique"))
+})

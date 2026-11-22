@@ -66,3 +66,28 @@ test_that("summary metrics equal their definitions", {
                    covers = "summary.group_tna()", quantity = "network summary per group", tolerance = 1e-10,
                    key = "metric")
 })
+
+test_that("summary metrics of group models equal igraph's on each group's network", {
+  skip_without_reference("igraph")
+  igraph_summary <- \(weights) {
+    graph <- igraph::graph_from_adjacency_matrix(weights, mode = "directed", weighted = TRUE)
+    strength_out <- igraph::strength(graph, mode = "out")
+    strength_in <- igraph::strength(graph, mode = "in")
+    degree_out <- igraph::degree(graph, mode = "out")
+    c(igraph::vcount(graph), igraph::ecount(graph), min(igraph::edge_density(graph), 1), igraph::mean_distance(graph),
+      mean(strength_out), stats::sd(strength_out), mean(strength_in), stats::sd(strength_in),
+      mean(degree_out), stats::sd(degree_out),
+      igraph::centr_degree(graph, mode = "out", loops = FALSE)$centralization,
+      igraph::centr_degree(graph, mode = "in", loops = FALSE)$centralization, igraph::reciprocity(graph))
+  }
+  halves <- rep(c("first", "second"), each = 1000)
+  per_group <- lapply(split(seq_len(2000L), halves), \(rows) igraph_summary(ref_rows(ref_pairs(wide[rows, ]))))
+  expected <- data.frame(
+    metric = c("Node Count", "Edge Count", "Network Density", "Mean Distance", "Mean Out-Strength", "SD Out-Strength",
+               "Mean In-Strength", "SD In-Strength", "Mean Out-Degree", "SD Out-Degree",
+               "Centralization (Out-Degree)", "Centralization (In-Degree)", "Reciprocity"),
+    first = per_group$first, second = per_group$second)
+  expect_reference(summary(group_tna(group_regulation, group = halves)), expected, reference = "igraph",
+                   covers = "summary.group_tna()", quantity = "network summary per group", tolerance = 1e-10,
+                   key = "metric")
+})

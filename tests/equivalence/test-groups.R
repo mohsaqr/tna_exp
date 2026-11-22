@@ -146,3 +146,121 @@ test_that("a seqHMM mixture Markov model gives the TraMineR rates of its most pr
                    quantity = "transition probability per most probable cluster of seqHMM", tolerance = 1e-12,
                    key = c("group", "from", "to"))
 })
+
+#' TraMineR's lagged transition counts of a set of rows of a sequence table, one table per lag
+#'
+#' @param data A wide sequence table.
+#' @param alphabet The states.
+#' @param lags The lags.
+#' @return A list of count matrices.
+traminer_group_lags <- function(data, alphabet, lags) {
+  sequences <- suppressMessages(TraMineR::seqdef(as.data.frame(data), alphabet = alphabet))
+  lapply(lags, \(lag) `dimnames<-`(suppressMessages(TraMineR::seqtrate(sequences, lag = lag, count = TRUE)),
+                                   list(alphabet, alphabet)))
+}
+
+test_that("group models of each type equal TraMineR's (lagged) transition counts per group", {
+  skip_without_reference("TraMineR")
+  lags <- seq_len(ncol(group_regulation) - 1L)
+  per_group <- list(first = traminer_group_lags(group_regulation[1:1000, ], states, lags),
+                    second = traminer_group_lags(group_regulation[1001:2000, ], states, lags))
+  expect_reference(model_weights(group_ftna(group_regulation, group = halves)),
+                   ref_groups_long(lapply(per_group, `[[`, 1L)), reference = "TraMineR",
+                   covers = c("group_ftna()", "group_model.default()"), quantity = "transition count per group",
+                   tolerance = 0, key = c("group", "from", "to"))
+  attention <- lapply(per_group, \(tables) Reduce(`+`, Map(\(counts, lag) exp(-lag) * counts, tables, lags)))
+  expect_reference(model_weights(group_atna(group_regulation, group = halves)), ref_groups_long(attention),
+                   reference = "TraMineR", covers = c("group_atna()", "group_model.default()"),
+                   quantity = "attention weight per group, from lagged counts", tolerance = 1e-10, measure = "relative",
+                   key = c("group", "from", "to"))
+  cooccurrence <- lapply(per_group, \(tables) {
+    both <- Reduce(`+`, lapply(tables, \(counts) counts + t(counts)))
+    `diag<-`(both, diag(both) / 2)
+  })
+  expect_reference(model_weights(group_ctna(group_regulation, group = halves)), ref_groups_long(cooccurrence),
+                   reference = "TraMineR", covers = c("group_ctna()", "group_model.default()"),
+                   quantity = "co-occurrence count per group, from lagged counts (each same-state pair once)",
+                   tolerance = 0, key = c("group", "from", "to"))
+})
+
+test_that("a clustering and tna's mixture model give TraMineR's rates of their clusters", {
+  skip_without_reference("TraMineR")
+  sequences <- group_regulation[seq_len(200L), ]
+  clustering <- cluster_data(sequences, k = 3)
+  rates_of <- \(data, alphabet) {
+    `dimnames<-`(suppressMessages(TraMineR::seqtrate(suppressMessages(TraMineR::seqdef(as.data.frame(data),
+                                                                                         alphabet = alphabet)))),
+                 list(alphabet, alphabet))
+  }
+  by_cluster <- lapply(split(seq_len(200L), paste("Group", clustering$assignments)),
+                       \(rows) rates_of(sequences[rows, ], states))
+  expect_reference(model_weights(group_model(clustering)), ref_groups_long(by_cluster), reference = "TraMineR",
+                   covers = c("group_model()", "group_model.tna_clustering()"),
+                   quantity = "transition probability per cluster of cluster_data()", tolerance = 1e-12,
+                   key = c("group", "from", "to"))
+  observations <- engagement_mmm$observations
+  mixture_states <- ref_states(ref_wide(observations))
+  clusters <- as.character(engagement_mmm$most_probable_cluster)
+  mixture_rates <- lapply(split(seq_len(nrow(observations)), clusters),
+                          \(rows) rates_of(observations[rows, ], mixture_states))
+  expect_reference(model_weights(group_model(engagement_mmm)), ref_groups_long(mixture_rates), reference = "TraMineR",
+                   covers = c("group_model()", "group_model.tna_mmm()"),
+                   quantity = "transition probability per cluster of a tna_mmm", tolerance = 1e-12,
+                   key = c("group", "from", "to"))
+})
+
+test_that("rename_groups() changes the names and keeps every weight", {
+  skip_without_reference("TraMineR")
+  renamed <- rename_groups(group_tna(group_regulation, group = halves), c("early", "late"))
+  rates_of <- \(rows) {
+    sequences <- suppressMessages(TraMineR::seqdef(as.data.frame(group_regulation[rows, ]), alphabet = states))
+    `dimnames<-`(TraMineR::seqtrate(sequences), list(states, states))
+  }
+  expect_reference(model_weights(renamed), ref_groups_long(list(early = rates_of(1:1000), late = rates_of(1001:2000))),
+                   reference = "TraMineR", covers = "rename_groups()",
+                   quantity = "transition probability per renamed group", tolerance = 1e-12,
+                   key = c("group", "from", "to"))
+})
+
+# Recovery: two groups of sequences drawn by simulab::simulate_group_sequences() from their own chains (simulab
+# keeps each group's matrix with the data), fitted by group_tna(), and the same groups by TraMineR.
+# Tolerance for the recovery: 4 binomial standard errors at the least visited state of each chain (rs_departures(),
+# from the parameters, before the draws; the first state of each sequence is drawn from simulab's uniform start
+# when no initial probabilities are given, which rs_departures() is given too).
+
+test_that("group_tna() recovers the chains of simulab's grouped sequences and equals TraMineR on them", {
+  skip_without_reference("TraMineR")
+  group_states <- c("Plan", "Learn", "Reflect")
+  given <- list(
+    matrix(c(0.6, 0.3, 0.1, 0.2, 0.6, 0.2, 0.3, 0.3, 0.4), 3, byrow = TRUE, dimnames = list(group_states, group_states)),
+    matrix(c(0.2, 0.5, 0.3, 0.4, 0.2, 0.4, 0.1, 0.1, 0.8), 3, byrow = TRUE, dimnames = list(group_states, group_states)))
+  start <- c(Plan = 1, Learn = 1, Reflect = 1) / 3
+  n_seq <- 3000L
+  len <- 15L
+  lapply(1:3, \(seed) {
+    simulated <- simulab::simulate_group_sequences(groups = 2L, actors = n_seq, transitions = given, chain_length = len,
+                                                   initial = start, states = group_states, seed = seed)
+    wide <- as.data.frame(simulated, what = "wide")
+    truth <- as.data.frame(simulated, what = "transitions")
+    sequences <- subset(wide, select = -c(id, group))
+    model <- group_tna(sequences, group = wide$group)
+    lapply(unique(wide$group), \(g) {
+      cells <- subset(truth, group == g)
+      true_weights <- tapply(cells$probability, list(factor(cells$from, group_states), factor(cells$to, group_states)), sum)
+      chain <- unclass(true_weights)
+      found <- model[[g]]$weights
+      expect_reference(found, chain[rownames(found), colnames(found)],
+                       reference = "independent: recovery of the parameters of simulab simulate_group_sequences()",
+                       covers = c("group_tna()", "group_model.default()"),
+                       quantity = sprintf("Monte Carlo summary: recovered transition probability, %s, seed %d", g, seed),
+                       tolerance = 4 * sqrt(0.25 / min(rs_departures(chain, start[rownames(chain)], n_seq, len))))
+      rows <- wide$group == g
+      alphabet <- rownames(found)
+      rates <- suppressMessages(TraMineR::seqtrate(suppressMessages(TraMineR::seqdef(sequences[rows, ], alphabet = alphabet))))
+      expect_reference(found, `dimnames<-`(rates, list(alphabet, alphabet)), reference = "TraMineR",
+                       covers = c("group_tna()", "group_model.default()"),
+                       quantity = sprintf("transition probability of simulab's sequences, %s, seed %d", g, seed),
+                       tolerance = 1e-12)
+    })
+  })
+})

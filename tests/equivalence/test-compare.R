@@ -128,3 +128,47 @@ test_that("centrality differences and correlations equal those of the two networ
                    reference = "stats", covers = c("compare()", "compare.tna()"), quantity = "centrality correlation",
                    tolerance = 1e-10, key = "centrality")
 })
+
+#' Correlations and distances of two weight matrices by stats, Bray-Curtis and weighted Jaccard by vegan, cosine by
+#' proxy
+#'
+#' @param x,y Square matrices with the same states.
+#' @return A list: `stats`, `vegan` and `proxy`, each a data frame: metric, value.
+outside_metrics <- function(x, y) {
+  a <- as.vector(x)
+  b <- as.vector(y)
+  pair <- rbind(a, b)
+  list(
+    stats = data.frame(metric = from_stats,
+                       value = c(stats::cor(a, b), stats::cor(a, b, method = "spearman"),
+                                 stats::cor(a, b, method = "kendall"), as.vector(stats::dist(pair)),
+                                 as.vector(stats::dist(pair, method = "manhattan")))),
+    # vegan's quantitative Jaccard is the dissimilarity 1 - sum(min) / sum(max) (Ruzicka); tna reports the similarity
+    vegan = data.frame(metric = c("Bray-Curtis", "Jaccard"),
+                       value = c(as.vector(vegan::vegdist(pair, method = "bray")),
+                                 1 - as.vector(vegan::vegdist(pair, method = "jaccard")))),
+    proxy = data.frame(metric = "Cosine", value = as.vector(proxy::simil(pair, method = "cosine"))))
+}
+
+test_that("comparisons of two models, two matrices and two groups equal stats, vegan and proxy", {
+  skip_without_reference(c("vegan", "proxy"))
+  expected <- outside_metrics(first, second)
+  metrics <- \(found, wanted) subset(found$summary_metrics, metric %in% wanted, select = c(metric, value))
+  calls <- list(list(found = compare(models[["first"]], models[["second"]]), covers = c("compare()", "compare.tna()"),
+                     label = "two models"),
+                list(found = compare(first, second), covers = c("compare()", "compare.matrix()"), label = "two matrices"),
+                list(found = compare(models, i = 1L, j = 2L), covers = c("compare()", "compare.group_tna()"),
+                     label = "two groups"))
+  lapply(calls, \(call) {
+    lapply(c("stats", "vegan", "proxy"), \(reference) {
+      expect_reference(metrics(call$found, expected[[reference]]$metric), expected[[reference]], reference = reference,
+                       covers = call$covers, quantity = sprintf("comparison metric, %s", call$label),
+                       tolerance = 1e-10, key = "metric")
+    })
+  })
+  scale01 <- \(m) (m - min(m)) / (max(m) - min(m))
+  scaled <- outside_metrics(scale01(first), scale01(second))
+  expect_reference(metrics(compare(models[["first"]], models[["second"]], scaling = "minmax"), scaled$stats$metric),
+                   scaled$stats, reference = "stats", covers = c("compare()", "compare.tna()"),
+                   quantity = "comparison metric after min-max scaling", tolerance = 1e-10, key = "metric")
+})

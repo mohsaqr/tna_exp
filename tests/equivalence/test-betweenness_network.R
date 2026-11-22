@@ -51,3 +51,15 @@ test_that("edge betweenness of group models equals that of each group's network"
                    covers = c("betweenness_network()", "betweenness_network.group_tna()"),
                    quantity = "edge betweenness per group", tolerance = 1e-10)
 })
+
+test_that("edge betweenness of group models equals igraph's on each group's network", {
+  skip_without_reference("igraph")
+  halves <- rep(c("first", "second"), each = 1000)
+  groups <- betweenness_network(group_tna(group_regulation, group = halves))
+  wide <- ref_wide(group_regulation)
+  expected <- lapply(split(seq_len(2000L), halves),
+                     \(rows) igraph_edge_betweenness(ref_rows(ref_pairs(wide[rows, ])), TRUE, TRUE))
+  expect_reference(unlist(lapply(groups, \(g) g$weights)), unlist(expected), reference = "igraph",
+                   covers = c("betweenness_network()", "betweenness_network.group_tna()"),
+                   quantity = "edge betweenness per group", tolerance = 1e-10)
+})

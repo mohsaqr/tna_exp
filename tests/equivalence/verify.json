@@ -30,6 +30,27 @@
     "Nestimate": {
       "authority": "internal",
       "note": "owner's package: internal (owner's decision 2026-11-21); a function resting on it counts as Indirect only through exports.via, when that package's own suite verifies the function"
+    },
+    "boot": {
+      "authority": "open-source"
+    },
+    "bootnet": {
+      "authority": "open-source"
+    },
+    "NetworkComparisonTest": {
+      "authority": "open-source"
+    },
+    "vegan": {
+      "authority": "open-source"
+    },
+    "proxy": {
+      "authority": "open-source"
+    },
+    "aod": {
+      "authority": "open-source"
+    },
+    "graphics": {
+      "authority": "open-source"
     }
   },
   "exports": {
@@ -132,7 +153,13 @@
       "random_group_tna()",
       "random_tna_mmm()",
       "import_data()",
-      "import_onehot()"
+      "import_onehot()",
+      "hist.tna()",
+      "hist.group_tna()",
+      "pruning_details()",
+      "pruning_details.tna()",
+      "pruning_details.group_tna()",
+      "rename_groups()"
     ],
     "not_numeric": {
       "plot_model()": "draws a transition network",
@@ -153,13 +180,7 @@
       "plot_sequences.tna()": "as plot_sequences()",
       "plot_sequences.group_tna()": "as plot_sequences()",
       "plot_sequences.tna_data()": "as plot_sequences()",
-      "hist.tna()": "draws a histogram of the edge weights",
-      "hist.group_tna()": "draws one histogram of edge weights per group",
-      "pruning_details()": "prints the pruning record; returns nothing",
-      "pruning_details.tna()": "as pruning_details()",
-      "pruning_details.group_tna()": "as pruning_details()",
-      "rename_groups()": "renames the groups of a group model; no number changes",
-      "list_random_state_pools()": "lists the names of the built-in state vocabularies and their sizes"
+      "list_random_state_pools()": "a fixed catalogue: the names of the built-in label pools and their lengths; nothing is computed"
     },
     "not_yet": {},
     "via": {
@@ -170,6 +191,54 @@
         }
       ],
       "markov_order.tna()": [
+        {
+          "product": "r-nestimate",
+          "function": "markov_order_test()"
+        }
+      ],
+      "permutation_test()": [
+        {
+          "product": "r-nestimate",
+          "function": "permutation()"
+        },
+        {
+          "product": "r-nestimate",
+          "function": "net_edge_betweenness()"
+        },
+        {
+          "product": "r-nestimate",
+          "function": "build_network()"
+        }
+      ],
+      "permutation_test.tna()": [
+        {
+          "product": "r-nestimate",
+          "function": "permutation()"
+        },
+        {
+          "product": "r-nestimate",
+          "function": "net_edge_betweenness()"
+        },
+        {
+          "product": "r-nestimate",
+          "function": "build_network()"
+        }
+      ],
+      "summary.tna_permutation()": [
+        {
+          "product": "r-nestimate",
+          "function": "permutation()"
+        },
+        {
+          "product": "r-nestimate",
+          "function": "net_edge_betweenness()"
+        },
+        {
+          "product": "r-nestimate",
+          "function": "build_network()"
+        }
+      ],
+      "markov_order.group_tna()": [
         {
           "product": "r-nestimate",
           "function": "markov_order_test()"

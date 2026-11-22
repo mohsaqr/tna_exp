@@ -144,3 +144,24 @@ test_that("centralities of group models equal those of each group's network", {
                    covers = c("centralities()", "centralities.group_tna()"), quantity = "centrality per group",
                    tolerance = 1e-8, key = c("group", "state"))
 })
+
+test_that("centralities of group models equal igraph's on each group's network", {
+  skip_without_reference("igraph")
+  halves <- rep(c("first", "second"), each = 1000)
+  igraph_centralities <- \(weights) {
+    graph <- igraph::graph_from_adjacency_matrix(weights, mode = "directed", weighted = TRUE)
+    lengths <- 1 / igraph::E(graph)$weight
+    data.frame(state = igraph::V(graph)$name,
+               OutStrength = igraph::strength(graph, mode = "out"), InStrength = igraph::strength(graph, mode = "in"),
+               ClosenessIn = igraph::closeness(graph, mode = "in", weights = lengths),
+               ClosenessOut = igraph::closeness(graph, mode = "out", weights = lengths),
+               Closeness = igraph::closeness(graph, mode = "all", weights = lengths),
+               Betweenness = igraph::betweenness(graph, weights = lengths),
+               PageRank = igraph::page_rank(graph)$vector)
+  }
+  per_group <- lapply(split(seq_len(2000L), halves), \(rows) igraph_centralities(ref_network(wide[rows, ])))
+  expected <- do.call(rbind, Map(\(table, group) data.frame(group = group, table), per_group, names(per_group)))
+  expect_reference(centralities(group_tna(group_regulation, group = halves), measures = path_measures), expected,
+                   reference = "igraph", covers = c("centralities()", "centralities.group_tna()"),
+                   quantity = "centrality per group", tolerance = 1e-8, key = c("group", "state"))
+})

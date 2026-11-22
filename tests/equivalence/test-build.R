@@ -165,3 +165,112 @@ test_that("a TraMineR sequence object gives TraMineR's transition rates", {
                    tolerance = 1e-12)
 })
 
+
+# The lagged models against TraMineR: seqtrate(lag = k, count = TRUE) counts the pairs of observed states k time
+# points apart, so attention, co-occurrence and gap weights are sums of TraMineR's lagged count tables.
+# Tolerance: sums of some 25 tables of whole counts weighted by exp() or 1 / lag, 1e-10 relative; plain sums of
+# whole counts, 0.
+
+#' TraMineR's lagged transition counts of the bundled sequences, one table per lag
+#'
+#' @param data A wide sequence table.
+#' @return A list of count matrices with the states as dimnames, lag 1 first.
+traminer_lags <- function(data) {
+  sequences <- suppressMessages(TraMineR::seqdef(as.data.frame(data)))
+  alphabet <- TraMineR::alphabet(sequences)
+  lapply(seq_len(ncol(data) - 1L), \(lag) {
+    `dimnames<-`(suppressMessages(TraMineR::seqtrate(sequences, lag = lag, count = TRUE)), list(alphabet, alphabet))
+  })
+}
+
+test_that("attention, co-occurrence and gap weights equal sums of TraMineR's lagged transition counts", {
+  skip_without_reference("TraMineR")
+  lagged <- traminer_lags(group_regulation)
+  lags <- seq_along(lagged)
+  weighted_sum <- \(weight) Reduce(`+`, Map(\(counts, lag) weight(lag) * counts, lagged, lags))
+  expect_reference(atna(group_regulation)$weights, weighted_sum(\(lag) exp(-lag)), reference = "TraMineR",
+                   covers = c("atna()", "build_model()"), quantity = "attention weight, lambda = 1, from lagged counts",
+                   tolerance = 1e-10, measure = "relative")
+  expect_reference(atna(group_regulation, params = list(lambda = 3))$weights, weighted_sum(\(lag) exp(-lag / 3)),
+                   reference = "TraMineR", covers = c("atna()", "build_model()"),
+                   quantity = "attention weight, lambda = 3, from lagged counts", tolerance = 1e-10, measure = "relative")
+  expect_reference(atna(group_regulation, params = list(direction = "backward"))$weights, t(weighted_sum(\(lag) exp(-lag))),
+                   reference = "TraMineR", covers = c("atna()", "build_model()"),
+                   quantity = "attention weight, backward, from lagged counts", tolerance = 1e-10, measure = "relative")
+  # Co-occurrence: every pair of time points, both directions off the diagonal and each pair once on it (ctna()'s
+  # convention, see the known difference above).
+  both <- Reduce(`+`, lapply(lagged, \(counts) counts + t(counts)))
+  diag(both) <- diag(both) / 2
+  expect_reference(ctna(group_regulation)$weights, both, reference = "TraMineR", covers = c("ctna()", "build_model()"),
+                   quantity = "co-occurrence count from lagged counts", tolerance = 0)
+  gap <- Reduce(`+`, Map(\(counts, lag) counts / lag, lagged[1:4], 1:4))
+  expect_reference(build_model(group_regulation, type = "gap", params = list(max_gap = 3L))$weights, gap,
+                   reference = "TraMineR", covers = "build_model()", quantity = "gap weight, max_gap = 3, from lagged counts",
+                   tolerance = 1e-10, measure = "relative")
+  expect_reference(build_model(group_regulation, type = "reverse")$weights, t(lagged[[1L]]), reference = "TraMineR",
+                   covers = "build_model()", quantity = "reverse: transition count from TraMineR", tolerance = 0)
+})
+
+test_that("sequences with missing time points inside give TraMineR's and markovchain's estimates", {
+  skip_without_reference(c("TraMineR", "markovchain"))
+  # 300 sequences with 20 time points blanked in each of columns 3 to 8: a transition is counted only between two
+  # observed adjacent time points.
+  gappy <- as.data.frame(group_regulation[seq_len(300L), ])
+  blanks <- rs_with_seed(5L, lapply(3:8, \(column) sample.int(300L, 20L)))
+  gappy[3:8] <- Map(\(column, rows) `[<-`(column, rows, NA), gappy[3:8], blanks)
+  sequences <- suppressMessages(TraMineR::seqdef(gappy))
+  alphabet <- TraMineR::alphabet(sequences)
+  rates <- `dimnames<-`(suppressMessages(TraMineR::seqtrate(sequences)), list(alphabet, alphabet))
+  expect_reference(tna(gappy)$weights, rates, reference = "TraMineR", covers = c("tna()", "build_model()"),
+                   quantity = "transition probability, missing time points inside", tolerance = 1e-12)
+  expect_reference(ftna(gappy)$weights, ref_pairs(ref_wide(gappy), alphabet), reference = by_definition,
+                   covers = c("ftna()", "build_model()"), quantity = "transition count, missing time points inside",
+                   tolerance = 0)
+})
+
+# Parameter recovery: sequences drawn by simulab::simulate_markov() from a known chain, fitted by tna() and,
+# for the same data, by markovchain. simulab stores the generating transition matrix and initial probabilities with
+# the data (as.data.frame(x, what = "transitions" / "initial_probabilities")).
+# Tolerance for the recovery: 4 binomial standard errors of an estimated probability, 4 sqrt(0.25 / departures)
+# with the expected departures from the least visited state of the chain (rs_departures(), computed from the
+# parameters before anything is drawn); for an initial probability 4 sqrt(0.25 / n). For tna against markovchain
+# on the same data the ratio of two whole counts, 1e-12.
+
+recovery_chain <- matrix(c(0.60, 0.30, 0.10, 0.00,
+                           0.20, 0.50, 0.20, 0.10,
+                           0.25, 0.25, 0.40, 0.10,
+                           0.10, 0.10, 0.30, 0.50), 4, byrow = TRUE,
+                         dimnames = list(c("A", "B", "C", "D"), c("A", "B", "C", "D")))
+recovery_inits <- c(A = 0.4, B = 0.3, C = 0.2, D = 0.1)
+
+test_that("tna() recovers the transition and initial probabilities of simulab's Markov chains", {
+  skip_without_reference("markovchain")
+  n_seq <- 4000L
+  len <- 15L
+  lapply(1:3, \(seed) {
+    simulated <- simulab::simulate_markov(n = n_seq, transition = recovery_chain, chain_length = len,
+                                          initial = recovery_inits, states = rownames(recovery_chain), seed = seed)
+    wide <- subset(as.data.frame(simulated, what = "wide"), select = -id)
+    truth <- as.data.frame(simulated, what = "transitions")
+    true_weights <- tapply(truth$probability, list(factor(truth$from, rownames(recovery_chain)),
+                                                   factor(truth$to, rownames(recovery_chain))), sum)
+    true_inits <- as.data.frame(simulated, what = "initial_probabilities")
+    model <- tna(wide)
+    tolerance <- 4 * sqrt(0.25 / min(rs_departures(recovery_chain, recovery_inits, n_seq, len)))
+    expect_reference(model$weights, unclass(true_weights),
+                     reference = "independent: recovery of the parameters of simulab simulate_markov()",
+                     covers = c("tna()", "build_model()"),
+                     quantity = sprintf("Monte Carlo summary: recovered transition probability, seed %d", seed),
+                     tolerance = tolerance)
+    expect_reference(model$inits, stats::setNames(true_inits$probability, true_inits$state),
+                     reference = "independent: recovery of the parameters of simulab simulate_markov()",
+                     covers = c("tna()", "build_model()"),
+                     quantity = sprintf("Monte Carlo summary: recovered initial probability, seed %d", seed),
+                     tolerance = 4 * sqrt(0.25 / n_seq))
+    fit <- markovchain::markovchainFit(data = lapply(seq_len(nrow(wide)), \(row) unlist(wide[row, ], use.names = FALSE)),
+                                       method = "mle")$estimate@transitionMatrix
+    states <- rownames(model$weights)
+    expect_reference(model$weights, fit[states, states], reference = "markovchain", covers = c("tna()", "build_model()"),
+                     quantity = sprintf("transition probability of simulab sequences, seed %d", seed), tolerance = 1e-12)
+  })
+})

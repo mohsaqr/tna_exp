@@ -71,3 +71,54 @@ test_that("as.igraph() hands igraph the weight matrix", {
                    covers = c("as.igraph()", "as.igraph.group_tna()"),
                    quantity = "edge weight of group b read back by igraph", tolerance = 1e-12)
 })
+
+test_that("a count matrix or table from TraMineR gives TraMineR's transition rates", {
+  skip_without_reference("TraMineR")
+  sequences <- suppressMessages(TraMineR::seqdef(as.data.frame(group_regulation)))
+  alphabet <- TraMineR::alphabet(sequences)
+  tramine <- \(count) `dimnames<-`(suppressMessages(TraMineR::seqtrate(sequences, count = count)), list(alphabet, alphabet))
+  expect_reference(build_model(tramine(TRUE), type = "relative")$weights, tramine(FALSE), reference = "TraMineR",
+                   covers = c("build_model()", "build_model.matrix()"),
+                   quantity = "transition probability from TraMineR's count matrix", tolerance = 1e-12)
+  expect_reference(build_model(as.table(tramine(TRUE)), type = "relative")$weights, tramine(FALSE),
+                   reference = "TraMineR", covers = c("build_model()", "build_model.default()"),
+                   quantity = "transition probability from TraMineR's count table", tolerance = 1e-12)
+  expect_reference(build_model(tramine(TRUE), type = "frequency")$weights, tramine(TRUE), reference = "TraMineR",
+                   covers = c("build_model()", "build_model.matrix()"),
+                   quantity = "frequency weights of TraMineR's count matrix kept", tolerance = 0)
+})
+
+test_that("a long table gives markovchain's maximum likelihood chain of its sequences", {
+  skip_without_reference("markovchain")
+  set.seed(42)
+  small <- wide[seq_len(200L), ]
+  observed <- which(!is.na(small), arr.ind = TRUE)
+  long <- data.frame(id = observed[, "row"], state = small[observed], time = observed[, "col"])
+  long <- long[sample.int(nrow(long)), ]
+  class(long) <- c("tsn", class(long))
+  # markovchain reads each sequence in time order, split from the long table in base R
+  by_id <- split(as.data.frame(long), long$id)
+  chains <- lapply(by_id, \(rows) rows$state[order(rows$time)])
+  fit <- markovchain::markovchainFit(data = unname(chains), method = "mle")$estimate@transitionMatrix
+  small_states <- ref_states(small)
+  expect_reference(tsn(long)$weights, fit[small_states, small_states], reference = "markovchain",
+                   covers = c("tsn()", "build_model.tsn()"), quantity = "transition probability, long table",
+                   tolerance = 1e-12)
+})
+
+test_that("an edge list gives igraph's matrix of combined edge weights", {
+  skip_without_reference("igraph")
+  set.seed(123)
+  nodes <- c("A", "B", "C", "D")
+  edges <- data.frame(from = sample(nodes, 100, replace = TRUE), to = sample(nodes, 100, replace = TRUE),
+                      weight = stats::rexp(100))
+  combined <- \(how) {
+    graph <- igraph::graph_from_data_frame(edges, directed = TRUE, vertices = data.frame(name = nodes))
+    graph <- igraph::simplify(graph, remove.multiple = TRUE, remove.loops = FALSE, edge.attr.comb = list(weight = how))
+    as.matrix(igraph::as_adjacency_matrix(graph, attr = "weight", sparse = FALSE))[nodes, nodes]
+  }
+  expect_reference(sna(edges)$weights, combined("sum"), reference = "igraph", covers = "sna()",
+                   quantity = "summed edge weight", tolerance = 1e-12)
+  expect_reference(sna(edges, aggregate = mean)$weights, combined("mean"), reference = "igraph", covers = "sna()",
+                   quantity = "mean edge weight", tolerance = 1e-12)
+})

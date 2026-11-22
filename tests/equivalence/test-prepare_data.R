@@ -62,3 +62,42 @@ test_that("the model of prepared data counts the transitions within sessions", {
                    covers = c("build_model.tna_data()", "tna()", "prepare_data()"),
                    quantity = "transition probability within sessions", tolerance = 1e-12)
 })
+
+test_that("the model of prepared data equals TraMineR's rates of the sessions", {
+  skip_without_reference("TraMineR")
+  log <- as.data.frame(group_regulation_long)
+  expected <- ref_sessions(log, threshold = 300)
+  # the sessions, cut in base R, as a wide table for TraMineR
+  sessions <- split(expected$action, expected$session)
+  longest <- max(lengths(sessions))
+  wide <- as.data.frame(do.call(rbind, lapply(sessions, \(events) c(events, rep(NA, longest - length(events))))))
+  sequences <- suppressMessages(TraMineR::seqdef(wide))
+  alphabet <- TraMineR::alphabet(sequences)
+  rates <- `dimnames<-`(suppressMessages(TraMineR::seqtrate(sequences)), list(alphabet, alphabet))
+  prepared <- prepare_data(group_regulation_long, actor = "Actor", time = "Time", action = "Action",
+                           time_threshold = 300)
+  expect_reference(tna(prepared)$weights, rates, reference = "TraMineR",
+                   covers = c("build_model.tna_data()", "tna()", "prepare_data()"),
+                   quantity = "transition probability within sessions", tolerance = 1e-12)
+})
+
+test_that("prepare_data() recovers the sequences of simulab's event logs", {
+  # simulab::simulate_event_log() spaces an actor's events 60 to 600 seconds apart; with a threshold of 900 seconds
+  # every actor is one session, which must be the actor's simulated sequence (simulab's "wide" table).
+  lapply(1:3, \(seed) {
+    simulated <- simulab::simulate_event_log(groups = 3, actors = 40, sequence_length = c(5L, 25L), seed = seed)
+    log <- as.data.frame(simulated)
+    truth <- as.data.frame(simulated, what = "wide")
+    prepared <- prepare_data(log, actor = "id", time = "timestamp", action = "state", time_threshold = 900)
+    found <- ref_cells_of(prepared$sequence_data, prepared$meta_data$id)
+    steps <- grep("^S[0-9]+$", names(truth), value = TRUE)
+    true_cells <- do.call(rbind, lapply(steps, \(step) {
+      data.frame(session = truth$id, position = as.integer(substring(step, 2L)), action = truth[[step]])
+    }))
+    true_cells <- true_cells[!is.na(true_cells$action), ]
+    expect_reference(found, true_cells,
+                     reference = "independent: recovery of the sequences of simulab simulate_event_log()",
+                     covers = "prepare_data()", quantity = sprintf("action of an actor's sequence, seed %d", seed),
+                     tolerance = 0, key = c("session", "position"))
+  })
+})
