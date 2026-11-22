@@ -1,5 +1,13 @@
 # Changelog
 
+## tna 1.5.10
+
+- [`reprune()`](https://sonsoles.me/tna/reference/reprune.md) returns
+  the model with its pruning active again, as documented and as
+  [`deprune()`](https://sonsoles.me/tna/reference/deprune.md) does. It
+  returned the pruning record (a list) instead, because its last line
+  was an assignment.
+
 ## tna 1.5.8
 
 CRAN release: 2026-11-16

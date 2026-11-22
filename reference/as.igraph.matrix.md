@@ -42,8 +42,8 @@ Helper functions
 ``` r
 weights <- matrix(c(0, 0.6, 0.4, 0.5, 0, 0.5, 0.2, 0.8, 0), 3, 3)
 as.igraph(weights)
-#> IGRAPH 88f4d18 D-W- 3 6 -- 
+#> IGRAPH 65f5e0e D-W- 3 6 -- 
 #> + attr: weight (e/n)
-#> + edges from 88f4d18:
+#> + edges from 65f5e0e:
 #> [1] 1->2 1->3 2->1 2->3 3->1 3->2
 ```
