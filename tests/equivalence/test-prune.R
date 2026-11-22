@@ -50,8 +50,7 @@ test_that("deprune() restores the weights and reprune() prunes them again", {
                    covers = c("reprune()", "reprune.tna()"), quantity = "weight after reprune()", tolerance = 0)
   expect_reference(class(reprune(deprune(pruned)))[[1L]], "tna", reference = by_definition,
                    covers = c("reprune()", "reprune.tna()"), quantity = "class of the model reprune() returns",
-                   tolerance = 0,
-                   defect = "reprune.tna() returns the pruning record (a list) instead of the model: its last line is an assignment; FINDINGS.md")
+                   tolerance = 0)
 })
 
 test_that("group models are pruned, depruned and repruned group by group", {

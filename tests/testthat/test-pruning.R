@@ -127,6 +127,19 @@ test_that("pruned weights are restored by reprune", {
   )
 })
 
+test_that("reprune returns the model with the pruning active again", {
+  pruned_model <- prune(mock_tna, threshold = 0.2)
+  repruned_model <- reprune(deprune(pruned_model))
+  # The model itself, as deprune() returns it, not the pruning record.
+  expect_s3_class(repruned_model, "tna")
+  expect_identical(names(repruned_model), names(pruned_model))
+  expect_true(attr(repruned_model, "pruning")$active)
+  expect_identical(repruned_model$weights, pruned_model$weights)
+  repruned_groups <- reprune(deprune(prune(mmm_model, threshold = 0.3)))
+  expect_s3_class(repruned_groups, "group_tna")
+  expect_true(all(vapply(repruned_groups, inherits, logical(1), "tna")))
+})
+
 test_that("pruning can be applied for clusters", {
   expect_error(
     prune(mmm_model, threshold = 0.3),

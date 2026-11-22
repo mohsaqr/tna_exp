@@ -348,6 +348,7 @@ reprune.tna <- function(x, ...) {
   tmp$active <- TRUE
   x$weights <- tmp$weights
   attr(x, "pruning") <- tmp
+  x
 }
 
 #' Disparity Filter Algorithm

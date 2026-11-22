@@ -1,3 +1,9 @@
+# tna 1.5.10
+
+* `reprune()` returns the model with its pruning active again, as documented
+  and as `deprune()` does. It returned the pruning record (a list) instead,
+  because its last line was an assignment.
+
 # tna 1.5.8
 
 * `permutation_test()`: comparing two models with scaled edge weights gives a
