@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,10 @@
       <small>Source: <a href="https://github.com/sonsoleslp/tna/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.11" id="tna-1511">tna 1.5.11<a class="anchor" aria-label="anchor" href="#tna-1511"></a></h2>
+<ul><li>No change to the package code. The equivalence tests (<code>tests/equivalence/</code>, not part of the package build) follow the 2026-11-23 evidence audit: a reference that tna itself calls (igraph in <code><a href="../reference/communities.html">communities()</a></code>, <code><a href="../reference/centralities.html">centralities()</a></code>, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, <code><a href="../reference/cliques.html">cliques()</a></code>, <code><a href="../reference/betweenness_network.html">betweenness_network()</a></code>, <code><a href="https://r.igraph.org/reference/as.igraph.html" class="external-link">as.igraph()</a></code>; <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">graphics::hist()</a></code>; seqHMM’s <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>; <code><a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam()</a></code>, <code><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">stats::hclust()</a></code>) is declared internal, with independent checks beside it (fast greedy communities, PageRank by power iteration, RSP betweenness and diffusion centrality from their papers, histogram counts, silhouette widths, edge lists); Monte Carlo comparisons use one tolerance per number; <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>‘s density (loops counted, capped at 1) and mean distance (probabilities read as lengths) are compared with the literature’s definitions and declared pending the maintainers’ decision.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.10" id="tna-1510">tna 1.5.10<a class="anchor" aria-label="anchor" href="#tna-1510"></a></h2>
 <ul><li>

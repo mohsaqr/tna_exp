@@ -1,5 +1,30 @@
 # Changelog
 
+## tna 1.5.11
+
+- No change to the package code. The equivalence tests
+  (`tests/equivalence/`, not part of the package build) follow the
+  2026-11-23 evidence audit: a reference that tna itself calls (igraph
+  in
+  [`communities()`](https://sonsoles.me/tna/reference/communities.md),
+  [`centralities()`](https://sonsoles.me/tna/reference/centralities.md),
+  [`summary()`](https://rdrr.io/r/base/summary.html),
+  [`cliques()`](https://sonsoles.me/tna/reference/cliques.md),
+  [`betweenness_network()`](https://sonsoles.me/tna/reference/betweenness_network.md),
+  [`as.igraph()`](https://r.igraph.org/reference/as.igraph.html);
+  [`graphics::hist()`](https://rdrr.io/r/graphics/hist.html); seqHMM’s
+  [`summary()`](https://rdrr.io/r/base/summary.html);
+  [`cluster::pam()`](https://rdrr.io/pkg/cluster/man/pam.html),
+  [`stats::hclust()`](https://rdrr.io/r/stats/hclust.html)) is declared
+  internal, with independent checks beside it (fast greedy communities,
+  PageRank by power iteration, RSP betweenness and diffusion centrality
+  from their papers, histogram counts, silhouette widths, edge lists);
+  Monte Carlo comparisons use one tolerance per number;
+  [`summary()`](https://rdrr.io/r/base/summary.html)‘s density (loops
+  counted, capped at 1) and mean distance (probabilities read as
+  lengths) are compared with the literature’s definitions and declared
+  pending the maintainers’ decision.
+
 ## tna 1.5.10
 
 - [`reprune()`](https://sonsoles.me/tna/reference/reprune.md) returns
