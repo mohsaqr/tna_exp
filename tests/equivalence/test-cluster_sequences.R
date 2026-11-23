@@ -103,19 +103,56 @@ test_that("clusters and silhouette widths equal cluster::pam() and stats::hclust
   distances <- stringdist::stringdistmatrix(ref_strings(wide), method = "lv")
   medoids <- cluster::pam(distances, diss = TRUE, k = 3)
   pam_tna <- cluster_sequences(sequences, k = 3, dissimilarity = "lv")
-  expect_reference(pam_tna$assignments, medoids$clustering, reference = "cluster",
+  expect_reference(pam_tna$assignments, medoids$clustering, reference = "cluster", authority = "internal",
                    covers = c("cluster_sequences()", "cluster_data()"), quantity = "cluster, pam, k = 3",
                    tolerance = 0)
-  expect_reference(pam_tna$silhouette, medoids$silinfo$avg.width, reference = "cluster",
+  expect_reference(pam_tna$silhouette, medoids$silinfo$avg.width, reference = "cluster", authority = "internal",
                    covers = c("cluster_sequences()", "cluster_data()"), quantity = "mean silhouette width, pam, k = 3",
                    tolerance = 1e-10)
   tree <- stats::hclust(distances, method = "average")
   groups <- stats::cutree(tree, k = 3)
   hc_tna <- cluster_sequences(sequences, k = 3, dissimilarity = "lv", method = "average")
-  expect_reference(hc_tna$assignments, groups, reference = "stats",
+  expect_reference(hc_tna$assignments, groups, reference = "stats", authority = "internal",
                    covers = c("cluster_sequences()", "cluster_data()"), quantity = "cluster, average linkage, k = 3",
                    tolerance = 0)
   expect_reference(hc_tna$silhouette, mean(cluster::silhouette(groups, dist = distances)[, "sil_width"]),
-                   reference = "cluster", covers = c("cluster_sequences()", "cluster_data()"),
+                   reference = "cluster", authority = "internal", covers = c("cluster_sequences()", "cluster_data()"),
                    quantity = "mean silhouette width, average linkage, k = 3", tolerance = 1e-10)
+})
+
+# cluster_data() clusters with cluster::pam(), stats::hclust() and cluster::silhouette() itself (R/clusters.R), so the
+# rows above are declared authority "internal" (STANDARD decision 14: "<package> (called by the package)"). The
+# independent check: the mean silhouette width of the partition tna returns, from Rousseeuw's (1987) definition on
+# stringdist's distances, s(i) = (b(i) - a(i)) / max(a(i), b(i)), a(i) the mean distance to the other members of
+# i's cluster, b(i) the smallest mean distance to another cluster, s(i) = 0 for a cluster of one.
+
+#' The mean silhouette width of a partition from its definition (Rousseeuw 1987)
+#'
+#' @param distances A "dist" object.
+#' @param membership The cluster of each element.
+#' @return The mean silhouette width.
+ref_mean_silhouette <- function(distances, membership) {
+  d <- as.matrix(distances)
+  widths <- vapply(seq_along(membership), \(i) {
+    own <- membership == membership[i]
+    if (sum(own) == 1L) return(0)
+    a <- sum(d[i, own]) / (sum(own) - 1L)
+    b <- min(vapply(setdiff(unique(membership), membership[i]), \(c) mean(d[i, membership == c]), numeric(1)))
+    (b - a) / max(a, b)
+  }, numeric(1))
+  mean(widths)
+}
+
+test_that("the silhouette width tna reports is that of its partition, by Rousseeuw's definition", {
+  skip_without_reference("stringdist")
+  distances <- stringdist::stringdistmatrix(ref_strings(wide), method = "lv")
+  pam_tna <- cluster_sequences(sequences, k = 3, dissimilarity = "lv")
+  hc_tna <- cluster_sequences(sequences, k = 3, dissimilarity = "lv", method = "average")
+  by_definition <- "independent: mean silhouette width of the returned partition (Rousseeuw 1987) in base R"
+  expect_reference(pam_tna$silhouette, ref_mean_silhouette(distances, pam_tna$assignments), reference = by_definition,
+                   covers = c("cluster_sequences()", "cluster_data()"),
+                   quantity = "mean silhouette width of the partition, pam, k = 3", tolerance = 1e-10)
+  expect_reference(hc_tna$silhouette, ref_mean_silhouette(distances, hc_tna$assignments), reference = by_definition,
+                   covers = c("cluster_sequences()", "cluster_data()"),
+                   quantity = "mean silhouette width of the partition, average linkage, k = 3", tolerance = 1e-10)
 })

@@ -125,3 +125,41 @@ rs_departures <- function(trans, inits, n_seq, len) {
   occupancy <- Reduce(\(p, i) p %*% trans, seq_len(len - 2L), inits, accumulate = TRUE)
   n_seq * colSums(do.call(rbind, occupancy))
 }
+
+# Monte Carlo tolerances, one per number (audit 2026-11-23, A4): each cell is judged at 4 standard errors of ITS
+# OWN difference, not at 4 times the largest standard error of the table.
+
+#' 4 standard errors of the difference of two Monte Carlo p-values of one cell, plus tna's +1
+#'
+#' The reference's share `q` comes from `draws` draws, tna's from `iter`. The variance q (1 - q) is taken at the
+#' point of the reference's 99.9% Clopper-Pearson interval for q closest to 1/2, so that a share that is low (or 0)
+#' by chance does not shrink the tolerance below what the cell's true share allows; this also gives the floor for
+#' cells whose share is 0 or 1. 1 / (iter + 1) covers the +1 of tna's (k + 1) / (iter + 1).
+#'
+#' @param q The reference's shares, one per cell (named).
+#' @param iter The number of tna's draws.
+#' @param draws The number of the reference's draws.
+#' @return The tolerances, named as `q`.
+rs_p_tolerance <- function(q, iter, draws) {
+  k <- round(q * draws)
+  lower <- ifelse(k > 0, stats::qbeta(0.0005, k, draws - k + 1), 0)
+  upper <- ifelse(k < draws, stats::qbeta(0.9995, k + 1, draws - k), 1)
+  at <- pmin(pmax(0.5, lower), upper)
+  stats::setNames(4 * sqrt(at * (1 - at)) * sqrt(1 / iter + 1 / draws) + 1 / (iter + 1), names(q))
+}
+
+#' One comparison per cell, each at its own tolerance
+#'
+#' @param actual,expected Named numeric vectors with the same names (the package's and the reference's cells).
+#' @param tolerance Named tolerances, one per cell of `expected`.
+#' @param reference,covers As in expect_reference().
+#' @param quantity The quantity; each cell is recorded as "<quantity>: <cell>".
+#' @return Invisibly, NULL.
+rs_expect_cells <- function(actual, expected, tolerance, reference, covers, quantity) {
+  stopifnot("the package and the reference must have the same cells" = setequal(names(actual), names(expected)),
+            "one tolerance per cell" = setequal(names(tolerance), names(expected)))
+  invisible(lapply(names(expected), \(cell) {
+    expect_reference(actual[[cell]], expected[[cell]], reference = reference, covers = covers,
+                     quantity = sprintf("%s: %s", quantity, cell), tolerance = tolerance[[cell]])
+  }))
+}

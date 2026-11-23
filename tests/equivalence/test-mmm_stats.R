@@ -2,7 +2,9 @@
 # p-values and confidence intervals. For a seqHMM model, the estimates and standard errors against seqHMM's own
 # summary() (coefficients and the square roots of the diagonal of vcov), and the z-values, p-values and intervals
 # against the Wald formulas (estimate / se, 2 (1 - Phi(|z|)), estimate -/+ z_(1 - level/2) se). The same formulas
-# for tna's own mixture model (engagement_mmm, an intercept per cluster).
+# for tna's own mixture model (engagement_mmm, an intercept per cluster). mmm_stats.mhmm() reads the estimates and
+# their covariance from seqHMM's summary() itself (R/mmm.R), so the seqHMM rows are declared authority "internal"
+# (STANDARD decision 14: "seqHMM (called by the package)"); the Wald formulas are the independent evidence.
 # Tolerance: one division or one normal quantile per number, 1e-10 absolute.
 
 #' Wald statistics of coefficients from their estimates and standard errors
@@ -34,7 +36,7 @@ test_that("the coefficients of a seqHMM model equal seqHMM's estimates, standard
   std_error <- sqrt(diag(fitted$vcov))
   expect_reference(mmm_stats(fit), data.frame(cluster = cluster, variable = variable, estimate = estimate,
                                               std_error = std_error),
-                   reference = "seqHMM", covers = c("mmm_stats()", "mmm_stats.mhmm()"),
+                   reference = "seqHMM", authority = "internal", covers = c("mmm_stats()", "mmm_stats.mhmm()"),
                    quantity = "coefficient", tolerance = 1e-10, key = c("cluster", "variable"))
   expect_reference(mmm_stats(fit, level = 0.1), ref_wald(cluster, variable, estimate, std_error, level = 0.1),
                    reference = "independent: Wald z, normal p-value and interval from the estimate and standard error",

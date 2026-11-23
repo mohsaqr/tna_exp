@@ -1,3 +1,18 @@
+# tna 1.5.11
+
+* No change to the package code. The equivalence tests (`tests/equivalence/`,
+  not part of the package build) follow the 2026-11-23 evidence audit: a
+  reference that tna itself calls (igraph in `communities()`, `centralities()`,
+  `summary()`, `cliques()`, `betweenness_network()`, `as.igraph()`;
+  `graphics::hist()`; seqHMM's `summary()`; `cluster::pam()`, `stats::hclust()`)
+  is declared internal, with independent checks beside it (fast greedy
+  communities, PageRank by power iteration, RSP betweenness and diffusion
+  centrality from their papers, histogram counts, silhouette widths, edge
+  lists); Monte Carlo comparisons use one tolerance per number; `summary()`'s
+  density (loops counted, capped at 1) and mean distance (probabilities read as
+  lengths) are compared with the literature's definitions and declared pending
+  the maintainers' decision.
+
 # tna 1.5.10
 
 * `reprune()` returns the model with its pruning active again, as documented

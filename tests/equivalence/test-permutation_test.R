@@ -5,10 +5,11 @@
 # permutations are drawn inside the function), so they are compared within Monte Carlo error.
 # Moved from the standing script
 # equivalence/tna/local/local_testing_and_equivalence/betweenness_permutation_vs_nestimate.R.
-# Tolerances: the observed difference is a difference of two sums of path-count ratios (1e-10 absolute). A p-value
-# from 2000 permutations has a standard error of at most sqrt(0.25 / 2000) = 0.0112, so the difference of two
-# independent estimates has one of at most 0.0158; 0.07 absolute is about 4.4 of those (looser than 1e-8 because
-# the two sides draw different permutations).
+# Tolerances: the observed difference is a difference of two sums of path-count ratios (1e-10 absolute). The
+# p-values, one tolerance per edge (audit 2026-11-23): 4 standard errors of the difference of two estimates from
+# 2000 permutations each, sqrt(q (1 - q)) sqrt(2 / 2000), q Nestimate's share, by rs_p_tolerance()
+# (helper-resampling.R), fixed before the run (looser than 1e-8 because the two sides draw different
+# permutations). Nestimate is internal (the owner's package), so these rows are shown and not counted.
 
 halves <- list(first = group_regulation[1:1000, ], second = group_regulation[1001:2000, ])
 iter <- 2000L
@@ -30,17 +31,22 @@ test_that("observed differences and p-values of edge betweenness agree with Nest
                    quantity = "observed difference of edge betweenness", tolerance = 1e-10, key = c("from", "to"))
   p_values <- unclass(theirs$p_values)
   dimnames(p_values) <- list(states, states)
-  expect_reference(edges, data.frame(ref_long(p_values, "p_value")), reference = "Nestimate",
-                   covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
-                   quantity = "permutation p-value, independent streams", tolerance = 0.07, key = c("from", "to"))
+  theirs_p <- rs_cells(p_values)
+  cells <- paste(edges$from, "->", edges$to)
+  # Nestimate's p-value is (k + 1) / (iter + 1): its share k / iter
+  rs_expect_cells(stats::setNames(edges$p_value, cells), theirs_p[cells],
+                  rs_p_tolerance(((iter + 1) * theirs_p - 1) / iter, iter, iter)[cells], reference = "Nestimate",
+                  covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
+                  quantity = "permutation p-value, independent streams")
 })
 
 test_that("a grouped model is tested pair by pair as by a base-R permutation test", {
   # Three groups of 150 sequences: three pairs. Each pair's observed differences are deterministic; its p-values,
   # (1 + number of relabellings reaching |observed|) / (iter + 1), are compared with a permutation test written
   # in base R (helper-resampling.R, 4000 relabellings) within Monte Carlo error: 4 standard errors of the
-  # difference, max over cells of sqrt(q (1 - q)) sqrt(1/1000 + 1/4000), plus 1/1001 for tna's +1, q the
-  # reference's share, fixed before the run. A probe of 20 seeds passed 20 of 20 before this file was run.
+  # difference, one per cell, sqrt(q (1 - q)) sqrt(1/1000 + 1/4000), plus 1/1001 for tna's +1, q the reference's
+  # share (rs_p_tolerance(), helper-resampling.R), fixed before the run. A probe of 20 seeds passed 20 of 20 before
+  # this file was run (with the earlier tolerance, the largest over cells).
   data <- group_regulation[1:450, ]
   wide <- ref_wide(data)
   states <- ref_states(wide)
@@ -60,11 +66,11 @@ test_that("a grouped model is tested pair by pair as by a base-R permutation tes
                      covers = c("permutation_test.group_tna()", "summary.group_tna_permutation()"),
                      quantity = sprintf("observed difference, %s", name), tolerance = 1e-10)
     q <- reference$exceed
-    expect_reference(stats::setNames(rows$p_value, cells), ((1000 * q + 1) / 1001)[cells],
-                     reference = "independent: permutation test written in base R (helper-resampling.R)",
-                     covers = c("permutation_test.group_tna()", "summary.group_tna_permutation()"),
-                     quantity = sprintf("Monte Carlo summary: permutation p-value, %s", name),
-                     tolerance = 4 * max(sqrt(q * (1 - q))) * sqrt(1 / 1000 + 1 / 4000) + 1 / 1001)
+    rs_expect_cells(stats::setNames(rows$p_value, cells), ((1000 * q + 1) / 1001)[cells],
+                    rs_p_tolerance(q, 1000L, 4000L)[cells],
+                    reference = "independent: permutation test written in base R (helper-resampling.R)",
+                    covers = c("permutation_test.group_tna()", "summary.group_tna_permutation()"),
+                    quantity = sprintf("Monte Carlo summary: permutation p-value, %s", name))
   })
 })
 
@@ -77,12 +83,30 @@ test_that("a grouped model is tested pair by pair as by a base-R permutation tes
 # writes the 81 directed cells into the first 81 of those positions (zeros elsewhere); the permutations, the
 # re-estimation and the p-values are NCT's.
 # Tolerances: the observed absolute difference is deterministic (1e-12). A p-value from tna's 2000 and NCT's 4000
-# permutations differs by Monte Carlo error with a standard error of at most 0.5 sqrt(1/2000 + 1/4000) = 0.0137;
-# 0.055 is 4 of those, fixed before the run (looser than 1e-8 because the two sides draw their own permutations).
+# permutations differs by Monte Carlo error: one tolerance per edge (audit 2026-11-23), 4 standard errors of the
+# difference, sqrt(q (1 - q)) sqrt(1/2000 + 1/4000) + 1/2001, q NCT's share (rs_p_tolerance(), helper-resampling.R),
+# fixed before the run (looser than 1e-8 because the two sides draw their own permutations).
 
 nct_iter <- 4000L
 tna_iter <- 2000L
-nct_tolerance <- 4 * 0.5 * sqrt(1 / tna_iter + 1 / nct_iter)
+
+#' Per-edge tolerances of tna's p-values against NCT's, from NCT's p-values (k + 1) / (it + 1)
+#'
+#' @param p NCT's p-values.
+#' @return The tolerances (rs_p_tolerance() of NCT's shares k / it).
+nct_tolerance <- \(p) rs_p_tolerance(((nct_iter + 1) * p - 1) / nct_iter, tna_iter, nct_iter)
+
+#' tna's and NCT's p-values compared edge by edge
+#'
+#' @param found,expected Data frames with from, to, p_value.
+#' @param covers,quantity As in expect_reference().
+#' @return Invisibly, NULL.
+expect_nct_p <- function(found, expected, covers, quantity) {
+  cells <- paste(expected$from, "->", expected$to)
+  rs_expect_cells(stats::setNames(found$p_value, paste(found$from, "->", found$to)),
+                  stats::setNames(expected$p_value, cells), stats::setNames(nct_tolerance(expected$p_value), cells),
+                  reference = "NetworkComparisonTest", covers = covers, quantity = quantity)
+}
 
 #' NCT's edge p-values and observed absolute differences of two sets of sequences
 #'
@@ -136,19 +160,14 @@ test_that("edge p-values of two transition networks agree with NetworkComparison
                      covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
                      quantity = sprintf("observed absolute difference, seed %d", seed), tolerance = 1e-12,
                      key = c("from", "to"))
-    expect_reference(subset(found, select = c(from, to, p_value)), subset(expected, select = c(from, to, p_value)),
-                     reference = "NetworkComparisonTest",
-                     covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
-                     quantity = sprintf("Monte Carlo summary: permutation p-value, seed %d", seed),
-                     tolerance = nct_tolerance, key = c("from", "to"))
+    expect_nct_p(found, expected, covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
+                 quantity = sprintf("Monte Carlo summary: permutation p-value, seed %d", seed))
   })
   paired <- nct_edges(data[1:150, ], data[151:300, ], relative_network, paired = TRUE, seed = 12L)
   table <- summary(rs_with_seed(4L, permutation_test(x, y, iter = tna_iter, paired = TRUE)), digits = 12L)
-  expect_reference(data.frame(from = table$from, to = table$to, p_value = table$p_value),
-                   subset(paired, select = c(from, to, p_value)), reference = "NetworkComparisonTest",
-                   covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
-                   quantity = "Monte Carlo summary: paired permutation p-value", tolerance = nct_tolerance,
-                   key = c("from", "to"))
+  expect_nct_p(data.frame(from = table$from, to = table$to, p_value = table$p_value), paired,
+               covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
+               quantity = "Monte Carlo summary: paired permutation p-value")
 })
 
 test_that("edge p-values of two edge betweenness networks agree with NCT() re-estimating igraph's edge betweenness", {
@@ -171,16 +190,13 @@ test_that("edge p-values of two edge betweenness networks agree with NCT() re-es
                    reference = "NetworkComparisonTest",
                    covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
                    quantity = "observed absolute difference of edge betweenness", tolerance = 1e-10, key = c("from", "to"))
-  expect_reference(subset(found, select = c(from, to, p_value)), subset(expected, select = c(from, to, p_value)),
-                   reference = "NetworkComparisonTest",
-                   covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
-                   quantity = "Monte Carlo summary: permutation p-value of edge betweenness", tolerance = nct_tolerance,
-                   key = c("from", "to"))
+  expect_nct_p(found, expected, covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
+               quantity = "Monte Carlo summary: permutation p-value of edge betweenness")
 })
 
 test_that("observed differences and p-values of two transition networks agree with a base-R permutation test", {
-  # The formula route beside NCT: helper-resampling.R's rs_permutation() with 4000 relabellings; tolerance as for
-  # the grouped model above, fixed before the run.
+  # The formula route beside NCT: helper-resampling.R's rs_permutation() with 4000 relabellings; tolerances as for
+  # the grouped model above (one per cell), fixed before the run.
   data <- group_regulation[1:300, ]
   wide <- ref_wide(data)
   states <- ref_states(wide)
@@ -193,11 +209,11 @@ test_that("observed differences and p-values of two transition networks agree wi
                    covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
                    quantity = "observed difference of two models", tolerance = 1e-10)
   q <- reference$exceed
-  expect_reference(stats::setNames(table$p_value, cells), ((1000 * q + 1) / 1001)[cells],
-                   reference = "independent: permutation test written in base R (helper-resampling.R)",
-                   covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
-                   quantity = "Monte Carlo summary: permutation p-value of two models",
-                   tolerance = 4 * max(sqrt(q * (1 - q))) * sqrt(1 / 1000 + 1 / 4000) + 1 / 1001)
+  rs_expect_cells(stats::setNames(table$p_value, cells), ((1000 * q + 1) / 1001)[cells],
+                  rs_p_tolerance(q, 1000L, 4000L)[cells],
+                  reference = "independent: permutation test written in base R (helper-resampling.R)",
+                  covers = c("permutation_test()", "permutation_test.tna()", "summary.tna_permutation()"),
+                  quantity = "Monte Carlo summary: permutation p-value of two models")
 })
 
 test_that("a grouped model is tested pair by pair as NCT() tests each pair of groups", {
@@ -216,10 +232,8 @@ test_that("a grouped model is tested pair by pair as NCT() tests each pair of gr
                      covers = c("permutation_test.group_tna()", "summary.group_tna_permutation()"),
                      quantity = sprintf("observed absolute difference, %s", name), tolerance = 1e-12,
                      key = c("from", "to"))
-    expect_reference(data.frame(from = rows$from, to = rows$to, p_value = rows$p_value),
-                     subset(expected, select = c(from, to, p_value)), reference = "NetworkComparisonTest",
-                     covers = c("permutation_test.group_tna()", "summary.group_tna_permutation()"),
-                     quantity = sprintf("Monte Carlo summary: permutation p-value, %s", name),
-                     tolerance = nct_tolerance, key = c("from", "to"))
+    expect_nct_p(data.frame(from = rows$from, to = rows$to, p_value = rows$p_value), expected,
+                 covers = c("permutation_test.group_tna()", "summary.group_tna_permutation()"),
+                 quantity = sprintf("Monte Carlo summary: permutation p-value, %s", name))
   })
 })

@@ -57,19 +57,55 @@ test_that("as.igraph() hands igraph the weight matrix", {
   skip_without_reference("igraph")
   model <- tna(group_regulation)
   read_back <- as.matrix(igraph::as_adjacency_matrix(as.igraph(model), attr = "weight", sparse = FALSE))
-  expect_reference(read_back[states, states], ref_rows(counts), reference = "igraph",
+  expect_reference(read_back[states, states], ref_rows(counts), reference = "igraph", authority = "internal",
                    covers = c("as.igraph()", "as.igraph.tna()"), quantity = "edge weight read back by igraph",
                    tolerance = 1e-12)
   matrix_back <- as.matrix(igraph::as_adjacency_matrix(as.igraph(ref_rows(counts)), attr = "weight", sparse = FALSE))
-  expect_reference(matrix_back[states, states], ref_rows(counts), reference = "igraph",
+  expect_reference(matrix_back[states, states], ref_rows(counts), reference = "igraph", authority = "internal",
                    covers = c("as.igraph()", "as.igraph.matrix()"),
                    quantity = "edge weight of a matrix read back by igraph", tolerance = 1e-12)
   groups <- group_tna(group_regulation, group = rep(c("a", "b"), each = 1000))
   group_back <- as.matrix(igraph::as_adjacency_matrix(as.igraph(groups, which = "b"), attr = "weight",
                                                       sparse = FALSE))
   expect_reference(group_back[states, states], ref_rows(ref_pairs(wide[1001:2000, ], states)), reference = "igraph",
-                   covers = c("as.igraph()", "as.igraph.group_tna()"),
+                   authority = "internal", covers = c("as.igraph()", "as.igraph.group_tna()"),
                    quantity = "edge weight of group b read back by igraph", tolerance = 1e-12)
+})
+
+# as.igraph() builds the graph with igraph's graph_from_adjacency_matrix(), so the read-backs above are declared
+# authority "internal" (STANDARD decision 14). The independent check: the graph's edge list (read with igraph's
+# accessors) against the non-zero cells of the weight matrix listed in base R, one edge per cell, loops included.
+
+#' The edges of a graph as a named vector of weights, "from -> to"
+#'
+#' @param graph An igraph graph.
+#' @return Named weights.
+graph_edges <- function(graph) {
+  ends <- igraph::as_edgelist(graph, names = TRUE)
+  stats::setNames(igraph::E(graph)$weight, paste(ends[, 1L], "->", ends[, 2L]))
+}
+
+#' The non-zero cells of a weight matrix as a named vector, "from -> to"
+#'
+#' @param weights A square matrix with dimnames.
+#' @return Named weights.
+matrix_edges <- function(weights) {
+  cells <- which(weights != 0, arr.ind = TRUE)
+  stats::setNames(weights[cells], paste(rownames(weights)[cells[, 1L]], "->", colnames(weights)[cells[, 2L]]))
+}
+
+test_that("as.igraph() has one edge per non-zero cell of the weight matrix, with its weight", {
+  skip_without_reference("igraph")
+  by_cells <- "independent: the non-zero cells of the weight matrix listed in base R"
+  expect_reference(graph_edges(as.igraph(tna(group_regulation))), matrix_edges(ref_rows(counts)), reference = by_cells,
+                   covers = c("as.igraph()", "as.igraph.tna()"), quantity = "edge list of a model", tolerance = 1e-12)
+  expect_reference(graph_edges(as.igraph(ref_rows(counts))), matrix_edges(ref_rows(counts)), reference = by_cells,
+                   covers = c("as.igraph()", "as.igraph.matrix()"), quantity = "edge list of a matrix", tolerance = 1e-12)
+  groups <- group_tna(group_regulation, group = rep(c("a", "b"), each = 1000))
+  expect_reference(graph_edges(as.igraph(groups, which = "b")),
+                   matrix_edges(ref_rows(ref_pairs(wide[1001:2000, ], states))), reference = by_cells,
+                   covers = c("as.igraph()", "as.igraph.group_tna()"), quantity = "edge list of group b",
+                   tolerance = 1e-12)
 })
 
 test_that("a count matrix or table from TraMineR gives TraMineR's transition rates", {

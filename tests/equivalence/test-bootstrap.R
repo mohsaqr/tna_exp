@@ -7,12 +7,14 @@
 # - Monte Carlo summaries against a bootstrap written in base R (helper-resampling.R) with its own 4000 resamples:
 #   the bootstrap mean and SD of each weight and the "stability" p-value, (1 + number of resamples outside the
 #   consistency range) / (iter + 1). Tolerances, derived before the run from the reference's own spread, for
-#   tna's iter = 1000 against the reference's B = 4000 draws, 4 standard errors of the difference:
-#     mean: 4 max_e sd_e sqrt(1/1000 + 1/4000);
-#     SD: 4 max_e sqrt((m4_e - sd_e^4) / (4 sd_e^2)) sqrt(1/1000 + 1/4000), the large-sample SE of a sample SD;
-#     p-value: 4 max_e sqrt(q_e (1 - q_e)) sqrt(1/1000 + 1/4000) + 1/1001, q_e the reference's share outside the
-#     range (the 1/1001 covers the +1 of tna's p-value).
-#   A probe of 20 seeds of tna against one reference run passed 20 of 20 for each summary before this file was run.
+#   tna's iter = 1000 against the reference's B = 4000 draws, 4 standard errors of the difference, ONE PER CELL
+#   (each cell judged at its own standard error, not at the largest of the table; audit 2026-11-23):
+#     mean: 4 sd_e sqrt(1/1000 + 1/4000);
+#     SD: 4 sqrt((m4_e - sd_e^4) / (4 sd_e^2)) sqrt(1/1000 + 1/4000), the large-sample SE of a sample SD;
+#     a cell that is the same in every draw (sd_e = 0: a pair never observed) is constant on both sides: 1e-12;
+#     p-value: rs_p_tolerance() (helper-resampling.R), 4 sqrt(q_e (1 - q_e)) sqrt(1/1000 + 1/4000) + 1/1001,
+#     q_e the reference's share outside the range, its variance taken at the point of q_e's 99.9% Clopper-Pearson
+#     interval closest to 1/2 (the floor for shares of 0 or 1; the 1/1001 covers the +1 of tna's p-value).
 
 data <- group_regulation[1:300, ]
 wide <- ref_wide(data)
@@ -25,7 +27,7 @@ weights <- ref_rows(ref_pairs(wide, states))
 by_definition <- "independent: the bootstrap of the sequences written in base R (helper-resampling.R)"
 exact <- 1e-12
 
-#' The Monte Carlo tolerances of the header, from a draws x cells matrix and the observed weights
+#' The Monte Carlo tolerances of the header, one per cell, from a draws x cells matrix and the observed weights
 boot_tolerances <- function(draws_matrix, observed) {
   spread <- apply(draws_matrix, 2L, stats::sd)
   centred <- sweep(draws_matrix, 2L, colMeans(draws_matrix))
@@ -33,8 +35,8 @@ boot_tolerances <- function(draws_matrix, observed) {
   se_sd <- ifelse(spread > 0, sqrt(pmax(m4 - spread^4, 0) / (4 * spread^2)), 0)
   outside <- colMeans(sweep(draws_matrix, 2L, 0.75 * observed, "<=") | sweep(draws_matrix, 2L, 1.25 * observed, ">="))
   scale <- sqrt(1 / iter + 1 / nrow(draws_matrix))
-  list(mean = 4 * max(spread) * scale, sd = 4 * max(se_sd) * scale,
-       p = 4 * max(sqrt(outside * (1 - outside))) * scale + 1 / (iter + 1),
+  list(mean = ifelse(spread > 0, 4 * spread * scale, exact), sd = ifelse(se_sd > 0, 4 * se_sd * scale, exact),
+       p = rs_p_tolerance(outside, iter, nrow(draws_matrix)),
        outside = outside, mean_of = colMeans(draws_matrix), sd_of = spread)
 }
 summaries <- boot_tolerances(reference, rs_cells(weights))
@@ -56,22 +58,20 @@ test_that("the original weights and the consistency range follow their definitio
 test_that("bootstrap means, SDs and p-values agree with a base-R bootstrap within Monte Carlo error", {
   lapply(1:3, \(seed) {
     boot <- bootstrap(model, iter = iter, seed = seed)
-    expect_reference(rs_cells(boot$weights_mean), summaries$mean_of, reference = by_definition,
-                     covers = c("bootstrap()", "bootstrap.tna()"),
-                     quantity = sprintf("Monte Carlo summary: bootstrap mean of the weight, seed %d", seed),
-                     tolerance = summaries$mean)
-    expect_reference(rs_cells(boot$weights_sd), summaries$sd_of, reference = by_definition,
-                     covers = c("bootstrap()", "bootstrap.tna()"),
-                     quantity = sprintf("Monte Carlo summary: bootstrap SD of the weight, seed %d", seed),
-                     tolerance = summaries$sd)
-    expect_reference(rs_cells(boot$p_values), expected_p, reference = by_definition,
-                     covers = c("bootstrap()", "bootstrap.tna()"),
-                     quantity = sprintf("Monte Carlo summary: stability p-value, seed %d", seed), tolerance = summaries$p)
+    rs_expect_cells(rs_cells(boot$weights_mean), summaries$mean_of, summaries$mean, reference = by_definition,
+                    covers = c("bootstrap()", "bootstrap.tna()"),
+                    quantity = sprintf("Monte Carlo summary: bootstrap mean of the weight, seed %d", seed))
+    rs_expect_cells(rs_cells(boot$weights_sd), summaries$sd_of, summaries$sd, reference = by_definition,
+                    covers = c("bootstrap()", "bootstrap.tna()"),
+                    quantity = sprintf("Monte Carlo summary: bootstrap SD of the weight, seed %d", seed))
+    rs_expect_cells(rs_cells(boot$p_values), expected_p, summaries$p, reference = by_definition,
+                    covers = c("bootstrap()", "bootstrap.tna()"),
+                    quantity = sprintf("Monte Carlo summary: stability p-value, seed %d", seed))
     table <- summary(boot)
-    expect_reference(stats::setNames(table$p_value, paste(table$from, "->", table$to)),
-                     expected_p[paste(table$from, "->", table$to)], reference = by_definition,
-                     covers = "summary.tna_bootstrap()",
-                     quantity = sprintf("Monte Carlo summary: summary p-value, seed %d", seed), tolerance = summaries$p)
+    edges <- paste(table$from, "->", table$to)
+    rs_expect_cells(stats::setNames(table$p_value, edges), expected_p[edges], summaries$p[edges],
+                    reference = by_definition, covers = "summary.tna_bootstrap()",
+                    quantity = sprintf("Monte Carlo summary: summary p-value, seed %d", seed))
   })
 })
 
@@ -84,15 +84,14 @@ test_that("a grouped model bootstraps each group as its own data", {
     part <- wide[groups == g, , drop = FALSE]
     observed <- ref_rows(ref_pairs(part, states))
     tolerances <- boot_tolerances(rs_bootstrap(part, states, draws, seed = 12L), rs_cells(observed))
-    expect_reference(rs_cells(boot[[g]]$weights_mean), tolerances$mean_of, reference = by_definition,
-                     covers = "bootstrap.group_tna()",
-                     quantity = sprintf("Monte Carlo summary: bootstrap mean of the weight, group %s", g),
-                     tolerance = tolerances$mean)
+    rs_expect_cells(rs_cells(boot[[g]]$weights_mean), tolerances$mean_of, tolerances$mean, reference = by_definition,
+                    covers = "bootstrap.group_tna()",
+                    quantity = sprintf("Monte Carlo summary: bootstrap mean of the weight, group %s", g))
     rows <- table[table$group == g, ]
-    expect_reference(stats::setNames(rows$p_value, paste(rows$from, "->", rows$to)),
-                     ((iter * tolerances$outside + 1) / (iter + 1))[paste(rows$from, "->", rows$to)],
-                     reference = by_definition, covers = "summary.group_tna_bootstrap()",
-                     quantity = sprintf("Monte Carlo summary: stability p-value, group %s", g), tolerance = tolerances$p)
+    edges <- paste(rows$from, "->", rows$to)
+    rs_expect_cells(stats::setNames(rows$p_value, edges), ((iter * tolerances$outside + 1) / (iter + 1))[edges],
+                    tolerances$p[edges], reference = by_definition, covers = "summary.group_tna_bootstrap()",
+                    quantity = sprintf("Monte Carlo summary: stability p-value, group %s", g))
     expect_reference(stats::setNames(rows$weight, paste(rows$from, "->", rows$to)),
                      rs_cells(observed)[paste(rows$from, "->", rows$to)],
                      reference = "independent: row-normalised counts of consecutive pairs",
@@ -112,17 +111,17 @@ test_that("bootstrap_cliques() weights follow their definition and p-values agre
   per_draw <- t(apply(reference, 1L, \(cells) clique_mean(matrix(cells, length(states), dimnames = list(states, states)))))
   observed <- clique_mean(weights)
   outside <- colMeans(sweep(per_draw, 2L, 0.75 * observed, "<=") | sweep(per_draw, 2L, 1.25 * observed, ">="))
-  tolerance <- 4 * max(sqrt(outside * (1 - outside))) * sqrt(1 / iter + 1 / draws) + 1 / (iter + 1)
-  expect_reference(stats::setNames(boot$p_values, boot$clique), stats::setNames((iter * outside + 1) / (iter + 1), boot$clique),
-                   reference = by_definition, covers = c("bootstrap_cliques()", "bootstrap_cliques.tna()"),
-                   quantity = "Monte Carlo summary: clique stability p-value", tolerance = tolerance)
+  rs_expect_cells(stats::setNames(boot$p_values, boot$clique), stats::setNames((iter * outside + 1) / (iter + 1), boot$clique),
+                  stats::setNames(rs_p_tolerance(outside, iter, draws), boot$clique),
+                  reference = by_definition, covers = c("bootstrap_cliques()", "bootstrap_cliques.tna()"),
+                  quantity = "Monte Carlo summary: clique stability p-value")
 })
 
 # Against boot::boot() (Canty and Ripley; Davison and Hinkley 1997), the established implementation of the
 # nonparametric bootstrap: boot() resamples the sequences (rows of their pair counts) with replacement and the
 # statistic builds the relative network of the rows it is given. The summaries and their Monte Carlo tolerances
 # are those of the header (boot_tolerances(), 4 standard errors of the difference for tna's 1000 against boot's
-# 4000 resamples), fixed before the run.
+# 4000 resamples, one per cell), fixed before the run.
 
 #' boot()'s draws of the relative network of a set of sequences
 #'
@@ -145,19 +144,17 @@ test_that("bootstrap means, SDs and p-values agree with boot::boot() within Mont
   boot_p <- (iter * by_boot$outside + 1) / (iter + 1)
   lapply(1:3, \(seed) {
     boot <- bootstrap(model, iter = iter, seed = seed + 10L)
-    expect_reference(rs_cells(boot$weights_mean), by_boot$mean_of, reference = "boot",
-                     covers = c("bootstrap()", "bootstrap.tna()"),
-                     quantity = sprintf("Monte Carlo summary: bootstrap mean of the weight, seed %d", seed),
-                     tolerance = by_boot$mean)
-    expect_reference(rs_cells(boot$weights_sd), by_boot$sd_of, reference = "boot",
-                     covers = c("bootstrap()", "bootstrap.tna()"),
-                     quantity = sprintf("Monte Carlo summary: bootstrap SD of the weight, seed %d", seed),
-                     tolerance = by_boot$sd)
+    rs_expect_cells(rs_cells(boot$weights_mean), by_boot$mean_of, by_boot$mean, reference = "boot",
+                    covers = c("bootstrap()", "bootstrap.tna()"),
+                    quantity = sprintf("Monte Carlo summary: bootstrap mean of the weight, seed %d", seed))
+    rs_expect_cells(rs_cells(boot$weights_sd), by_boot$sd_of, by_boot$sd, reference = "boot",
+                    covers = c("bootstrap()", "bootstrap.tna()"),
+                    quantity = sprintf("Monte Carlo summary: bootstrap SD of the weight, seed %d", seed))
     table <- summary(boot)
     edges <- paste(table$from, "->", table$to)
-    expect_reference(stats::setNames(table$p_value, edges), boot_p[edges], reference = "boot",
-                     covers = c("bootstrap()", "bootstrap.tna()", "summary.tna_bootstrap()"),
-                     quantity = sprintf("Monte Carlo summary: stability p-value, seed %d", seed), tolerance = by_boot$p)
+    rs_expect_cells(stats::setNames(table$p_value, edges), boot_p[edges], by_boot$p[edges], reference = "boot",
+                    covers = c("bootstrap()", "bootstrap.tna()", "summary.tna_bootstrap()"),
+                    quantity = sprintf("Monte Carlo summary: stability p-value, seed %d", seed))
   })
 })
 
@@ -170,19 +167,18 @@ test_that("a grouped model and clique bootstraps agree with boot::boot() within 
     part <- wide[groups == g, , drop = FALSE]
     observed <- ref_rows(ref_pairs(part, states))
     by_boot <- boot_tolerances(boot_draws(part, seed = 15L), rs_cells(observed))
-    expect_reference(rs_cells(boot[[g]]$weights_mean), by_boot$mean_of, reference = "boot",
-                     covers = "bootstrap.group_tna()",
-                     quantity = sprintf("Monte Carlo summary: bootstrap mean of the weight, group %s", g),
-                     tolerance = by_boot$mean)
-    expect_reference(rs_cells(boot[[g]]$weights_sd), by_boot$sd_of, reference = "boot",
-                     covers = "bootstrap.group_tna()",
-                     quantity = sprintf("Monte Carlo summary: bootstrap SD of the weight, group %s", g),
-                     tolerance = by_boot$sd)
+    rs_expect_cells(rs_cells(boot[[g]]$weights_mean), by_boot$mean_of, by_boot$mean, reference = "boot",
+                    covers = "bootstrap.group_tna()",
+                    quantity = sprintf("Monte Carlo summary: bootstrap mean of the weight, group %s", g))
+    rs_expect_cells(rs_cells(boot[[g]]$weights_sd), by_boot$sd_of, by_boot$sd, reference = "boot",
+                    covers = "bootstrap.group_tna()",
+                    quantity = sprintf("Monte Carlo summary: bootstrap SD of the weight, group %s", g))
     rows <- table[table$group == g, ]
     edges <- paste(rows$from, "->", rows$to)
-    expect_reference(stats::setNames(rows$p_value, edges), ((iter * by_boot$outside + 1) / (iter + 1))[edges],
-                     reference = "boot", covers = c("bootstrap.group_tna()", "summary.group_tna_bootstrap()"),
-                     quantity = sprintf("Monte Carlo summary: stability p-value, group %s", g), tolerance = by_boot$p)
+    rs_expect_cells(stats::setNames(rows$p_value, edges), ((iter * by_boot$outside + 1) / (iter + 1))[edges],
+                    by_boot$p[edges], reference = "boot",
+                    covers = c("bootstrap.group_tna()", "summary.group_tna_bootstrap()"),
+                    quantity = sprintf("Monte Carlo summary: stability p-value, group %s", g))
   })
   cliques_boot <- bootstrap_cliques(model, size = 2, iter = iter, seed = 16)
   pairs <- strsplit(cliques_boot$clique, "-", fixed = TRUE)
@@ -191,9 +187,9 @@ test_that("a grouped model and clique bootstraps agree with boot::boot() within 
                       \(cells) clique_mean(matrix(cells, length(states), dimnames = list(states, states)))))
   observed <- clique_mean(weights)
   outside <- colMeans(sweep(per_draw, 2L, 0.75 * observed, "<=") | sweep(per_draw, 2L, 1.25 * observed, ">="))
-  tolerance <- 4 * max(sqrt(outside * (1 - outside))) * sqrt(1 / iter + 1 / draws) + 1 / (iter + 1)
-  expect_reference(stats::setNames(cliques_boot$p_values, cliques_boot$clique),
-                   stats::setNames((iter * outside + 1) / (iter + 1), cliques_boot$clique), reference = "boot",
-                   covers = c("bootstrap_cliques()", "bootstrap_cliques.tna()"),
-                   quantity = "Monte Carlo summary: clique stability p-value", tolerance = tolerance)
+  rs_expect_cells(stats::setNames(cliques_boot$p_values, cliques_boot$clique),
+                  stats::setNames((iter * outside + 1) / (iter + 1), cliques_boot$clique),
+                  stats::setNames(rs_p_tolerance(outside, iter, draws), cliques_boot$clique), reference = "boot",
+                  covers = c("bootstrap_cliques()", "bootstrap_cliques.tna()"),
+                  quantity = "Monte Carlo summary: clique stability p-value")
 })

@@ -1,6 +1,7 @@
 # cliques(): the sets of `size` states in which every ordered pair is joined by an edge of at least `threshold`
 # (or, with sum_weights = TRUE, every pair's two weights add up to at least `threshold`). Against igraph's
-# cliques() on the graph of the pairs that qualify, and against an enumeration of every set of states in base R.
+# cliques() on the graph of the pairs that qualify (the routine tna calls, R/cliques.R: authority "internal",
+# STANDARD decision 14), and against an enumeration of every set of states in base R.
 # A clique is named by its states; the value compared is the sum of the weights inside it.
 # Tolerance: a sum of a few probabilities, 1e-12 absolute.
 
@@ -45,15 +46,15 @@ test_that("cliques equal igraph's cliques of the qualifying pairs", {
   skip_without_reference("igraph")
   expect_reference(ref_clique_table(cliques(model, size = 2, threshold = 0.1)$indices),
                    ref_clique_table(igraph_cliques(mutual(0.1), 2L)), reference = "igraph",
-                   covers = c("cliques()", "cliques.tna()"), quantity = "dyad, threshold 0.1", tolerance = 1e-12,
+                   authority = "internal", covers = c("cliques()", "cliques.tna()"), quantity = "dyad, threshold 0.1", tolerance = 1e-12,
                    key = "clique")
   expect_reference(ref_clique_table(cliques(model, size = 3, threshold = 0.05)$indices),
                    ref_clique_table(igraph_cliques(mutual(0.05), 3L)), reference = "igraph",
-                   covers = c("cliques()", "cliques.tna()"), quantity = "triad, threshold 0.05", tolerance = 1e-12,
+                   authority = "internal", covers = c("cliques()", "cliques.tna()"), quantity = "triad, threshold 0.05", tolerance = 1e-12,
                    key = "clique")
   expect_reference(ref_clique_table(cliques(model, size = 3, threshold = 0.15, sum_weights = TRUE)$indices),
                    ref_clique_table(igraph_cliques(summed(0.15), 3L)), reference = "igraph",
-                   covers = c("cliques()", "cliques.tna()"), quantity = "triad of summed weights, threshold 0.15",
+                   authority = "internal", covers = c("cliques()", "cliques.tna()"), quantity = "triad of summed weights, threshold 0.15",
                    tolerance = 1e-12, key = "clique")
 })
 
@@ -116,7 +117,7 @@ test_that("cliques of group models equal igraph's cliques for each group", {
   }, found, names(found))
   with_group <- \(tables) do.call(rbind, Map(\(table, group) data.frame(group = rep(group, nrow(table)), table),
                                              tables, names(tables)))
-  expect_reference(with_group(ours), with_group(per_group), reference = "igraph",
+  expect_reference(with_group(ours), with_group(per_group), reference = "igraph", authority = "internal",
                    covers = c("cliques()", "cliques.group_tna()"), quantity = "triad per group, threshold 0.05",
                    tolerance = 1e-12, key = c("group", "clique"))
 })
